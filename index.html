@@ -38,20 +38,25 @@
     --shadow-lift: 0 16px 40px rgba(0,0,0,0.45);
   }
   *{box-sizing:border-box;}
-  html,body{height:100%;}
-  body{
-    margin:0;
-    background:
-      radial-gradient(1200px 650px at 82% -8%, rgba(76,124,240,0.14), transparent 60%),
-      radial-gradient(900px 550px at -5% 105%, rgba(51,214,166,0.06), transparent 60%),
-      var(--bg);
-    color:var(--text-primary);
-    font-family:'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    -webkit-font-smoothing:antialiased;
-    min-height:100vh;
-    display:flex;
-    flex-direction:column;
-  }
+  html {
+  min-height: 100%;
+  background:
+    radial-gradient(1200px 650px at 82% -8%, rgba(76,124,240,0.14), transparent 60%),
+    radial-gradient(900px 550px at -5% 105%, rgba(51,214,166,0.06), transparent 60%),
+    var(--bg);
+  background-attachment: fixed;
+}
+
+body {
+  margin:0;
+  min-height:100vh;
+  background:transparent;
+  color:var(--text-primary);
+  font-family:'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  -webkit-font-smoothing:antialiased;
+  display:flex;
+  flex-direction:column;
+}
   h1,h2,h3{font-family:'Sora', sans-serif;}
   h4{font-family:'Arial Black', sans-serif;}
   .mono{font-family:'JetBrains Mono', monospace;}
