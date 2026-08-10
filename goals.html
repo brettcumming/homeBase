@@ -592,8 +592,8 @@
     if(goal){
       el('startingField').style.display = 'none';
       el('savedInfoField').style.display = 'block';
-      el('savedInfoText').textContent = `${currency(goal.saved)} saved so far — use "Add Funds" on the card to allocate more.`;
-    } else {
+      el('fSavedAmount').value = goal.saved;
+      } else {
       el('startingField').style.display = 'block';
       el('savedInfoField').style.display = 'none';
       el('fStarting').value = '';
