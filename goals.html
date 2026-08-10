@@ -1,1 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="icon" type="image/svg+xml" href="hb_favicon.svg">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>homeBase — Goals</title>
+<style>body{visibility:hidden;}</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="supabase-client.js"></script>
+<script src="auth.js" defer></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0f1e;
+    --bg-elevated:#0d1426;
+    --panel:#121b31;
+    --panel-alt:#16213b;
+    --border:#22304f;
+    --border-soft:rgba(255,255,255,0.06);
+    --text-primary:#eaf0fb;
+    --text-secondary:#9aa8c7;
+    --text-muted:#66759c;
+    --accent:#4c7cf0;
+    --accent-hover:#6690ff;
+    --accent-soft:rgba(76,124,240,0.14);
+    --success:#33d6a6;
+    --success-soft:rgba(51,214,166,0.12);
+    --warning:#f0b84c;
+    --warning-soft:rgba(240,184,76,0.12);
+    --danger:#f0664c;
+    --danger-soft:rgba(240,102,76,0.13);
+    --radius-sm:8px;
+    --radius-md:12px;
+    --radius-lg:18px;
+    --shadow-soft: 0 8px 24px rgba(0,0,0,0.35);
+    --shadow-lift: 0 16px 40px rgba(0,0,0,0.45);
+  }
+  *{box-sizing:border-box;}
+  html,body{height:100%;}
+  body{
+    margin:0;
+    background:
+      radial-gradient(1100px 600px at 85% -10%, rgba(76,124,240,0.10), transparent 60%),
+      radial-gradient(900px 500px at -10% 110%, rgba(51,214,166,0.05), transparent 60%),
+      var(--bg);
+    color:var(--text-primary);
+    font-family:'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+  }
+  h1,h2,h3{font-family:'Sora', sans-serif;}
+  .mono{font-family:'JetBrains Mono', monospace;}
+  a{color:inherit;}
+  button{font-family:inherit;}
+  ::selection{background:var(--accent-soft);}
+  button:focus-visible, input:focus-visible, select:focus-visible{
+    outline:2px solid var(--accent); outline-offset:2px;
+  }
+
+  .app{display:grid; grid-template-columns:260px 1fr; min-height:100vh;}
+
+  .sidebar{
+    background:linear-gradient(180deg, var(--bg-elevated), var(--bg));
+    border-right:1px solid var(--border-soft);
+    padding:28px 20px; display:flex; flex-direction:column; gap:32px; position:relative;
+  }
+  .sidebar::before{
+    content:""; position:absolute; top:0; left:0; bottom:0; width:2px;
+    background:linear-gradient(180deg, var(--accent), transparent 70%); opacity:0.6;
+  }
+  .brand{display:flex; align-items:center; gap:12px; padding:0 4px;}
+  .brand-mark{
+    width:40px; height:40px; border-radius:11px;
+    background:linear-gradient(155deg, var(--accent), #2a4fc4);
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 6px 16px rgba(76,124,240,0.35); flex-shrink:0;
+  }
+  .brand-mark svg{width:24px; height:24px;}
+  .brand-text{display:flex; flex-direction:column; line-height:1.25;}
+  .brand-text strong{font-family:'Sora'; font-size:15.5px; font-weight:700; letter-spacing:0.2px;}
+  .brand-text span{font-size:11.5px; color:var(--text-muted); font-weight:500;}
+  .nav{display:flex; flex-direction:column; gap:4px;}
+  .nav-label{
+    font-size:10.5px; text-transform:uppercase; letter-spacing:1.2px;
+    color:var(--text-muted); font-weight:600; padding:0 12px; margin-bottom:6px;
+  }
+  .nav-item{
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    padding:10px 12px; border-radius:8px; font-size:14px; font-weight:500;
+    color:var(--text-secondary); cursor:pointer; transition:background .15s ease, color .15s ease;
+    border:1px solid transparent; text-decoration:none;
+  }
+  .nav-item .left{display:flex; align-items:center; gap:10px;}
+  .nav-item svg{width:17px; height:17px; opacity:0.85;}
+  .nav-item.active{background:var(--accent-soft); color:var(--text-primary); border-color:rgba(76,124,240,0.35);}
+  .nav-item:not(.active):hover{background:rgba(255,255,255,0.03); color:var(--text-primary);}
+  .sidebar-footer{
+    margin-top:auto; padding-top:18px; border-top:1px dashed var(--border);
+    font-size:11.5px; color:var(--text-muted); display:flex; flex-direction:column; gap:4px;
+  }
+
+  .main{padding:32px 40px 60px; max-width:1280px; width:100%;}
+  .topbar{
+    display:flex; align-items:flex-start; justify-content:space-between; gap:24px;
+    margin-bottom:28px; flex-wrap:wrap;
+  }
+  .topbar h1{font-size:26px; font-weight:700; margin:0 0 6px; letter-spacing:-0.3px;}
+  .topbar p{margin:0; color:var(--text-secondary); font-size:14px; max-width:50ch;}
+
+  .btn{
+    display:inline-flex; align-items:center; gap:8px; padding:10px 18px; border-radius:10px;
+    border:1px solid transparent; font-size:13.5px; font-weight:600; cursor:pointer;
+    transition:transform .12s ease, box-shadow .12s ease, background .15s ease, border-color .15s ease;
+    white-space:nowrap;
+  }
+  .btn svg{width:16px; height:16px;}
+  .btn-primary{
+    background:linear-gradient(155deg, var(--accent-hover), var(--accent)); color:#08101f;
+    box-shadow:0 8px 20px rgba(76,124,240,0.28);
+  }
+  .btn-primary:hover{transform:translateY(-1px); box-shadow:0 10px 24px rgba(76,124,240,0.38);}
+  .btn-ghost{background:var(--panel); color:var(--text-secondary); border-color:var(--border);}
+  .btn-ghost:hover{color:var(--text-primary); border-color:rgba(255,255,255,0.18); background:var(--panel-alt);}
+  .actions-row{display:flex; gap:10px; flex-shrink:0;}
+
+  .ledger-stitch{
+    height:1px; margin:26px 0 24px;
+    background-image:linear-gradient(90deg, var(--border) 50%, transparent 50%);
+    background-size:10px 1px; background-repeat:repeat-x; opacity:0.7;
+  }
+
+  .field label{display:block; font-size:12px; font-weight:600; color:var(--text-secondary); margin-bottom:7px;}
+  .field-row{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+  input, select{
+    background:var(--panel); border:1px solid var(--border); color:var(--text-primary);
+    padding:9px 12px; border-radius:9px; font-size:13.5px; width:100%; font-family:inherit;
+  }
+  input::placeholder{color:var(--text-muted);}
+  .save-hint{
+    font-size:11.5px; color:var(--text-muted); background:var(--panel); border:1px solid var(--border-soft);
+    border-radius:8px; padding:10px 12px; line-height:1.5;
+  }
+
+  .icon-btn{
+    width:30px; height:30px; border-radius:8px; display:flex; align-items:center; justify-content:center;
+    background:transparent; border:1px solid transparent; color:var(--text-muted); cursor:pointer;
+    transition:background .12s ease, color .12s ease, border-color .12s ease;
+  }
+  .icon-btn svg{width:14.5px; height:14.5px;}
+  .icon-btn:hover{background:var(--panel-alt); color:var(--text-primary); border-color:var(--border);}
+  .icon-btn.danger:hover{color:var(--danger); border-color:rgba(240,102,76,0.35); background:var(--danger-soft);}
+
+  .bar-track{flex:1; height:8px; background:var(--panel); border-radius:5px; overflow:hidden;}
+  .bar-fill{height:100%; border-radius:5px;}
+
+  .empty-state{
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    padding:70px 20px; text-align:center; color:var(--text-muted); grid-column:1/-1;
+  }
+  .empty-state svg{width:40px; height:40px; margin-bottom:14px; opacity:0.5;}
+  .empty-state h3{margin:0 0 6px; color:var(--text-secondary); font-size:15px;}
+  .empty-state p{margin:0 0 18px; font-size:13px; max-width:32ch;}
+
+  /* ---- Goals grid ---- */
+  .goal-grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(260px, 1fr)); gap:16px;}
+  .goal-card{
+    background:linear-gradient(160deg, var(--panel), var(--panel-alt));
+    border:1px solid var(--border-soft); border-radius:var(--radius-md); padding:20px;
+    display:flex; gap:16px; align-items:flex-start;
+  }
+  .trophy-wrap{position:relative; width:64px; height:72px; flex-shrink:0;}
+  .trophy-wrap svg{position:absolute; inset:0; width:100%; height:100%;}
+  .trophy-fill-clip{position:absolute; inset:0; overflow:hidden; transition:clip-path .6s ease;}
+
+  .goal-info{flex:1; min-width:0;}
+  .goal-card-top{display:flex; align-items:flex-start; justify-content:space-between; gap:8px;}
+  .goal-card-top h3{font-size:15.5px; margin:0; font-weight:700;}
+  .goal-card-actions{display:flex; gap:4px; flex-shrink:0;}
+  .goal-reached-tag{
+    display:inline-block; font-size:10.5px; font-weight:700; color:#e8a83c;
+    background:rgba(232,168,60,0.14); padding:3px 8px; border-radius:20px; margin:6px 0 0;
+  }
+  .goal-amounts{margin-top:8px; font-size:14px;}
+  .goal-amounts .saved{font-family:'JetBrains Mono'; font-weight:700; color:var(--text-primary);}
+  .goal-amounts .of{color:var(--text-muted); font-size:12px; margin:0 3px;}
+  .goal-amounts .target{font-family:'JetBrains Mono'; color:var(--text-secondary);}
+  .goal-progress-track{height:7px; margin-top:9px;}
+  .goal-progress-fill{background:linear-gradient(90deg,#e8a83c,#ffe08a);}
+  .goal-pct{font-size:11.5px; color:var(--text-muted); margin-top:6px;}
+  .goal-fund-btn{margin-top:12px; padding:7px 14px; font-size:12.5px;}
+
+  /* ---- Drawer / overlay / toast ---- */
+  .overlay{
+    position:fixed; inset:0; background:rgba(4,7,16,0.6); backdrop-filter:blur(2px);
+    opacity:0; pointer-events:none; transition:opacity .2s ease; z-index:40;
+  }
+  .overlay.show{opacity:1; pointer-events:auto;}
+  .drawer{
+    position:fixed; top:0; right:0; bottom:0; width:420px; max-width:92vw;
+    background:linear-gradient(180deg, var(--bg-elevated), var(--bg));
+    border-left:1px solid var(--border); box-shadow:var(--shadow-lift);
+    transform:translateX(100%); transition:transform .25s cubic-bezier(.4,0,.2,1);
+    z-index:50; display:flex; flex-direction:column;
+  }
+  .drawer.show{transform:translateX(0);}
+  .drawer-header{
+    padding:22px 24px; border-bottom:1px solid var(--border-soft);
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .drawer-header h2{font-size:17px; margin:0; font-weight:700;}
+  .drawer-close{
+    width:30px; height:30px; border-radius:8px; background:var(--panel); border:1px solid var(--border);
+    color:var(--text-secondary); cursor:pointer; display:flex; align-items:center; justify-content:center;
+  }
+  .drawer-close:hover{color:var(--text-primary);}
+  .drawer-body{padding:22px 24px; overflow-y:auto; flex:1; display:flex; flex-direction:column; gap:16px;}
+  .drawer-footer{padding:18px 24px; border-top:1px solid var(--border-soft); display:flex; gap:10px;}
+  .drawer-footer .btn{flex:1; justify-content:center;}
+
+  /* ---- Add Funds modal (centered, not side drawer) ---- */
+  .modal-overlay{
+    position:fixed; inset:0; background:rgba(4,7,16,0.6); backdrop-filter:blur(2px);
+    opacity:0; pointer-events:none; transition:opacity .2s ease; z-index:70;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .modal-overlay.show{opacity:1; pointer-events:auto;}
+  .modal-box{
+    width:360px; max-width:90vw; background:linear-gradient(160deg, var(--panel), var(--panel-alt));
+    border:1px solid var(--border-soft); border-radius:var(--radius-md); padding:24px;
+    box-shadow:var(--shadow-lift); transform:translateY(10px); transition:transform .2s ease;
+  }
+  .modal-overlay.show .modal-box{transform:translateY(0);}
+  .modal-box h2{font-size:16px; margin:0 0 4px;}
+  .modal-box p{margin:0 0 16px; font-size:12.5px; color:var(--text-secondary);}
+  .modal-actions{display:flex; gap:10px; margin-top:18px;}
+  .modal-actions .btn{flex:1; justify-content:center;}
+
+  .toast{
+    position:fixed; bottom:26px; right:26px; background:var(--panel-alt); border:1px solid var(--border);
+    padding:13px 18px; border-radius:10px; font-size:13.5px; display:flex; align-items:center; gap:10px;
+    box-shadow:var(--shadow-lift); transform:translateY(20px); opacity:0; transition:all .25s ease; z-index:80;
+  }
+  .toast.show{transform:translateY(0); opacity:1;}
+  .toast svg{width:16px; height:16px; color:var(--success); flex-shrink:0;}
+
+  footer.note{margin-top:30px; color:var(--text-muted); font-size:12px; text-align:center;}
+
+  @media (max-width:900px){
+    .app{grid-template-columns:1fr;}
+    .sidebar{flex-direction:row; align-items:center; padding:16px 20px; gap:16px; overflow-x:auto;}
+    .sidebar::before{display:none;}
+    .nav{flex-direction:row;}
+    .nav-label{display:none;}
+    .sidebar-footer{display:none;}
+    .main{padding:24px 18px 50px;}
+    .field-row{grid-template-columns:1fr;}
+    .goal-grid{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark">
+        <svg viewBox="0 0 24 24" width="68" height="68" fill="none" stroke="#eaf0fb" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-label="Home">
+          <path d="M4 21V3h3v7" />
+          <path d="M7 10 12 5l7 5v11" />
+          <path d="M4 21h5" />
+          <path d="M15 21h4" />
+        </svg>
+      </div>
+      <div class="brand-text">
+        <strong>homeBase</strong>
+        <span>Goals</span>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <div class="nav-label">Workspace</div>
+      <a href="index.html" class="nav-item">
+        <div class="left">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v10a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V10"/></svg>
+          Home
+        </div>
+      </a>
+      <a href="payments.html" class="nav-item">
+        <div class="left">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 9h18M7 14h4"/></svg>
+          Payments
+        </div>
+      </a>
+      <a href="expenses.html" class="nav-item">
+        <div class="left">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          Expenses
+        </div>
+      </a>
+      <a href="goals.html" class="nav-item active">
+        <div class="left">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 4h8v4a4 4 0 0 1-8 0V4Z"/><path d="M6 4H4a2 2 0 0 0 0 4h2M18 4h2a2 2 0 0 1 0 4h-2"/><path d="M7 21h10"/><path d="M9 21c0-3 1-4 3-4s3 1 3 4"/></svg>
+          Goals
+        </div>
+      </a>
+      <a href="documents.html" class="nav-item">
+        <div class="left">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/></svg>
+          Documents
+        </div>
+      </a>
+      <a href="family-details.html" class="nav-item">
+        <div class="left">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 21a8 8 0 0 0-16 0"/><circle cx="12" cy="7" r="4"/></svg>
+          Family Details
+        </div>
+      </a>
+      <a href="bond.html" class="nav-item">
+        <div class="left">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-9"/><path d="M9 20v-6h6v6"/></svg>
+          Bond Payments
+        </div>
+      </a>
+      <a href="medical.html" class="nav-item">
+        <div class="left">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M19 14c1.5-1.5 3-3.5 3-5.5A4.5 4.5 0 0 0 17.5 4c-1.7 0-3 .7-4.5 2.5C11.5 4.7 10.2 4 8.5 4A4.5 4.5 0 0 0 4 8.5C4 13 12 21 12 21s2.5-2.4 4.5-4.5"/><path d="M9 11h3m0 0h3m-3 0V8m0 3v3"/></svg>
+          Medical
+        </div>
+      </a>
+      <a href="pets.html" class="nav-item">
+        <div class="left">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+            <ellipse cx="12" cy="16.2" rx="7" ry="5.5"/>
+            <ellipse cx="5.5" cy="7.5" rx="2.9" ry="4"/>
+            <ellipse cx="12" cy="4.8" rx="2.9" ry="4"/>
+            <ellipse cx="18.5" cy="7.5" rx="2.9" ry="4"/>
+          </svg>
+          Pets
+        </div>
+      </a>
+      <a href="property.html" class="nav-item">
+        <div class="left">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14.7 2.7a5.2 5.2 0 0 0-6.9 6.9l-5.1 5.1a2 2 0 0 0 0 2.8l1.8 1.8a2 2 0 0 0 2.8 0l5.1-5.1a5.2 5.2 0 0 0 6.9-6.9l-3.2 3.2-2.6-.6-.6-2.6 3.2-3.2a5.2 5.2 0 0 0-1.4-1.4Z"/>
+            <circle cx="5.5" cy="18.5" r="1"/>
+          </svg>
+          Home Maintenance
+        </div>
+      </a>
+    </nav>
+
+    <script>
+      document.querySelector('.nav .nav-item.active')?.scrollIntoView({ inline: 'center', block: 'nearest' });
+    </script>
+
+    <div class="sidebar-footer">
+      <span>homeBase · v0.1</span>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <div>
+        <h1>Family Goals</h1>
+        <p>Save toward what matters — track progress as you go.</p>
+      </div>
+      <div class="actions-row">
+        <button class="btn btn-primary" id="addGoalBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+          Add Goal
+        </button>
+      </div>
+    </div>
+
+    <div class="ledger-stitch"></div>
+
+    <div class="goal-grid" id="goalGrid"></div>
+
+    <div class="empty-state" id="emptyState" style="display:none;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 4h8v4a4 4 0 0 1-8 0V4Z"/><path d="M6 4H4a2 2 0 0 0 0 4h2M18 4h2a2 2 0 0 1 0 4h-2"/><path d="M7 21h10"/><path d="M9 21c0-3 1-4 3-4s3 1 3 4"/></svg>
+      <h3>No goals yet</h3>
+      <p>Set your first savings goal and start allocating funds toward it.</p>
+      <button class="btn btn-primary" id="emptyAddBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+        Add Goal
+      </button>
+    </div>
+  </main>
+</div>
+
+<!-- Add / Edit Goal drawer -->
+<div class="overlay" id="overlay"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-header">
+    <h2 id="drawerTitle">Add Goal</h2>
+    <button class="drawer-close" id="drawerClose">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+  </div>
+  <div class="drawer-body">
+    <input type="hidden" id="editId">
+    <div class="field">
+      <label for="fName">Goal name</label>
+      <input type="text" id="fName" placeholder="e.g. Family holiday">
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <label for="fTarget">Target amount (R)</label>
+        <input type="number" id="fTarget" step="0.01" placeholder="0.00">
+      </div>
+      <div class="field" id="startingField">
+        <label for="fStarting">Starting amount (R)</label>
+        <input type="number" id="fStarting" step="0.01" placeholder="0.00">
+      </div>
+    </div>
+    <div class="field" id="savedInfoField" style="display:none;">
+      <label>Currently saved</label>
+      <div class="save-hint" id="savedInfoText"></div>
+    </div>
+    <div class="field">
+      <label for="fNotes">Notes (optional)</label>
+      <input type="text" id="fNotes" placeholder="Any extra detail…">
+    </div>
+  </div>
+  <div class="drawer-footer">
+    <button class="btn btn-ghost" id="cancelBtn">Cancel</button>
+    <button class="btn btn-primary" id="saveBtn">Save Goal</button>
+  </div>
+</div>
+
+<!-- Add Funds modal -->
+<div class="modal-overlay" id="fundsOverlay">
+  <div class="modal-box">
+    <h2 id="fundsGoalName">Add Funds</h2>
+    <p>Allocate money toward this goal.</p>
+    <div class="field">
+      <label for="fFundAmount">Amount (R)</label>
+      <input type="number" id="fFundAmount" step="0.01" placeholder="0.00">
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="fundsCancelBtn">Cancel</button>
+      <button class="btn btn-primary" id="fundsConfirmBtn">Add Funds</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>
+  <span id="toastText">Saved</span>
+</div>
+
+<script>
+(function(){
+  const el = (id) => document.getElementById(id);
+
+  let goals = [];
+  let editingId = null;
+  let fundingId = null;
+
+  function currency(n){
+    return 'R' + Number(n).toLocaleString('en-ZA', {minimumFractionDigits:2, maximumFractionDigits:2});
+  }
+  function escapeHtml(str){
+    return String(str ?? '').replace(/[&<>"']/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]));
+  }
+  function showToast(msg){
+    const toast = el('toast');
+    el('toastText').textContent = msg;
+    toast.classList.add('show');
+    clearTimeout(showToast._t);
+    showToast._t = setTimeout(() => toast.classList.remove('show'), 2200);
+  }
+
+  async function loadGoals(){
+    const { data, error } = await supabaseClient
+      .from('goals')
+      .select('*')
+      .order('created_at', { ascending: true });
+    if(error){ showToast('Error loading goals'); console.error(error); return; }
+    goals = data.map(g => ({
+      id: g.id, name: g.name,
+      target: Number(g.target_amount), saved: Number(g.saved_amount),
+      notes: g.notes
+    }));
+    render();
+  }
+
+  // Shared shape geometry for both the empty outline and the gold fill layer.
+  const TROPHY_SOLID = `
+    <rect x="22" y="14" width="56" height="8" rx="3"/>
+    <path d="M26,22 L74,22 C74,50 66,72 50,72 C34,72 26,50 26,22 Z"/>
+    <rect x="46" y="72" width="8" height="16"/>
+    <rect x="34" y="88" width="32" height="9" rx="2"/>
+    <rect x="24" y="97" width="52" height="9" rx="3"/>
+  `;
+  const TROPHY_HANDLES = `
+    <path d="M26,26 C8,26 8,52 28,54"/>
+    <path d="M74,26 C92,26 92,52 72,54"/>
+  `;
+
+  function trophyMarkup(goalId, pct){
+    const gradId = `trophyGrad-${goalId}`;
+    const clipTop = 100 - pct;
+    return `
+      <div class="trophy-wrap">
+        <svg class="trophy-bg" viewBox="0 0 100 112" fill="none" stroke="var(--border)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          ${TROPHY_SOLID}
+          ${TROPHY_HANDLES}
+        </svg>
+        <div class="trophy-fill-clip" style="clip-path: inset(${clipTop}% 0 0 0);">
+          <svg viewBox="0 0 100 112">
+            <defs>
+              <linearGradient id="${gradId}" x1="0" y1="1" x2="0" y2="0">
+                <stop offset="0" stop-color="#e8a83c"/>
+                <stop offset="1" stop-color="#ffe08a"/>
+              </linearGradient>
+            </defs>
+            <g fill="url(#${gradId})" stroke="none">
+              ${TROPHY_SOLID}
+            </g>
+            <g fill="none" stroke="url(#${gradId})" stroke-width="6" stroke-linecap="round">
+              ${TROPHY_HANDLES}
+            </g>
+          </svg>
+        </div>
+      </div>
+    `;
+  }
+
+  function render(){
+    const grid = el('goalGrid');
+    const empty = el('emptyState');
+    if(goals.length === 0){
+      grid.innerHTML = '';
+      empty.style.display = 'flex';
+      return;
+    }
+    empty.style.display = 'none';
+
+    grid.innerHTML = goals.map(g => {
+      const pct = g.target > 0 ? Math.min(100, (g.saved / g.target) * 100) : 0;
+      return `
+        <div class="goal-card">
+          <div class="goal-trophy">${trophyMarkup(g.id, pct)}</div>
+          <div class="goal-info">
+            <div class="goal-card-top">
+              <h3>${escapeHtml(g.name)}</h3>
+              <div class="goal-card-actions">
+                <button class="icon-btn" data-edit="${g.id}" aria-label="Edit goal">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5Z"/></svg>
+                </button>
+                <button class="icon-btn danger" data-del="${g.id}" aria-label="Delete goal">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0-1 14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L4 6"/></svg>
+                </button>
+              </div>
+            </div>
+            ${pct >= 100 ? '<span class="goal-reached-tag">🏆 Goal reached</span>' : ''}
+            <div class="goal-amounts">
+              <span class="saved">${currency(g.saved)}</span><span class="of">of</span><span class="target">${currency(g.target)}</span>
+            </div>
+            <div class="bar-track goal-progress-track"><div class="bar-fill goal-progress-fill" style="width:${pct}%"></div></div>
+            <div class="goal-pct">${pct.toFixed(0)}% funded${g.notes ? ' · ' + escapeHtml(g.notes) : ''}</div>
+            <button class="btn btn-ghost goal-fund-btn" data-fund="${g.id}">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M12 5v14M5 12h14"/></svg>
+              Add Funds
+            </button>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function openDrawer(goal){
+    editingId = goal ? goal.id : null;
+    el('drawerTitle').textContent = goal ? 'Edit Goal' : 'Add Goal';
+    el('editId').value = goal ? goal.id : '';
+    el('fName').value = goal ? goal.name : '';
+    el('fTarget').value = goal ? goal.target : '';
+    el('fNotes').value = goal ? (goal.notes || '') : '';
+
+    if(goal){
+      el('startingField').style.display = 'none';
+      el('savedInfoField').style.display = 'block';
+      el('savedInfoText').textContent = `${currency(goal.saved)} saved so far — use "Add Funds" on the card to allocate more.`;
+    } else {
+      el('startingField').style.display = 'block';
+      el('savedInfoField').style.display = 'none';
+      el('fStarting').value = '';
+    }
+
+    el('drawer').classList.add('show');
+    el('overlay').classList.add('show');
+    setTimeout(() => el('fName').focus(), 200);
+  }
+  function closeDrawer(){
+    el('drawer').classList.remove('show');
+    el('overlay').classList.remove('show');
+    editingId = null;
+  }
+
+  el('saveBtn').addEventListener('click', async () => {
+    const name = el('fName').value.trim();
+    const target = parseFloat(el('fTarget').value);
+    if(!name){ el('fName').focus(); return; }
+    if(isNaN(target) || target <= 0){ el('fTarget').focus(); return; }
+    const notes = el('fNotes').value.trim();
+
+    let error;
+    if(editingId){
+      ({ error } = await supabaseClient.from('goals').update({ name, target_amount: target, notes }).eq('id', editingId));
+    } else {
+      const starting = parseFloat(el('fStarting').value) || 0;
+      ({ error } = await supabaseClient.from('goals').insert({ name, target_amount: target, saved_amount: starting, notes }));
+    }
+    if(error){ showToast('Save failed'); console.error(error); return; }
+
+    showToast(editingId ? 'Goal updated' : 'Goal added');
+    closeDrawer();
+    await loadGoals();
+  });
+
+  async function handleDelete(id){
+    const g = goals.find(x => x.id === id);
+    if(!g) return;
+    if(!confirm(`Delete "${g.name}"? This can't be undone.`)) return;
+    const { error } = await supabaseClient.from('goals').delete().eq('id', id);
+    if(error){ showToast('Delete failed'); console.error(error); return; }
+    await loadGoals();
+    showToast('Goal removed');
+  }
+
+  function openFundsModal(id){
+    const g = goals.find(x => x.id === id);
+    if(!g) return;
+    fundingId = id;
+    el('fundsGoalName').textContent = `Add Funds — ${g.name}`;
+    el('fFundAmount').value = '';
+    el('fundsOverlay').classList.add('show');
+    setTimeout(() => el('fFundAmount').focus(), 150);
+  }
+  function closeFundsModal(){
+    el('fundsOverlay').classList.remove('show');
+    fundingId = null;
+  }
+
+  el('fundsConfirmBtn').addEventListener('click', async () => {
+    const amount = parseFloat(el('fFundAmount').value);
+    if(isNaN(amount) || amount <= 0){ el('fFundAmount').focus(); return; }
+    const g = goals.find(x => x.id === fundingId);
+    if(!g) return;
+    const newSaved = g.saved + amount;
+    const { error } = await supabaseClient.from('goals').update({ saved_amount: newSaved }).eq('id', fundingId);
+    if(error){ showToast('Could not add funds'); console.error(error); return; }
+    showToast(`${currency(amount)} added to ${g.name}`);
+    closeFundsModal();
+    await loadGoals();
+  });
+  el('fundsCancelBtn').addEventListener('click', closeFundsModal);
+  el('fundsOverlay').addEventListener('click', (e) => { if(e.target.id === 'fundsOverlay') closeFundsModal(); });
+
+  el('addGoalBtn').addEventListener('click', () => openDrawer(null));
+  el('emptyAddBtn').addEventListener('click', () => openDrawer(null));
+  el('drawerClose').addEventListener('click', closeDrawer);
+  el('cancelBtn').addEventListener('click', closeDrawer);
+  el('overlay').addEventListener('click', closeDrawer);
+
+  el('goalGrid').addEventListener('click', (e) => {
+    const editBtn = e.target.closest('[data-edit]');
+    const delBtn = e.target.closest('[data-del]');
+    const fundBtn = e.target.closest('[data-fund]');
+    if(editBtn){ const g = goals.find(x => x.id === editBtn.dataset.edit); if(g) openDrawer(g); }
+    if(delBtn){ handleDelete(delBtn.dataset.del); }
+    if(fundBtn){ openFundsModal(fundBtn.dataset.fund); }
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if(e.key === 'Escape'){
+      if(el('drawer').classList.contains('show')) closeDrawer();
+      if(el('fundsOverlay').classList.contains('show')) closeFundsModal();
+    }
+  });
+
+  loadGoals();
+})();
+</script>
+</body>
+</html>
 
