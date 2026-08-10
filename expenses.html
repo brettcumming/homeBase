@@ -182,7 +182,12 @@
   .breakdown-row:last-child{margin-bottom:0;}
   .breakdown-row .cname{width:130px; font-size:12.5px; color:var(--text-secondary); flex-shrink:0;}
   .breakdown-row .bar-track{flex:1; height:8px; background:var(--panel); border-radius:5px; overflow:hidden;}
-  .breakdown-row .bar-fill{height:100%; border-radius:5px; background:linear-gradient(90deg, var(--accent), var(--accent-hover));}
+  /*.breakdown-row .bar-fill{height:100%; border-radius:5px; background:linear-gradient(90deg, var(--accent), var(--accent-hover));}*/
+
+  .bar-fill{height:100%; border-radius:5px; overflow:hidden; display:flex;}
+  .bar-seg-brett{height:100%; background:linear-gradient(90deg,#f0664c,#ff8266);}
+  .bar-seg-bernice{height:100%; background:linear-gradient(90deg,#f0e04c,#ffe98a);}
+  
   .breakdown-row .bamount{width:90px; text-align:right; font-family:'JetBrains Mono'; font-size:12.5px; color:var(--text-primary); flex-shrink:0;}
   .breakdown-empty{font-size:12.5px; color:var(--text-muted); text-align:center; padding:6px 0;}
 
@@ -610,13 +615,13 @@
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>
   <span id="toastText">Saved</span>
 </div>
-
 <script>
 (function(){
   const el = (id) => document.getElementById(id);
 
   let expenses = [];
   let editingId = null;
+  let selectedPaidBy = 'Brett';
 
   function currency(n){
     return 'R' + Number(n).toLocaleString('en-ZA', {minimumFractionDigits:2, maximumFractionDigits:2});
@@ -650,7 +655,8 @@
     if(error){ showToast('Error loading expenses'); console.error(error); return; }
     expenses = data.map(e => ({
       id: e.id, description: e.description, amount: e.amount,
-      date: e.expense_date, category: e.category, notes: e.notes
+      date: e.expense_date, category: e.category, notes: e.notes,
+      paidBy: e.paid_by || 'Brett'
     }));
     render();
   }
@@ -687,11 +693,17 @@
     el('statCount').textContent = monthList.length;
 
     const byCat = {};
-    monthList.forEach(e => { byCat[e.category] = (byCat[e.category]||0) + Number(e.amount||0); });
-    const sorted = Object.entries(byCat).sort((a,b) => b[1]-a[1]);
+    monthList.forEach(e => {
+      const amt = Number(e.amount||0);
+      if(!byCat[e.category]) byCat[e.category] = { total: 0, Brett: 0, Bernice: 0 };
+      byCat[e.category].total += amt;
+      byCat[e.category][e.paidBy === 'Bernice' ? 'Bernice' : 'Brett'] += amt;
+    });
+    const sorted = Object.entries(byCat).sort((a,b) => b[1].total - a[1].total);
+
     if(sorted.length){
       el('statTopCat').textContent = sorted[0][0];
-      el('statTopCatAmount').textContent = currency(sorted[0][1]) + ' spent';
+      el('statTopCatAmount').textContent = currency(sorted[0][1].total) + ' spent';
     } else {
       el('statTopCat').textContent = '—';
       el('statTopCatAmount').textContent = '—';
@@ -701,14 +713,22 @@
     if(sorted.length === 0){
       breakdownEl.innerHTML = '<div class="breakdown-empty">No expenses logged for this month yet.</div>';
     } else {
-      const max = sorted[0][1];
-      breakdownEl.innerHTML = sorted.map(([cat, amt]) => `
+      const max = sorted[0][1].total;
+      breakdownEl.innerHTML = sorted.map(([cat, d]) => {
+        const widthPct = max ? (d.total/max*100) : 0;
+        const brettPct = d.total ? (d.Brett/d.total*100) : 0;
+        const berniceP = 100 - brettPct;
+        return `
         <div class="breakdown-row">
           <div class="cname">${escapeHtml(cat)}</div>
-          <div class="bar-track"><div class="bar-fill" style="width:${max ? (amt/max*100) : 0}%"></div></div>
-          <div class="bamount">${currency(amt)}</div>
+          <div class="bar-track"><div class="bar-fill" style="width:${widthPct}%">
+            <div class="bar-seg-brett" style="width:${brettPct}%"></div>
+            <div class="bar-seg-bernice" style="width:${berniceP}%"></div>
+          </div></div>
+          <div class="bamount">${currency(d.total)}</div>
         </div>
-      `).join('');
+      `;
+      }).join('');
     }
   }
 
@@ -769,6 +789,12 @@
     `).join('');
   }
 
+  function updatePaidBySelection(){
+    document.querySelectorAll('.paidby-option').forEach(btn => {
+      btn.classList.toggle('selected', btn.dataset.paidby === selectedPaidBy);
+    });
+  }
+
   function openDrawer(expense){
     editingId = expense ? expense.id : null;
     el('drawerTitle').textContent = expense ? 'Edit Expense' : 'Add Expense';
@@ -778,6 +804,8 @@
     el('fDate').value = expense ? expense.date : new Date().toISOString().slice(0,10);
     el('fCategory').value = expense ? expense.category : 'Groceries';
     el('fNotes').value = expense ? (expense.notes||'') : '';
+    selectedPaidBy = expense ? (expense.paidBy || 'Brett') : 'Brett';
+    updatePaidBySelection();
     el('drawer').classList.add('show');
     el('overlay').classList.add('show');
     setTimeout(() => el('fDesc').focus(), 200);
@@ -787,6 +815,13 @@
     el('overlay').classList.remove('show');
     editingId = null;
   }
+
+  el('paidByGroup').addEventListener('click', (e) => {
+    const btn = e.target.closest('.paidby-option');
+    if(!btn) return;
+    selectedPaidBy = btn.dataset.paidby;
+    updatePaidBySelection();
+  });
 
   el('saveBtn').addEventListener('click', async () => {
     const description = el('fDesc').value.trim();
@@ -798,7 +833,8 @@
       amount,
       expense_date: el('fDate').value || null,
       category: el('fCategory').value,
-      notes: el('fNotes').value.trim()
+      notes: el('fNotes').value.trim(),
+      paid_by: selectedPaidBy
     };
 
     let error;
@@ -825,8 +861,8 @@
   }
 
   function exportCsv(){
-    const rows = [['Description','Amount','Date','Category','Notes']];
-    getMonthExpenses().forEach(e => rows.push([e.description, e.amount, e.date, e.category, e.notes||'']));
+    const rows = [['Description','Amount','Date','Category','Paid By','Notes']];
+    getMonthExpenses().forEach(e => rows.push([e.description, e.amount, e.date, e.category, e.paidBy, e.notes||'']));
     const csv = rows.map(r => r.map(v => `"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
     const blob = new Blob([csv], {type:'text/csv'});
     const url = URL.createObjectURL(blob);
@@ -864,5 +900,6 @@
   loadExpenses();
 })();
 </script>
+
 </body>
 </html>
