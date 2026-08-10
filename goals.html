@@ -564,7 +564,7 @@ function goalIconMarkup(goalId, pct){
             </div>
             ${pct >= 100 ? '<span class="goal-reached-tag">🏆 Goal reached</span>' : ''}
             <div class="goal-amounts">
-              <span class="saved">${currency(g.saved)}</span><span class="of">of</span><span class="target">${currency(g.target)}</span>
+              <span class="saved">${currency(g.saved)}</span><span class="of"> of </span><span class="target">${currency(g.target)}</span>
             </div>
             <div class="bar-track goal-progress-track"><div class="bar-fill goal-progress-fill" style="width:${pct}%"></div></div>
             <div class="goal-pct">${pct.toFixed(0)}% funded${g.notes ? ' · ' + escapeHtml(g.notes) : ''}</div>
