@@ -171,7 +171,8 @@
     border:1px solid var(--border-soft); border-radius:var(--radius-md); padding:20px;
     display:flex; gap:16px; align-items:flex-start;
   }
-  .trophy-wrap{position:relative; width:64px; height:72px; flex-shrink:0;}
+  /*.trophy-wrap{position:relative; width:64px; height:72px; flex-shrink:0;}*/
+  .trophy-wrap{position:relative; width:84px; height:84px; flex-shrink:0;}
   .trophy-wrap svg{position:absolute; inset:0; width:100%; height:100%;}
   .trophy-fill-clip{position:absolute; inset:0; overflow:hidden; transition:clip-path .6s ease;}
 
@@ -504,47 +505,46 @@
     render();
   }
 
-  // Shared shape geometry for both the empty outline and the gold fill layer.
-  const TROPHY_SOLID = `
-    <rect x="22" y="14" width="56" height="8" rx="3"/>
-    <path d="M26,22 L74,22 C74,50 66,72 50,72 C34,72 26,50 26,22 Z"/>
-    <rect x="46" y="72" width="8" height="16"/>
-    <rect x="34" y="88" width="32" height="9" rx="2"/>
-    <rect x="24" y="97" width="52" height="9" rx="3"/>
-  `;
-  const TROPHY_HANDLES = `
-    <path d="M26,26 C8,26 8,52 28,54"/>
-    <path d="M74,26 C92,26 92,52 72,54"/>
-  `;
+ // Two closed shapes (fillable) and two open fin lines (stroke-only),
+// split from the rocket icon so the body fills solid while the
+// thin fin lines stay as linework in both the empty and filled states.
+const ROCKET_SOLID = `
+  <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/>
+  <path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/>
+`;
+const ROCKET_LINES = `
+  <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/>
+  <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/>
+`;
 
-  function trophyMarkup(goalId, pct){
-    const gradId = `trophyGrad-${goalId}`;
-    const clipTop = 100 - pct;
-    return `
-      <div class="trophy-wrap">
-        <svg class="trophy-bg" viewBox="0 0 100 112" fill="none" stroke="var(--border)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          ${TROPHY_SOLID}
-          ${TROPHY_HANDLES}
+function goalIconMarkup(goalId, pct){
+  const gradId = `iconGrad-${goalId}`;
+  const clipTop = 100 - pct;
+  return `
+    <div class="trophy-wrap">
+      <svg class="trophy-bg" viewBox="0 0 24 24" fill="none" stroke="var(--border)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+        ${ROCKET_SOLID}
+        ${ROCKET_LINES}
+      </svg>
+      <div class="trophy-fill-clip" style="clip-path: inset(${clipTop}% 0 0 0);">
+        <svg viewBox="0 0 24 24">
+          <defs>
+            <linearGradient id="${gradId}" x1="0" y1="1" x2="0" y2="0">
+              <stop offset="0" stop-color="#e8a83c"/>
+              <stop offset="1" stop-color="#ffe08a"/>
+            </linearGradient>
+          </defs>
+          <g fill="url(#${gradId})" stroke="none">
+            ${ROCKET_SOLID}
+          </g>
+          <g fill="none" stroke="url(#${gradId})" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+            ${ROCKET_LINES}
+          </g>
         </svg>
-        <div class="trophy-fill-clip" style="clip-path: inset(${clipTop}% 0 0 0);">
-          <svg viewBox="0 0 100 112">
-            <defs>
-              <linearGradient id="${gradId}" x1="0" y1="1" x2="0" y2="0">
-                <stop offset="0" stop-color="#e8a83c"/>
-                <stop offset="1" stop-color="#ffe08a"/>
-              </linearGradient>
-            </defs>
-            <g fill="url(#${gradId})" stroke="none">
-              ${TROPHY_SOLID}
-            </g>
-            <g fill="none" stroke="url(#${gradId})" stroke-width="6" stroke-linecap="round">
-              ${TROPHY_HANDLES}
-            </g>
-          </svg>
-        </div>
       </div>
-    `;
-  }
+    </div>
+  `;
+}
 
   function render(){
     const grid = el('goalGrid');
@@ -559,8 +559,8 @@
     grid.innerHTML = goals.map(g => {
       const pct = g.target > 0 ? Math.min(100, (g.saved / g.target) * 100) : 0;
       return `
-        <div class="goal-card">
-          <div class="goal-trophy">${trophyMarkup(g.id, pct)}</div>
+        <div class="goal-card">        
+          <div class="goal-trophy">${goalIconMarkup(g.id, pct)}</div>
           <div class="goal-info">
             <div class="goal-card-top">
               <h3>${escapeHtml(g.name)}</h3>
