@@ -610,25 +610,27 @@
   }
 
   el('saveBtn').addEventListener('click', async () => {
-    const name = el('fName').value.trim();
-    const target = parseFloat(el('fTarget').value);
-    if(!name){ el('fName').focus(); return; }
-    if(isNaN(target) || target <= 0){ el('fTarget').focus(); return; }
-    const notes = el('fNotes').value.trim();
+  const name = el('fName').value.trim();
+  const target = parseFloat(el('fTarget').value);
+  if(!name){ el('fName').focus(); return; }
+  if(isNaN(target) || target <= 0){ el('fTarget').focus(); return; }
+  const notes = el('fNotes').value.trim();
 
-    let error;
-    if(editingId){
-      ({ error } = await supabaseClient.from('goals').update({ name, target_amount: target, notes }).eq('id', editingId));
-    } else {
-      const starting = parseFloat(el('fStarting').value) || 0;
-      ({ error } = await supabaseClient.from('goals').insert({ name, target_amount: target, saved_amount: starting, notes }));
-    }
-    if(error){ showToast('Save failed'); console.error(error); return; }
+  let error;
+  if(editingId){
+    const savedAmount = parseFloat(el('fSavedAmount').value);
+    if(isNaN(savedAmount) || savedAmount < 0){ el('fSavedAmount').focus(); return; }
+    ({ error } = await supabaseClient.from('goals').update({ name, target_amount: target, notes, saved_amount: savedAmount }).eq('id', editingId));
+  } else {
+    const starting = parseFloat(el('fStarting').value) || 0;
+    ({ error } = await supabaseClient.from('goals').insert({ name, target_amount: target, saved_amount: starting, notes }));
+  }
+  if(error){ showToast('Save failed'); console.error(error); return; }
 
-    showToast(editingId ? 'Goal updated' : 'Goal added');
-    closeDrawer();
-    await loadGoals();
-  });
+  showToast(editingId ? 'Goal updated' : 'Goal added');
+  closeDrawer();
+  await loadGoals();
+});
 
   async function handleDelete(id){
     const g = goals.find(x => x.id === id);
