@@ -698,6 +698,7 @@ body {
     'Event': 'glow-green'
   };
   const EXPENSE_HIGHLIGHT_HOURS = 6; // how long the Expenses tile stays lit after a new expense
+  const PAYMENT_HIGHLIGHT_HOURS = 6; // how long the Expenses tile stays lit after a new expense
 
   let events = [];
   let order = [];
@@ -917,9 +918,27 @@ body {
     }
   }
 
+  // ---- Expenses tile "recent activity" highlight ----
+  async function checkRecentPaymentActivity(){
+    const cutoff = new Date(Date.now() - PAYMENT_HIGHLIGHT_HOURS * 3600 * 1000).toISOString();
+    const { data, error } = await supabaseClient
+      .from('payments')
+      .select('created_at')
+      .gte('created_at', cutoff)
+      .order('created_at', { ascending: false })
+      .limit(1);
+    if(error){ console.error(error); return; }
+    const paymentsCard = document.querySelector('a[href="payments.html"].card');
+    if(paymentsCard){
+      paymentsCard.classList.toggle('recent-activity', !!(data && data.length));
+    }
+  }
+
   loadEvents();
   checkRecentExpenseActivity();
+  checkRecentPaymentActivity();
   setInterval(checkRecentExpenseActivity, 5 * 60 * 1000);
+  setInterval(checkRecentPaymentActivity, 5 * 60 * 1000);
 })();
 </script>
 
