@@ -118,15 +118,19 @@ body {
   .card.medical .card-icon{background:rgba(255,255,255,0.06); color:var(--text-secondary);}
   .card.pets .card-icon{background:rgba(255,255,255,0.06); color:var(--text-secondary);}
 
+  /* Expenses tile — lit up for a while after a new expense is logged */
+  .card.recent-activity{
+    border-color:rgba(240,184,76,0.5);
+    animation:expenseTileGlow 2.4s ease-in-out infinite;
+  }
   .card.recent-activity .card-icon::after{
     content:"";
     position:absolute; top:-3px; right:-3px; width:10px; height:10px; border-radius:50%;
-    background:var(--warning); box-shadow:0 0 8px 2px #fcf003;
-    animation:expenseDotPulse 1.6s ease-in-out infinite;
+    background:var(--warning); box-shadow:0 0 8px 2px rgba(240,184,76,0.85);
   }
-  @keyframes expenseDotPulse{
-    0%, 100%{ box-shadow:0 0 6px 2px #fcf003; opacity:1; }
-    50%{ box-shadow:0 0 12px 4px #fcf003; opacity:0.75; }
+  @keyframes expenseTileGlow{
+    0%, 100%{ box-shadow:0 0 0 1px rgba(240,184,76,0.22), 0 0 14px -4px rgba(240,184,76,0.4); }
+    50%{ box-shadow:0 0 0 1px rgba(240,184,76,0.4), 0 0 26px -2px rgba(240,184,76,0.7); }
   }
 
   .soon-tag{
@@ -694,7 +698,6 @@ body {
     'Event': 'glow-green'
   };
   const EXPENSE_HIGHLIGHT_HOURS = 6; // how long the Expenses tile stays lit after a new expense
-  const PAYMENT_HIGHLIGHT_HOURS = 6; // how long the Expenses tile stays lit after a new expense
 
   let events = [];
   let order = [];
@@ -914,27 +917,9 @@ body {
     }
   }
 
-  // ---- Expenses tile "recent activity" highlight ----
-  async function checkRecentPaymentActivity(){
-    const cutoff = new Date(Date.now() - PAYMENT_HIGHLIGHT_HOURS * 3600 * 1000).toISOString();
-    const { data, error } = await supabaseClient
-      .from('payments')
-      .select('created_at')
-      .gte('created_at', cutoff)
-      .order('created_at', { ascending: false })
-      .limit(1);
-    if(error){ console.error(error); return; }
-    const paymentsCard = document.querySelector('a[href="payments.html"].card');
-    if(paymentsCard){
-      paymentsCard.classList.toggle('recent-activity', !!(data && data.length));
-    }
-  }
-
   loadEvents();
   checkRecentExpenseActivity();
-  checkRecentPaymentActivity();
   setInterval(checkRecentExpenseActivity, 5 * 60 * 1000);
-  setInterval(checkRecentPaymentActivity, 5 * 60 * 1000);
 })();
 </script>
 
