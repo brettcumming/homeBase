@@ -70,16 +70,24 @@ body {
   }
 
   .hero{text-align:center; margin-bottom:52px;}
+  .brand-mark-wrap{
+    position:relative; width:64px; margin:0 auto 22px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .brand-orbit{
+    position:absolute; top:50%; left:50%; width:132px; height:132px;
+    transform:translate(-50%,-50%); pointer-events:none; z-index:1;
+  }
   .brand-mark{
-    width:64px; height:64px; border-radius:18px; margin:0 auto 22px;
+    width:64px; height:64px; border-radius:18px; margin:0; position:relative; z-index:2;
     background:linear-gradient(155deg, var(--accent), #2a4fc4);
     display:flex; align-items:center; justify-content:center;
     box-shadow:0 12px 32px rgba(76,124,240,0.35);
   }
   .brand-mark svg{width:42px; height:42px;}
-  .hero h1{font-size:32px; font-weight:800; margin:0 0 10px; letter-spacing:-0.4px;}
-  .hero h4{font-size:34px; font-weight:700; margin:0 0 10px; letter-spacing:-0.2px;}
-  .hero p{margin:0; color:var(--text-secondary); font-size:15px; max-width:46ch; margin:0 auto;}
+    .hero h1{font-size:32px; font-weight:800; margin:0 0 10px; letter-spacing:-0.4px;}
+    .hero h4{font-size:34px; font-weight:700; margin:0 0 10px; letter-spacing:-0.2px;}
+    .hero p{margin:0; color:var(--text-secondary); font-size:15px; max-width:46ch; margin:0 auto;}
 
   .ledger-stitch{
     height:1px; width:100%; max-width:520px; margin:36px 0 40px;
@@ -289,24 +297,30 @@ body {
 <div class="wrap">
 
   <div class="hero">
-    <div class="brand-mark">
-      <svg
-        viewBox="0 0 24 24"
-        width="68"
-        height="68"
-        fill="none"
-        stroke="#eaf0fb"
-        stroke-width="2.2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        aria-label="Home"
-      >
-        <path d="M4 21V3h3v7" />
-        <path d="M7 10 12 5l7 5v11" />
-        <path d="M4 21h5" />
-        <path d="M15 21h4" />
-      </svg>
-    </div>
+    <div class="brand-mark-wrap">
+  <svg class="brand-orbit" viewBox="0 0 100 100" aria-hidden="true">
+    <ellipse cx="50" cy="50" rx="48" ry="17" transform="rotate(-20 50 50)"
+      fill="none" stroke="#eaf0fb" stroke-width="1.6" opacity="0.5"/>
+  </svg>
+  <div class="brand-mark">
+    <svg
+      viewBox="0 0 24 24"
+      width="68"
+      height="68"
+      fill="none"
+      stroke="#eaf0fb"
+      stroke-width="2.2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-label="Home"
+    >
+      <path d="M4 21V3h3v7" />
+      <path d="M7 10 12 5l7 5v11" />
+      <path d="M4 21h5" />
+      <path d="M15 21h4" />
+    </svg>
+  </div>
+</div>
     <h4>homeBase</h4>
     <p>Shared home for payments, documents & all things important.</p>
   </div>
