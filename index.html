@@ -95,6 +95,15 @@ body {
   .grid{
     display:grid; grid-template-columns:repeat(5, 1fr); gap:12px; width:100%;
   }
+  /* Expenses tile — subtle red glow while there's unread activity */
+  .card.recent-activity{
+    border-color:rgba(255,59,48,0.45);
+    animation:expenseTileGlow 2.4s ease-in-out infinite;
+  }
+  @keyframes expenseTileGlow{
+    0%, 100%{ box-shadow:0 0 0 1px rgba(255,59,48,0.18), 0 0 14px -4px rgba(255,59,48,0.35); }
+    50%{ box-shadow:0 0 0 1px rgba(255,59,48,0.35), 0 0 26px -2px rgba(255,59,48,0.6); }
+  }
   .card{    
     height:165px;
     position:relative; background:linear-gradient(160deg, var(--panel), var(--panel-alt));
@@ -929,11 +938,15 @@ body {
       .select('id', { count: 'exact', head: true })
       .gte('created_at', cutoff);
     if(error){ console.error(error); return; }
+    const n = count || 0;
     const badge = el('expenseBadge');
     if(badge){
-      const n = count || 0;
       badge.textContent = n > 99 ? '99+' : n;
       badge.classList.toggle('show', n > 0);
+    }
+    const expensesCard = document.querySelector('a[href="expenses.html"].card');
+    if(expensesCard){
+      expensesCard.classList.toggle('recent-activity', n > 0);
     }
   }
 
