@@ -204,18 +204,30 @@ body {
   cursor:pointer;
 }
   
-.planner-event[data-depth="0"]{cursor:default;}
-.planner-event.glow-red{border-color:rgba(240,102,76,0.4); box-shadow:0 0 18px -6px rgba(240,102,76,0.5);}
+.planner-event[data-depth="0"]{cursor: .planner-event.glow-red{border-color:rgba(240,102,76,0.4); box-shadow:0 0 18px -6px rgba(240,102,76,0.5);}
 .planner-event.glow-orange{border-color:rgba(240,184,76,0.4); box-shadow:0 0 18px -6px rgba(240,184,76,0.5);}
 .planner-event.glow-yellow{border-color:rgba(240,224,76,0.4); box-shadow:0 0 18px -6px rgba(240,224,76,0.5);}
 .planner-event.glow-green{border-color:rgba(51,214,166,0.4); box-shadow:0 0 18px -6px rgba(51,214,166,0.5);}
 
 .planner-event-top{display:flex; align-items:center; justify-content:space-between; gap:8px;}
 .planner-dot{width:10px; height:10px; border-radius:50%; flex-shrink:0;}
-.planner-dot.glow-red{background:var(--danger); box-shadow:0 0 10px 2px rgba(240,102,76,0.7);}
-.planner-dot.glow-orange{background:var(--warning); box-shadow:0 0 10px 2px rgba(240,184,76,0.7);}
-.planner-dot.glow-yellow{background:#f0e04c; box-shadow:0 0 10px 2px rgba(240,224,76,0.7);}
-.planner-dot.glow-green{background:var(--success); box-shadow:0 0 10px 2px rgba(51,214,166,0.7);}
+
+.planner-event.glow-red{
+  background:linear-gradient(160deg, rgba(240,102,76,0.16), rgba(240,102,76,0.04)), var(--bg-elevated);
+  border-color:rgba(240,102,76,0.4); box-shadow:0 0 18px -6px rgba(240,102,76,0.5);
+}
+.planner-event.glow-orange{
+  background:linear-gradient(160deg, rgba(240,184,76,0.16), rgba(240,184,76,0.04)), var(--bg-elevated);
+  border-color:rgba(240,184,76,0.4); box-shadow:0 0 18px -6px rgba(240,184,76,0.5);
+}
+.planner-event.glow-yellow{
+  background:linear-gradient(160deg, rgba(240,224,76,0.16), rgba(240,224,76,0.04)), var(--bg-elevated);
+  border-color:rgba(240,224,76,0.4); box-shadow:0 0 18px -6px rgba(240,224,76,0.5);
+}
+.planner-event.glow-green{
+  background:linear-gradient(160deg, rgba(51,214,166,0.16), rgba(51,214,166,0.04)), var(--bg-elevated);
+  border-color:rgba(51,214,166,0.4); box-shadow:0 0 18px -6px rgba(51,214,166,0.5);
+}
 
 .planner-event-date{font-family:'JetBrains Mono'; font-size:11.5px; color:var(--text-secondary); flex-shrink:0;}
 .planner-event-date .day{font-weight:700; color:var(--text-primary);}
