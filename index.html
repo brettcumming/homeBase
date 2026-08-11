@@ -74,23 +74,14 @@ body {
   position:relative; width:64px; margin:0 auto 22px;
   display:flex; align-items:center; justify-content:center;
 }
-.brand-mark-wrap{
-  position:relative; width:64px; margin:0 auto 22px;
-  display:flex; align-items:center; justify-content:center;
-}
-.brand-orbit{
-  position:absolute; top:50%; left:50%; width:132px; height:132px;
-  transform:translate(-50%,-50%); pointer-events:none;
-}
-.brand-orbit-back{z-index:1;}
-.brand-orbit-front{z-index:3;}
 .brand-mark{
-  width:64px; height:64px; border-radius:18px; margin:0; position:relative; z-index:2;
-  background:linear-gradient(155deg, var(--accent), #2a4fc4);
-  display:flex; align-items:center; justify-content:center;
-  box-shadow:0 12px 32px rgba(76,124,240,0.35);
-}
-.brand-mark svg{width:42px; height:42px;}
+    width:64px; height:64px; border-radius:18px; margin:0 auto 22px;
+    background:linear-gradient(155deg, var(--accent), 
+#2a4fc4);
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 12px 32px rgba(76,124,240,0.35);
+  }
+  .brand-mark svg{width:42px; height:42px;}
 
   .ledger-stitch{
     height:1px; width:100%; max-width:520px; margin:36px 0 40px;
@@ -300,38 +291,25 @@ body {
 <div class="wrap">
 
   <div class="hero">
-    <div class="brand-mark-wrap">
-  <svg class="brand-orbit brand-orbit-back" viewBox="0 0 100 100" aria-hidden="true">
-    <g transform="rotate(-20 50 50)">
-      <path d="M4,50 A47,18 0 0 1 96,50 A46,12 0 0 0 4,50 Z" fill="#eaf0fb" opacity="0.5"/>
-    </g>
-  </svg>
-
-  <div class="brand-mark">
-    <svg
-      viewBox="0 0 24 24"
-      width="68"
-      height="68"
-      fill="none"
-      stroke="#eaf0fb"
-      stroke-width="2.2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      aria-label="Home"
-    >
-      <path d="M4 21V3h3v7" />
-      <path d="M7 10 12 5l7 5v11" />
-      <path d="M4 21h5" />
-      <path d="M15 21h4" />
-    </svg>
-  </div>
-
-  <svg class="brand-orbit brand-orbit-front" viewBox="0 0 100 100" aria-hidden="true">
-    <g transform="rotate(-20 50 50)">
-      <path d="M4,50 A47,18 0 0 0 96,50 A46,12 0 0 1 4,50 Z" fill="#eaf0fb" opacity="0.75"/>
-    </g>
-  </svg>
-</div>
+    <div class="brand-mark">
+      <svg
+        viewBox="0 0 24 24"
+        width="68"
+        height="68"
+        fill="none"
+        stroke="
+#eaf0fb"
+        stroke-width="2.2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-label="Home"
+      >
+        <path d="M4 21V3h3v7" />
+        <path d="M7 10 12 5l7 5v11" />
+        <path d="M4 21h5" />
+        <path d="M15 21h4" />
+      </svg>
+    </div>
     <h4>homeBase</h4>
     <p>Shared home for payments, documents & all things important.</p>
   </div>
