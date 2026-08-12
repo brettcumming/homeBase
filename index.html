@@ -112,6 +112,10 @@ body {
     flex-shrink:0; position:relative;
   }  
   .card-icon{ position:relative; } /* already present — just confirming this stays */
+  .card-icon-note{
+    width:44px; height:44px; border-radius:12px; display:flex; align-items:center; justify-content:center;
+    flex-shrink:0; position:relative;
+  }
   .expense-badge{
     position:absolute; top:-8px; right:-8px; min-width:20px; height:20px; padding:0 5px;
     border-radius:999px; background:#ff3b30; color:#fff;
@@ -122,6 +126,7 @@ body {
   .expense-badge.show{display:block;}
   
   .card-icon svg{width:21px; height:21px;}
+  .card-icon-note svg{width:26px; height:26px;}
   .card.payments .card-icon{background:var(--accent-soft); color:var(--accent-hover);}
   .card.documents .card-icon{background:var(--success-soft); color:var(--success);}
   .card.expenses .card-icon{background:var(--warning-soft); color:var(--warning);}
@@ -666,7 +671,7 @@ body {
 
     <a href="notes.html" class="card live payments">
       <div class="card-top">
-        <div class="card-icon">       
+        <div class="card-icon-note">       
           <svg
   xmlns="http://www.w3.org/2000/svg"
   width="30"
