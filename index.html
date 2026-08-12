@@ -112,11 +112,6 @@ body {
     flex-shrink:0; position:relative;
   }  
   .card-icon{ position:relative; } /* already present — just confirming this stays */
-  .card-icon-note{
-    width:44px; height:44px; border-radius:12px; display:flex; align-items:center; justify-content:center;
-    flex-shrink:0; position:relative;
-  }
-  .card-icon-note{ position:relative; }
   .expense-badge{
     position:absolute; top:-8px; right:-8px; min-width:20px; height:20px; padding:0 5px;
     border-radius:999px; background:#ff3b30; color:#fff;
@@ -127,7 +122,6 @@ body {
   .expense-badge.show{display:block;}
   
   .card-icon svg{width:21px; height:21px;}
-  .card-icon-note svg{width:23px; height:23px;}
   .card.payments .card-icon{background:var(--accent-soft); color:var(--accent-hover);}
   .card.documents .card-icon{background:var(--success-soft); color:var(--success);}
   .card.expenses .card-icon{background:var(--warning-soft); color:var(--warning);}
@@ -135,7 +129,7 @@ body {
   .card.bond .card-icon{background:rgba(255,255,255,0.06); color:var(--text-secondary);}
   .card.medical .card-icon{background:rgba(255,255,255,0.06); color:var(--text-secondary);}
   .card.pets .card-icon{background:rgba(255,255,255,0.06); color:var(--text-secondary);}
-  .card.notes.card-icon-note{background:rgba(255,255,255,0.06); color:var(--text-secondary);}
+  .card.notes .card-icon{background:rgba(255,255,255,0.06); color:var(--text-secondary);}
 
   /* Expenses tile — lit up for a while after a new expense is logged */
 
@@ -673,11 +667,11 @@ body {
 
     <a href="notes.html" class="card live payments">
       <div class="card-top">
-        <div class="card-icon-note">       
+        <div class="card-icon">       
           <svg
   xmlns="http://www.w3.org/2000/svg"
-  width="30"
-  height="30"
+  width="24"
+  height="24"
   viewBox="0 0 24 24"
   fill="none"
   stroke="#ffffff"
