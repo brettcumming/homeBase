@@ -180,13 +180,14 @@ body {
 
   .planner-header-actions{display:flex; align-items:center; gap:8px;}
   .planner-counter{
-    display:none; min-width:20px; height:20px; padding:0 5px;
+    position:absolute; top:-8px; right:-8px; min-width:20px; height:20px; padding:0 5px;
     border-radius:999px; background:#ff3b30; color:#fff;
     font-family:'Inter', sans-serif; font-size:11.5px; font-weight:700; line-height:20px;
     text-align:center; box-shadow:0 1px 4px rgba(0,0,0,0.45), 0 0 0 2px var(--panel);
-    margin-right:2px; flex-shrink:0;
+    display:none; z-index:5;
   }
-  .planner-counter.show{display:inline-block;}
+  .planner-counter.show{display:block;}
+  
   .planner-nav-btn{
     width:30px; height:30px; border-radius:8px; display:flex; align-items:center; justify-content:center;
     background:var(--panel); border:1px solid var(--border); color:var(--text-secondary); cursor:pointer;
@@ -368,13 +369,13 @@ body {
   </div>
 
   <div class="planner-tile">
+    <span class="planner-counter" id="plannerCounter"></span>
     <div class="planner-header">
   <div>
     <h2>Upcoming</h2>
     <p>Appointments, reminders and events.</p>
   </div>
   <div class="planner-header-actions">
-    <span class="planner-counter" id="plannerCounter"></span>
     <button class="planner-nav-btn" id="plannerPrevBtn" aria-label="Previous">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
     </button>
