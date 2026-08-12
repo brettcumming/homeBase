@@ -179,7 +179,14 @@ body {
   .planner-add-btn svg{width:14px; height:14px;}
 
   .planner-header-actions{display:flex; align-items:center; gap:8px;}
-  .planner-counter{font-size:11.5px; color:var(--text-muted); margin-right:2px; white-space:nowrap;}
+  .planner-counter{
+    display:none; min-width:20px; height:20px; padding:0 5px;
+    border-radius:999px; background:#ff3b30; color:#fff;
+    font-family:'Inter', sans-serif; font-size:11.5px; font-weight:700; line-height:20px;
+    text-align:center; box-shadow:0 1px 4px rgba(0,0,0,0.45), 0 0 0 2px var(--panel);
+    margin-right:2px; flex-shrink:0;
+  }
+  .planner-counter.show{display:inline-block;}
   .planner-nav-btn{
     width:30px; height:30px; border-radius:8px; display:flex; align-items:center; justify-content:center;
     background:var(--panel); border:1px solid var(--border); color:var(--text-secondary); cursor:pointer;
@@ -845,7 +852,9 @@ body {
   function updateCounter(){
     const counter = el('plannerCounter');
     if(!counter) return;
-    counter.textContent = events.length ? `${events.length} upcoming` : '';
+    const n = events.length;
+    counter.textContent = n > 99 ? '99+' : n;
+    counter.classList.toggle('show', n > 0);
   }
 
   function promote(id){
