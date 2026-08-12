@@ -193,16 +193,16 @@ body {
   overflow:hidden;
 }
 .planner-event{
-  position:absolute; top:0; left:0; width:280px; height:102px;
-  display:flex; flex-direction:column; gap:6px; justify-content:center;
+  position:absolute; top:0; left:0; width:280px; height:100px;
+  display:flex; flex-direction:column; gap:5px; justify-content:center;
   padding:8px 16px; border-radius:11px;
-  background:var(--bg-elevated); border:3px solid var(--border-soft);
+  background:var(--bg-elevated); border:1px solid var(--border-soft); border-left:4px solid var(--border-soft);
   transition:transform .25s ease, opacity .25s ease;
   cursor:pointer;
 }
   
 .planner-event[data-depth="0"]{cursor:default;}
-.planner-event.glow-red{
+/*.planner-event.glow-red{
   background:linear-gradient(160deg, rgba(240,102,76,0.16), rgba(240,102,76,0.04)), var(--bg-elevated);
   border-color:rgba(240,102,76,0.4); box-shadow:0 0 18px -6px rgba(240,102,76,0.5);
 }
@@ -217,6 +217,22 @@ body {
 .planner-event.glow-green{
   background:linear-gradient(160deg, rgba(51,214,166,0.16), rgba(51,214,166,0.04)), var(--bg-elevated);
   border-color:rgba(51,214,166,0.4); box-shadow:0 0 18px -6px rgba(51,214,166,0.5);
+}*/
+  .planner-event.glow-red{
+  background:linear-gradient(160deg, rgba(240,102,76,0.16), rgba(240,102,76,0.04)), var(--bg-elevated);
+  border-left-color:var(--danger); box-shadow:0 0 18px -6px rgba(240,102,76,0.5);
+}
+.planner-event.glow-orange{
+  background:linear-gradient(160deg, rgba(240,184,76,0.16), rgba(240,184,76,0.04)), var(--bg-elevated);
+  border-left-color:var(--warning); box-shadow:0 0 18px -6px rgba(240,184,76,0.5);
+}
+.planner-event.glow-yellow{
+  background:linear-gradient(160deg, rgba(240,224,76,0.16), rgba(240,224,76,0.04)), var(--bg-elevated);
+  border-left-color:#f0e04c; box-shadow:0 0 18px -6px rgba(240,224,76,0.5);
+}
+.planner-event.glow-green{
+  background:linear-gradient(160deg, rgba(51,214,166,0.16), rgba(51,214,166,0.04)), var(--bg-elevated);
+  border-left-color:var(--success); box-shadow:0 0 18px -6px rgba(51,214,166,0.5);
 }
 
 .planner-event-top{display:flex; align-items:center; justify-content:space-between; gap:8px;}
