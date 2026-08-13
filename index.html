@@ -129,6 +129,15 @@ body {
     display:none; z-index:5;
   }  
   .note-badge.show{display:block;}
+
+  .payment-badge{
+    position:absolute; top:-8px; right:-8px; min-width:20px; height:20px; padding:0 5px;
+    border-radius:999px; background:#ff3b30; color:#fff;
+    font-family:'Inter', sans-serif; font-size:11.5px; font-weight:700; line-height:20px;
+    text-align:center; box-shadow:0 1px 4px rgba(0,0,0,0.45), 0 0 0 2px var(--panel);
+    display:none; z-index:5;
+  }  
+  .payment-badge.show{display:block;}
   
   .card-icon svg{width:21px; height:21px;}
   .card.payments .card-icon{background:var(--accent-soft); color:var(--accent-hover);}
@@ -399,6 +408,7 @@ body {
       <div class="card-top">
         <div class="card-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 9h18M7 14h4"/></svg>
+          <span class="payment-badge" id="paymentBadge">0</span>
         </div>
       </div>
       <h2>Payments</h2>
@@ -783,6 +793,7 @@ body {
   };
   const EXPENSE_HIGHLIGHT_HOURS = 6;
   const NOTE_HIGHLIGHT_HOURS = 6;
+  const PAYMENT_HIGHLIGHT_HOURS = 6;
 
   let events = [];
   let order = [];
@@ -1026,11 +1037,32 @@ body {
     }
   }
 
+  async function checkRecentPaymentActivity(){
+    const cutoff = new Date(Date.now() - PAYMENT_HIGHLIGHT_HOURS * 3600 * 1000).toISOString();
+    const { count, error } = await supabaseClient
+      .from('payments')
+      .select('id', { count: 'exact', head: true })
+      .gte('created_at', cutoff);
+    if(error){ console.error(error); return; }
+    const n = count || 0;
+    const badge = el('paymentBadge');
+    if(badge){
+      badge.textContent = n > 99 ? '99+' : n;
+      badge.classList.toggle('show', n > 0);
+    }
+    const paymentsCard = document.querySelector('a[href="payments.html"].card');
+    if(paymentsCard){
+      paymentsCard.classList.toggle('recent-activity', n > 0);
+    }
+  }
+
   loadEvents();
   checkRecentExpenseActivity();
   checkRecentNoteActivity();
+  checkRecentPaymentActivity();
   setInterval(checkRecentExpenseActivity, 5 * 60 * 1000);
   setInterval(checkRecentNoteActivity, 5 * 60 * 1000);
+  setInterval(checkRecentPaymentActivity, 5 * 60 * 1000);
 })();
 </script>
 
