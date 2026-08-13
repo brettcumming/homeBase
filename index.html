@@ -12,7 +12,7 @@
 <script src="auth.js" defer></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
     --bg:#0a0f1e;
@@ -37,6 +37,12 @@
     --radius-lg:18px;
     --shadow-soft: 0 8px 24px rgba(0,0,0,0.35);
     --shadow-lift: 0 16px 40px rgba(0,0,0,0.45);
+    --note-brett:#d97a3a;
+    --note-brett-edge:#8f4318;
+    --note-brett-text:#fff0c4;
+    --note-bernice:#3d6fb0;
+    --note-bernice-edge:#254a7a;
+    --note-bernice-text:#f0a868;
   }
   *{box-sizing:border-box;}
   html {
@@ -120,24 +126,6 @@ body {
     display:none; z-index:5;
   }  
   .expense-badge.show{display:block;}
-
-  .note-badge{
-    position:absolute; top:-8px; right:-8px; min-width:20px; height:20px; padding:0 5px;
-    border-radius:999px; background:#ff3b30; color:#fff;
-    font-family:'Inter', sans-serif; font-size:11.5px; font-weight:700; line-height:20px;
-    text-align:center; box-shadow:0 1px 4px rgba(0,0,0,0.45), 0 0 0 2px var(--panel);
-    display:none; z-index:5;
-  }  
-  .note-badge.show{display:block;}
-
-  .payment-badge{
-    position:absolute; top:-8px; right:-8px; min-width:20px; height:20px; padding:0 5px;
-    border-radius:999px; background:#ff3b30; color:#fff;
-    font-family:'Inter', sans-serif; font-size:11.5px; font-weight:700; line-height:20px;
-    text-align:center; box-shadow:0 1px 4px rgba(0,0,0,0.45), 0 0 0 2px var(--panel);
-    display:none; z-index:5;
-  }  
-  .payment-badge.show{display:block;}
   
   .card-icon svg{width:21px; height:21px;}
   .card.payments .card-icon{background:var(--accent-soft); color:var(--accent-hover);}
@@ -149,9 +137,6 @@ body {
   .card.pets .card-icon{background:rgba(255,255,255,0.06); color:var(--text-secondary);}
   .card.notes .card-icon{background:rgba(255,255,255,0.06); color:var(--text-secondary);}
 
-  /* Expenses tile — lit up for a while after a new expense is logged */
-
-  
   .soon-tag{
     font-size:10px; font-weight:700; letter-spacing:0.5px; background:rgba(255,255,255,0.06);
     color:var(--text-muted); padding:4px 9px; border-radius:20px; text-transform:uppercase;
@@ -173,128 +158,53 @@ body {
 
   footer.note{color:var(--text-muted); font-size:12px; text-align:center; padding:20px 0 32px;}
 
-  /* Planner tile — sits between the hero and the card grid, grows horizontally */
-  .planner-tile-wrap{
-    position:relative; width:320px; margin:0 auto 40px;
+  /* Important notes strip — replaces the old planner tile */
+  .important-notes{width:100%; max-width:900px; margin:0 auto 40px;}
+  .important-notes-header{text-align:center; margin-bottom:20px;}
+  .important-notes-header h2{font-size:18px; margin:0 0 4px; font-weight:700;}
+  .important-notes-header p{margin:0; font-size:12.5px; color:var(--text-secondary);}
+  .important-notes-header a{font-size:12px; color:var(--accent-hover); font-weight:600;}
+
+  .note-row{
+    display:flex; flex-wrap:wrap; justify-content:center; gap:22px 20px;
   }
-  .planner-tile{
-    width:320px; height:280px; margin:0;
-    background:linear-gradient(160deg, var(--panel), var(--panel-alt));
-    border:1px solid var(--border-soft); border-radius:var(--radius-lg);
-    padding:14px 20px; position:relative; overflow:hidden;
+  .sticky-note{
+    position:relative; width:170px; min-height:140px; padding:20px 14px 14px;
+    border-radius:3px;
+    box-shadow:0 10px 22px -6px rgba(0,0,0,0.4), 0 2px 4px rgba(0,0,0,0.15);
+    display:flex; flex-direction:column; gap:6px;
+    transition:transform .18s ease, box-shadow .18s ease;
   }
-.planner-header{
-  display:flex; align-items:center; justify-content:space-between;
-  flex-wrap:wrap; row-gap:10px; margin-bottom:10px; position:relative;
-}
-  .planner-tile::before{
-    content:""; position:absolute; top:-60%; right:-6%; width:320px; height:120px;
-    background:radial-gradient(circle, rgba(76,124,240,0.14), transparent 70%);
-    pointer-events:none;
+  .sticky-note:hover{transform:translateY(-4px) rotate(0deg) !important; box-shadow:0 16px 30px -8px rgba(0,0,0,0.45), 0 3px 6px rgba(0,0,0,0.16); z-index:5;}
+  .sticky-note.owner-brett{background:linear-gradient(155deg, #e08a45, #b85a24); border-bottom:3px solid var(--note-brett-edge);}
+  .sticky-note.owner-bernice{background:linear-gradient(155deg, #6ba3e0, #2f5c95); border-bottom:3px solid var(--note-bernice-edge);}
+
+  .sticky-pin{
+    position:absolute; top:-7px; left:50%; transform:translateX(-50%);
+    width:12px; height:12px; border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, #ff8a7a, #d9432c 70%);
+    box-shadow:0 3px 5px rgba(0,0,0,0.35);
   }
-  .planner-header{display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; position:relative;}
-  .planner-header h2{font-size:16px; margin:0; font-weight:700;}
-  .planner-header p{margin:2px 0 0; font-size:12px; color:var(--text-secondary);}
-  .planner-add-btn{
-    display:inline-flex; align-items:center; gap:6px; padding:8px 14px; border-radius:9px;
-    background:var(--accent-soft); color:var(--accent-hover); border:1px solid rgba(76,124,240,0.3);
-    font-size:12.5px; font-weight:600; cursor:pointer; transition:background .15s ease; flex-shrink:0;
+  .sticky-cat{
+    font-family:'Inter'; font-size:8px; font-weight:700; text-transform:uppercase; letter-spacing:0.4px;
+    padding:2px 6px; border-radius:20px; background:rgba(0,0,0,0.12); color:#fff; align-self:flex-start;
   }
-  .planner-add-btn:hover{background:rgba(76,124,240,0.22);}
-  .planner-add-btn svg{width:14px; height:14px;}
-
-  .planner-header-actions{display:flex; align-items:center; gap:8px;}
-  .planner-counter{
-    position:absolute; top:-8px; right:-8px; min-width:20px; height:20px; padding:0 5px;
-    border-radius:999px; background:#ff3b30; color:#fff;
-    font-family:'Inter', sans-serif; font-size:11.5px; font-weight:700; line-height:20px;
-    text-align:center; box-shadow:0 1px 4px rgba(0,0,0,0.45), 0 0 0 2px var(--panel);
-    display:none; z-index:5;
+  .sticky-title{font-family:'Sora'; font-weight:700; font-size:12.5px; line-height:1.3;}
+  .owner-brett .sticky-title{color:var(--note-brett-text);}
+  .owner-bernice .sticky-title{color:var(--note-bernice-text);}
+  .sticky-content{
+    font-family:'Caveat', cursive; font-size:15.5px; line-height:1.3; white-space:pre-wrap;
+    flex:1; word-break:break-word; overflow:hidden;
   }
-  .planner-counter.show{display:block;}
-  
-  .planner-nav-btn{
-    width:30px; height:30px; border-radius:8px; display:flex; align-items:center; justify-content:center;
-    background:var(--panel); border:1px solid var(--border); color:var(--text-secondary); cursor:pointer;
-    transition:background .12s ease, color .12s ease; flex-shrink:0;
+  .owner-brett .sticky-content{color:#fff4d6;}
+  .owner-bernice .sticky-content{color:#f0a868;}
+  .sticky-footer{font-family:'Inter'; font-size:8px; margin-top:auto; padding-top:5px; opacity:0.7;}
+  .owner-brett .sticky-footer{color:var(--note-brett-text);}
+  .owner-bernice .sticky-footer{color:var(--note-bernice-text);}
+
+  .important-empty{
+    text-align:center; font-size:13px; color:var(--text-muted); padding:14px 0;
   }
-.planner-nav-btn:hover{background:var(--panel-alt); color:var(--text-primary);}
-.planner-nav-btn svg{width:14px; height:14px;}
-
-.planner-list{
-  position:relative; width:280px; height:192px;
-  overflow:hidden;
-}
-.planner-event{
-  position:absolute; top:0; left:0; width:280px; height:100px;
-  display:flex; flex-direction:column; gap:5px; justify-content:center;
-  padding:8px 16px; border-radius:11px;
-  background:var(--bg-elevated); border:1px solid var(--border-soft); border-left:6px solid var(--border-soft);
-  transition:transform .25s ease, opacity .25s ease;
-  cursor:pointer;
-}
-  
-.planner-event[data-depth="0"]{cursor:default;}
-/*.planner-event.glow-red{
-  background:linear-gradient(160deg, rgba(240,102,76,0.16), rgba(240,102,76,0.04)), var(--bg-elevated);
-  border-color:rgba(240,102,76,0.4); box-shadow:0 0 18px -6px rgba(240,102,76,0.5);
-}
-.planner-event.glow-orange{
-  background:linear-gradient(160deg, rgba(240,184,76,0.16), rgba(240,184,76,0.04)), var(--bg-elevated);
-  border-color:rgba(240,184,76,0.4); box-shadow:0 0 18px -6px rgba(240,184,76,0.5);
-}
-.planner-event.glow-yellow{
-  background:linear-gradient(160deg, rgba(240,224,76,0.16), rgba(240,224,76,0.04)), var(--bg-elevated);
-  border-color:rgba(240,224,76,0.4); box-shadow:0 0 18px -6px rgba(240,224,76,0.5);
-}
-.planner-event.glow-green{
-  background:linear-gradient(160deg, rgba(51,214,166,0.16), rgba(51,214,166,0.04)), var(--bg-elevated);
-  border-color:rgba(51,214,166,0.4); box-shadow:0 0 18px -6px rgba(51,214,166,0.5);
-}*/
-  .planner-event.glow-red{
-  background:linear-gradient(160deg, rgba(240,102,76,0.16), rgba(240,102,76,0.04)), var(--bg-elevated);
-  border-left-color:var(--danger); box-shadow:0 0 18px -6px rgba(240,102,76,0.5);
-}
-.planner-event.glow-orange{
-  background:linear-gradient(160deg, rgba(240,184,76,0.16), rgba(240,184,76,0.04)), var(--bg-elevated);
-  border-left-color:var(--warning); box-shadow:0 0 18px -6px rgba(240,184,76,0.5);
-}
-.planner-event.glow-yellow{
-  background:linear-gradient(160deg, rgba(240,224,76,0.16), rgba(240,224,76,0.04)), var(--bg-elevated);
-  border-left-color:#f0e04c; box-shadow:0 0 18px -6px rgba(240,224,76,0.5);
-}
-.planner-event.glow-green{
-  background:linear-gradient(160deg, rgba(51,214,166,0.16), rgba(51,214,166,0.04)), var(--bg-elevated);
-  border-left-color:var(--success); box-shadow:0 0 18px -6px rgba(51,214,166,0.5);
-}
-
-.planner-event-top{display:flex; align-items:center; justify-content:space-between; gap:8px;}
-.planner-dot{width:10px; height:10px; border-radius:50%; flex-shrink:0;}
-.planner-dot.glow-red{background:var(--danger); box-shadow:0 0 10px 2px rgba(240,102,76,0.7);}
-.planner-dot.glow-orange{background:var(--warning); box-shadow:0 0 10px 2px rgba(240,184,76,0.7);}
-.planner-dot.glow-yellow{background:#f0e04c; box-shadow:0 0 10px 2px rgba(240,224,76,0.7);}
-.planner-dot.glow-green{background:var(--success); box-shadow:0 0 10px 2px rgba(51,214,166,0.7);}
-
-.planner-event-date{font-family:'JetBrains Mono'; font-size:11.5px; color:var(--text-secondary); flex-shrink:0;}
-.planner-event-date .day{font-weight:700; color:var(--text-primary);}
-
-.planner-event-title{
-  font-size:13.5px; font-weight:550; color:var(--text-primary);
-  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
-}
-.planner-event-meta{font-size:10px; color:var(--text-muted);}
-
-
-/*.planner-event-footer{display:flex; align-items:center; justify-content:space-between; gap:2px;}*/
-.planner-del-btn{
-  width:24px; height:24px; border-radius:7px; display:flex; align-items:center; justify-content:center;
-  background:transparent; border:1px solid transparent; color:var(--text-muted); cursor:pointer; flex-shrink:0;
-  transition:background .12s ease, color .12s ease; margin-left:auto;
-}
-.planner-del-btn:hover{background:var(--panel); color:var(--danger);}
-.planner-del-btn svg{width:12px; height:12px;}
-
-.planner-empty{font-size:13px; color:var(--text-muted); text-align:center; padding:16px 0; flex:1;}
 
   /* Drawer / overlay / toast (shared pattern) */
   .overlay{
@@ -351,15 +261,9 @@ body {
     .hero{margin-bottom:32px;}
     .grid{grid-template-columns:repeat(2, 1fr); gap:10px;}
     .card{height:auto; min-height:112px; padding:18px;}
-    .planner-tile-wrap{width:253px; margin:0 auto 28px;}
-    .planner-tile{width:253px; height:253px; margin:0; padding:14px 16px;}
-    .planner-header{flex-wrap:wrap; row-gap:10px;}
-    .planner-list{width:220px; height:176px;}
-    .planner-event{width:220px; height:84px; padding:5px 10px; gap:2px;}
-    .planner-event-date{font-size:10px;}
-    .planner-event-title{font-size:12px;}
-    .planner-event-meta{font-size:9.5px;}
-    .planner-dot{width:8px; height:8px;}
+    .important-notes{margin:0 auto 28px;}
+    .sticky-note{width:135px; min-height:120px; padding:16px 11px 11px;}
+    .sticky-content{font-size:13.5px;}
     .toast{left:16px; right:16px; bottom:18px;}
   }
 </style>
@@ -378,37 +282,19 @@ body {
     <p>Shared home for payments, documents & all things important.</p>
   </div>
 
-  <div class="planner-tile-wrap">
-    <span class="planner-counter" id="plannerCounter"></span>
-    <div class="planner-tile">
-      <div class="planner-header">
-        <div>
-          <h2>Upcoming</h2>
-          <p>Appointments, reminders and events.</p>
-        </div>
-        <div class="planner-header-actions">
-          <button class="planner-nav-btn" id="plannerPrevBtn" aria-label="Previous">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
-          </button>
-          <button class="planner-nav-btn" id="plannerNextBtn" aria-label="Next">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
-          </button>
-          <button class="planner-add-btn" id="plannerAddBtn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
-            Add
-          </button>
-        </div>
-      </div>
-      <div class="planner-list" id="plannerList"></div>
+  <div class="important-notes">
+    <div class="important-notes-header">
+      <h2>Important</h2>
+      <p>Pulled from your notes — <a href="notes.html">manage all notes →</a></p>
     </div>
-  </div> 
+    <div class="note-row" id="importantNotesRow"></div>
+  </div>
 
   <div class="grid">
     <a href="payments.html" class="card live payments">
       <div class="card-top">
         <div class="card-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 9h18M7 14h4"/></svg>
-          <span class="payment-badge" id="paymentBadge">0</span>
         </div>
       </div>
       <h2>Payments</h2>
@@ -703,7 +589,6 @@ body {
   <path d="M13.2 7.5l3.3 3.3" />
   <path d="M5.2 15.5l3.3 3.3" />
 </svg>
- <span class="note-badge" id="noteBadge">0</span>          
         </div>
       </div>    
       <h2>Notes</h2>
@@ -733,50 +618,6 @@ body {
 
 <footer class="note">2026 homeBase · v1.1.6 ·</footer>
 
-<div class="overlay" id="overlay"></div>
-<div class="drawer" id="drawer">
-  <div class="drawer-header">
-    <h2 id="drawerTitle">Add Event</h2>
-    <button class="drawer-close" id="drawerClose">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><path d="M18 6 6 18M6 6l12 12"/></svg>
-    </button>
-  </div>
-  <div class="drawer-body">
-    <input type="hidden" id="editId">
-    <div class="field">
-      <label for="fTitle">Title</label>
-      <input type="text" id="fTitle" placeholder="e.g. Dentist appointment">
-    </div>
-    <div class="field-row">
-      <div class="field">
-        <label for="fDate">Date</label>
-        <input type="date" id="fDate">
-      </div>
-      <div class="field">
-        <label for="fTime">Time (optional)</label>
-        <input type="time" id="fTime">
-      </div>
-    </div>
-    <div class="field">
-      <label for="fCategory">Category</label>
-      <select id="fCategory">
-        <option>Appointment</option>
-        <option>Reminder</option>
-        <option>Birthday</option>
-        <option>Event</option>
-      </select>
-    </div>
-    <div class="field">
-      <label for="fNotes">Notes (optional)</label>
-      <input type="text" id="fNotes" placeholder="Any extra detail…">
-    </div>
-  </div>
-  <div class="drawer-footer">
-    <button class="btn btn-ghost" id="cancelBtn">Cancel</button>
-    <button class="btn btn-primary" id="saveBtn">Save Event</button>
-  </div>
-</div>
-
 <div class="toast" id="toast">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>
   <span id="toastText">Saved</span>
@@ -785,19 +626,8 @@ body {
 <script>
 (function(){
   const el = (id) => document.getElementById(id);
-  const CATEGORY_GLOW = {
-    'Appointment': 'glow-red',
-    'Reminder': 'glow-orange',
-    'Birthday': 'glow-yellow',
-    'Event': 'glow-green'
-  };
-  const EXPENSE_HIGHLIGHT_HOURS = 6;
-  const NOTE_HIGHLIGHT_HOURS = 6;
-  const PAYMENT_HIGHLIGHT_HOURS = 6;
-
-  let events = [];
-  let order = [];
-  let cardEls = new Map();
+  const EXPENSE_HIGHLIGHT_HOURS = 6; // how long the Expenses tile stays lit after a new expense
+  const IMPORTANT_NOTE_LIMIT = 6;
 
   function showToast(msg){
     const toast = el('toast');
@@ -809,196 +639,44 @@ body {
   function escapeHtml(str){
     return String(str ?? '').replace(/[&<>"']/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]));
   }
-  function formatEventDate(d){
-    const dt = new Date(d + 'T00:00:00');
-    return {
-      day: dt.toLocaleDateString('en-ZA', {day:'2-digit', month:'short'}),
-      weekday: dt.toLocaleDateString('en-ZA', {weekday:'short'})
-    };
-  }
-  function daysUntil(d){
-    const today = new Date(new Date().toDateString());
-    const target = new Date(d + 'T00:00:00');
-    return Math.round((target - today) / 86400000);
-  }
-  function relativeLabel(d){
-    const diff = daysUntil(d);
-    if(diff === 0) return 'Today';
-    if(diff === 1) return 'Tomorrow';
-    if(diff < 0) return `${Math.abs(diff)} day${Math.abs(diff)===1?'':'s'} ago`;
-    return `In ${diff} days`;
+  function rotationFor(id){
+    let hash = 0;
+    for(let i = 0; i < id.length; i++){ hash = (hash * 31 + id.charCodeAt(i)) % 1000; }
+    return ((hash % 7) - 3) * 1.1;
   }
 
-  async function loadEvents(){
+  // ---- Important notes strip ----
+  async function loadImportantNotes(){
+    const row = el('importantNotesRow');
+    if(!row) return;
     const { data, error } = await supabaseClient
-      .from('calendar_events')
+      .from('notes')
       .select('*')
-      .gte('event_date', new Date(Date.now() - 86400000).toISOString().slice(0,10))
-      .order('event_date', { ascending: true })
-      .limit(12);
-    if(error){ showToast('Error loading events'); console.error(error); return; }
-    events = data;
-    rebuildCards();
-  }
-
-  function buildCardElement(e){
-    const glow = CATEGORY_GLOW[e.category] || 'glow-orange';
-    const { day, weekday } = formatEventDate(e.event_date);
-    const div = document.createElement('div');
-    div.className = `planner-event ${glow}`;
-    div.dataset.id = e.id;
-    div.innerHTML = `
-      <div class="planner-event-top">
-        <div class="planner-dot ${glow}"></div>
-        <div class="planner-event-date"><span class="day">${day}</span> · ${weekday}</div>
+      .eq('category', 'Important')
+      .eq('is_done', false)
+      .order('created_at', { ascending: false })
+      .limit(IMPORTANT_NOTE_LIMIT);
+    if(error){ console.error(error); row.innerHTML = ''; return; }
+    if(!data || data.length === 0){
+      row.innerHTML = '<div class="important-empty">No important notes right now — add one in Notes.</div>';
+      return;
+    }
+    row.innerHTML = data.map(n => {
+      const ownerClass = n.owner === 'Bernice' ? 'owner-bernice' : 'owner-brett';
+      const rot = rotationFor(n.id);
+      return `
+      <div class="sticky-note ${ownerClass}" style="transform:rotate(${rot}deg);">
+        <div class="sticky-pin"></div>
+        <span class="sticky-cat">${escapeHtml(n.category)}</span>
+        ${n.title ? `<div class="sticky-title">${escapeHtml(n.title)}</div>` : ''}
+        <div class="sticky-content">${escapeHtml(n.content)}</div>
+        <div class="sticky-footer">${escapeHtml(n.owner)}</div>
       </div>
-      <div class="planner-event-title">${escapeHtml(e.title)}</div>
-      <div class="planner-event-meta">${escapeHtml(e.category)}${e.event_time ? ' · ' + e.event_time.slice(0,5) : ''} · ${relativeLabel(e.event_date)}
-        <button class="planner-del-btn" data-del="${e.id}" aria-label="Delete">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0-1 14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L4 6"/></svg>
-        </button>
-      </div>
-      
-        
-   
     `;
-    return div;
+    }).join('');
   }
 
-  function rebuildCards(){
-    const list = el('plannerList');
-    list.innerHTML = '';
-    cardEls.clear();
-    if(events.length === 0){
-      list.innerHTML = '<div class="planner-empty">Nothing coming up — click Add to schedule something.</div>';
-      order = [];
-      updateCounter();
-      return;
-    }
-    events.forEach(e => {
-      const cardEl = buildCardElement(e);
-      cardEls.set(e.id, cardEl);
-      list.appendChild(cardEl);
-    });
-    order = events.map((_, i) => i);
-    applyStack();
-  }
-
-  function computeStyle(depth){
-    const capped = Math.min(depth, 3);
-    const z = 100 - capped;
-    const translateY = capped * 30;
-    const scale = Math.max(1 - capped * 0.015, 0.9);
-    const opacity = capped === 0 ? 1 : Math.max(1 - capped * 0.09, 0.32);
-    const pe = capped <= 3 ? 'auto' : 'none';
-    return { z, translateY, scale, opacity, pe };
-  }
-
-  function applyStack(){
-    order.forEach((eventIdx, depth) => {
-      const ev = events[eventIdx];
-      const cardEl = cardEls.get(ev.id);
-      if(!cardEl) return;
-      const { z, translateY, scale, opacity, pe } = computeStyle(depth);
-      cardEl.style.zIndex = z;
-      cardEl.style.transform = `translateY(${translateY}px) scale(${scale})`;
-      cardEl.style.opacity = opacity;
-      cardEl.style.pointerEvents = pe;
-      cardEl.dataset.depth = depth;
-    });
-    updateCounter();
-  }
-
-  function updateCounter(){
-    const counter = el('plannerCounter');
-    if(!counter) return;
-    const n = events.length;
-    counter.textContent = n > 99 ? '99+' : n;
-    counter.classList.toggle('show', n > 0);
-  }
-
-  function promote(id){
-    const idx = events.findIndex(ev => ev.id === id);
-    if(idx === -1) return;
-    const posInOrder = order.indexOf(idx);
-    if(posInOrder <= 0) return;
-    order.splice(posInOrder, 1);
-    order.unshift(idx);
-    applyStack();
-  }
-
-  function nextCard(){
-    if(order.length < 2) return;
-    order.push(order.shift());
-    applyStack();
-  }
-  function prevCard(){
-    if(order.length < 2) return;
-    order.unshift(order.pop());
-    applyStack();
-  }
-
-  el('plannerList').addEventListener('click', async (e) => {
-    const delBtn = e.target.closest('[data-del]');
-    if(delBtn){
-      if(!confirm('Remove this event? This can\'t be undone.')) return;
-      const { error } = await supabaseClient.from('calendar_events').delete().eq('id', delBtn.dataset.del);
-      if(error){ showToast('Could not delete event'); console.error(error); return; }
-      await loadEvents();
-      showToast('Event removed');
-      return;
-    }
-    const card = e.target.closest('.planner-event');
-    if(card && card.dataset.depth !== '0'){
-      promote(card.dataset.id);
-    }
-  });
-
-  el('plannerPrevBtn').addEventListener('click', prevCard);
-  el('plannerNextBtn').addEventListener('click', nextCard);
-
-  function openDrawer(){
-    el('drawerTitle').textContent = 'Add Event';
-    el('editId').value = '';
-    el('fTitle').value = '';
-    el('fDate').value = new Date().toISOString().slice(0,10);
-    el('fTime').value = '';
-    el('fCategory').value = 'Appointment';
-    el('fNotes').value = '';
-    el('drawer').classList.add('show');
-    el('overlay').classList.add('show');
-    setTimeout(() => el('fTitle').focus(), 200);
-  }
-  function closeDrawer(){
-    el('drawer').classList.remove('show');
-    el('overlay').classList.remove('show');
-  }
-
-  el('plannerAddBtn').addEventListener('click', openDrawer);
-  el('drawerClose').addEventListener('click', closeDrawer);
-  el('cancelBtn').addEventListener('click', closeDrawer);
-  el('overlay').addEventListener('click', closeDrawer);
-  document.addEventListener('keydown', (e) => { if(e.key === 'Escape' && el('drawer').classList.contains('show')) closeDrawer(); });
-
-  el('saveBtn').addEventListener('click', async () => {
-    const title = el('fTitle').value.trim();
-    const date = el('fDate').value;
-    if(!title){ el('fTitle').focus(); return; }
-    if(!date){ el('fDate').focus(); return; }
-    const payload = {
-      title,
-      event_date: date,
-      event_time: el('fTime').value || null,
-      category: el('fCategory').value,
-      notes: el('fNotes').value.trim()
-    };
-    const { error } = await supabaseClient.from('calendar_events').insert(payload);
-    if(error){ showToast('Could not save event'); console.error(error); return; }
-    showToast('Event added');
-    closeDrawer();
-    await loadEvents();
-  });
-  
+  // ---- Expenses tile "recent activity" highlight ----
   async function checkRecentExpenseActivity(){
     const cutoff = new Date(Date.now() - EXPENSE_HIGHLIGHT_HOURS * 3600 * 1000).toISOString();
     const { count, error } = await supabaseClient
@@ -1018,51 +696,9 @@ body {
     }
   }
 
-  async function checkRecentNoteActivity(){
-    const cutoff = new Date(Date.now() - NOTE_HIGHLIGHT_HOURS * 3600 * 1000).toISOString();
-    const { count, error } = await supabaseClient
-      .from('notes')
-      .select('id', { count: 'exact', head: true })
-      .gte('created_at', cutoff);
-    if(error){ console.error(error); return; }
-    const n = count || 0;
-    const badge = el('noteBadge');
-    if(badge){
-      badge.textContent = n > 99 ? '99+' : n;
-      badge.classList.toggle('show', n > 0);
-    }
-    const notesCard = document.querySelector('a[href="notes.html"].card');
-    if(notesCard){
-       notesCard.classList.toggle('recent-activity', n > 0);
-    }
-  }
-
-  async function checkRecentPaymentActivity(){
-    const cutoff = new Date(Date.now() - PAYMENT_HIGHLIGHT_HOURS * 3600 * 1000).toISOString();
-    const { count, error } = await supabaseClient
-      .from('payments')
-      .select('id', { count: 'exact', head: true })
-      .gte('created_at', cutoff);
-    if(error){ console.error(error); return; }
-    const n = count || 0;
-    const badge = el('paymentBadge');
-    if(badge){
-      badge.textContent = n > 99 ? '99+' : n;
-      badge.classList.toggle('show', n > 0);
-    }
-    const paymentsCard = document.querySelector('a[href="payments.html"].card');
-    if(paymentsCard){
-      paymentsCard.classList.toggle('recent-activity', n > 0);
-    }
-  }
-
-  loadEvents();
+  loadImportantNotes();
   checkRecentExpenseActivity();
-  checkRecentNoteActivity();
-  checkRecentPaymentActivity();
   setInterval(checkRecentExpenseActivity, 5 * 60 * 1000);
-  setInterval(checkRecentNoteActivity, 5 * 60 * 1000);
-  setInterval(checkRecentPaymentActivity, 5 * 60 * 1000);
 })();
 </script>
 
