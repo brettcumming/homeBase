@@ -203,14 +203,7 @@
   .sticky-note.done:hover{transform:scale(0.94) rotate(-1deg) !important;}
   .sticky-note.done .sticky-content{text-decoration:line-through; text-decoration-thickness:1.5px;}
   .sticky-note.owner-brett{background:var(--note-brett); border-bottom:3px solid var(--note-brett-edge);}
-  .sticky-note.owner-bernice{background:var(--note-bernice); border-bottom:3px solid var(--note-bernice-edge);}
-
-  .sticky-pin{
-    position:absolute; top:-9px; left:50%; transform:translateX(-50%);
-    width:16px; height:16px; border-radius:50%;
-    background:radial-gradient(circle at 35% 30%, #ff8a7a, #d9432c 70%);
-    box-shadow:0 3px 5px rgba(0,0,0,0.35);
-  }
+  .sticky-note.owner-bernice{background:var(--note-bernice); border-bottom:3px solid var(--note-bernice-edge);}  
 
   .sticky-top{display:flex; align-items:flex-start; justify-content:space-between; gap:8px;}
   .sticky-cat{
@@ -697,8 +690,7 @@
             </button>
           `;
       return `
-      <div class="sticky-note ${ownerClass}${doneClass}" style="--rot:${rot}deg; transform:rotate(${rot}deg);" data-id="${n.id}">
-        <div class="sticky-pin"></div>
+      <div class="sticky-note ${ownerClass}${doneClass}" style="--rot:${rot}deg; transform:rotate(${rot}deg);" data-id="${n.id}">       
         <div class="sticky-top">
           <span class="sticky-cat">${escapeHtml(n.category)}</span>
           <div class="sticky-actions">${actions}</div>
