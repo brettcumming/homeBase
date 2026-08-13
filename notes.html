@@ -186,15 +186,11 @@
   .sticky-note:hover{transform:translateY(-4px) rotate(0deg) !important; box-shadow:0 16px 30px -8px rgba(0,0,0,0.4), 0 3px 6px rgba(0,0,0,0.14); z-index:5;}
 
   @keyframes noteToTrash{
-    0%{ transform:translate(0,0) scale(1,1) rotate(var(--rot,0deg)); border-radius:3px; opacity:1; }
-    18%{ transform:translate(calc(var(--tx) * 0.08), calc(var(--ty) * 0.05 - 10px)) scale(0.85,0.78) rotate(calc(var(--rot,0deg) + 12deg)); border-radius:16px; }
-    40%{ transform:translate(calc(var(--tx) * 0.4), calc(var(--ty) * 0.25 - 50px)) scale(0.5,0.48) rotate(150deg); border-radius:50%; }
-    65%{ transform:translate(calc(var(--tx) * 0.75), calc(var(--ty) * 0.6 - 15px)) scale(0.3) rotate(260deg); border-radius:50%; opacity:1; }
-    85%{ transform:translate(calc(var(--tx) * 0.95), calc(var(--ty) * 0.92)) scale(0.16) rotate(340deg); border-radius:50%; opacity:0.85; }
-    100%{ transform:translate(var(--tx), var(--ty)) scale(0.05) rotate(400deg); border-radius:50%; opacity:0; }
+    0%{ transform:translate(0,0) scale(1) rotate(var(--rot,0deg)); opacity:1; }
+    100%{ transform:translate(var(--tx), var(--ty)) scale(0.15) rotate(var(--rot,0deg)); opacity:0; }
   }
   .sticky-note.note-to-trash{
-    animation:noteToTrash 0.95s cubic-bezier(.4,0,.2,1) forwards;
+    animation:noteToTrash 0.9s ease-in-out forwards;
     pointer-events:none;
     position:relative; z-index:30;
     transform-origin:center center;
