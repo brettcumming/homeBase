@@ -163,7 +163,6 @@
     background-size:10px 1px; background-repeat:repeat-x; opacity:0.7;
   }
 
-  /* member grid */
   .member-grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(220px, 1fr)); gap:16px;}
   .member-card{
     background:linear-gradient(160deg, var(--panel), var(--panel-alt));
@@ -212,7 +211,6 @@
   .empty-state h3{margin:0 0 6px; color:var(--text-secondary); font-size:15px;}
   .empty-state p{margin:0; font-size:13px;}
 
-  /* drawer */
   .overlay{
     position:fixed; inset:0; background:rgba(4,7,16,0.6); backdrop-filter:blur(2px);
     opacity:0; pointer-events:none; transition:opacity .2s ease; z-index:40;
@@ -254,7 +252,6 @@
     font-weight:700; margin:6px 0 -4px;
   }
 
-  /* per-member docs */
   .mini-dropzone{
     border:2px dashed var(--border); border-radius:10px; padding:18px; text-align:center;
     transition:border-color .15s ease, background .15s ease; background:var(--panel);
@@ -394,24 +391,16 @@
       <a href="property.html" class="nav-item">
         <div class="left">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-  <path d="M14.7 2.7a5.2 5.2 0 0 0-6.9 6.9l-5.1 5.1a2 2 0 0 0 0 2.8l1.8 1.8a2 2 0 0 0 2.8 0l5.1-5.1a5.2 5.2 0 0 0 6.9-6.9l-3.2 3.2-2.6-.6-.6-2.6 3.2-3.2a5.2 5.2 0 0 0-1.4-1.4Z"/>
-  <circle cx="5.5" cy="18.5" r="1"/>
-</svg>
+            <path d="M14.7 2.7a5.2 5.2 0 0 0-6.9 6.9l-5.1 5.1a2 2 0 0 0 0 2.8l1.8 1.8a2 2 0 0 0 2.8 0l5.1-5.1a5.2 5.2 0 0 0 6.9-6.9l-3.2 3.2-2.6-.6-.6-2.6 3.2-3.2a5.2 5.2 0 0 0-1.4-1.4Z"/>
+            <circle cx="5.5" cy="18.5" r="1"/>
+          </svg>
           Home Maintenance
         </div>
       </a> 
       <a href="goals.html" class="nav-item">
         <div class="left">
           <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.4"
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"
           >
             <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z" />
             <path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z" />
@@ -468,7 +457,6 @@
   </main>
 </div>
 
-<!-- Drawer -->
 <div class="overlay" id="overlay"></div>
 <div class="drawer" id="drawer">
   <div class="drawer-header">
@@ -610,7 +598,6 @@
     return (name||'').trim().split(/\s+/).slice(0,2).map(w => w[0]?.toUpperCase() || '').join('');
   }
 
-  // ---- Loading ----
   async function loadMembers(){
     const { data, error } = await supabaseClient
       .from('family_members')
@@ -722,7 +709,6 @@
     currentDocuments = [];
   }
 
-  // ---- Documents ----
   async function loadDocuments(memberId){
     const { data, error } = await supabaseClient
       .from('family_member_documents')
@@ -829,7 +815,6 @@
     await loadMembers();
   }
 
-  // ---- Avatar upload / remove ----
   el('avatarInput').addEventListener('change', async () => {
     const file = el('avatarInput').files[0];
     if(!file) return;
@@ -883,7 +868,6 @@
     showToast('Photo removed');
   });
 
-  // ---- Save / delete member ----
   el('saveBtn').addEventListener('click', async () => {
     const name = el('fName').value.trim();
     if(!name){ el('fName').focus(); return; }
