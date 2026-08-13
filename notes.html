@@ -40,9 +40,9 @@
     --note-brett:#dbeafe;
     --note-brett-edge:#b7d3fb;
     --note-brett-text:#1b3a63;
-    --note-bernice:#fef3c7;
-    --note-bernice-edge:#fbe3a1;
-    --note-bernice-text:#6b4c11;
+    --note-bernice:#3d6fb0;
+    --note-bernice-edge:#254a7a;
+    --note-bernice-text:#e08a45;
   }
   *{box-sizing:border-box;}
   html,body{height:100%;}
@@ -203,7 +203,10 @@
   .sticky-note.done:hover{transform:scale(0.94) rotate(-1deg) !important;}
   .sticky-note.done .sticky-content{text-decoration:line-through; text-decoration-thickness:1.5px;}
   .sticky-note.owner-brett{background:var(--note-brett); border-bottom:3px solid var(--note-brett-edge);}
-  .sticky-note.owner-bernice{background:var(--note-bernice); border-bottom:3px solid var(--note-bernice-edge);}  
+  .sticky-note.owner-bernice{
+    background:linear-gradient(155deg, #6ba3e0, #2f5c95);
+    border-bottom:3px solid var(--note-bernice-edge);
+  } 
 
   .sticky-top{display:flex; align-items:flex-start; justify-content:space-between; gap:8px;}
   .sticky-cat{
@@ -226,14 +229,14 @@
 
   .sticky-title{font-family:'Sora'; font-weight:700; font-size:11.5px; line-height:1.3;}
   .owner-brett .sticky-title{color:var(--note-brett-text);}
-  .owner-bernice .sticky-title{color:var(--note-bernice-text);}
+  .owner-bernice .sticky-title{color:#f0a868;}
 
    .sticky-content{
     font-family:'Caveat', cursive; font-size:14px; line-height:1.35; white-space:pre-wrap;
     flex:1; word-break:break-word;
   }
   .owner-brett .sticky-content{color:#284a76;}
-  .owner-bernice .sticky-content{color:#7a591a;}
+  .owner-bernice .sticky-content{color:#f0a868;}
 
   .sticky-footer{
     font-family:'Inter'; font-size:8px; margin-top:auto; padding-top:5px; opacity:0.6;
