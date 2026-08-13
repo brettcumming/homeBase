@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<link rel="icon" type="image/svg+xml" href="hb_favicon.svg">
+<link rel="icon" type="image/svg+xml" href="leaf_icon.png">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>homeBase — Notes</title>
@@ -193,12 +193,12 @@
     border-bottom:3px solid var(--note-bernice-edge);
   }
 
-   .sticky-pin{
+   /*.sticky-pin{
     position:absolute; top:-7px; left:50%; transform:translateX(-50%);
     width:12px; height:12px; border-radius:50%;
     background:radial-gradient(circle at 35% 30%, #ff8a7a, #d9432c 70%);
     box-shadow:0 3px 5px rgba(0,0,0,0.35);
-  }
+  }*/
 
   .sticky-top{display:flex; align-items:flex-start; justify-content:space-between; gap:8px;}
   .sticky-cat{
@@ -587,8 +587,7 @@
       const ownerClass = n.owner === 'Bernice' ? 'owner-bernice' : 'owner-brett';
       const rot = rotationFor(n.id);
       return `
-      <div class="sticky-note ${ownerClass}" style="transform:rotate(${rot}deg);" data-id="${n.id}">
-        <div class="sticky-pin"></div>
+      <div class="sticky-note ${ownerClass}" style="transform:rotate(${rot}deg);" data-id="${n.id}">       
         <div class="sticky-top">
           <span class="sticky-cat">${escapeHtml(n.category)}</span>
           <div class="sticky-actions">
