@@ -185,21 +185,16 @@
   }
   .sticky-note:hover{transform:translateY(-4px) rotate(0deg) !important; box-shadow:0 16px 30px -8px rgba(0,0,0,0.4), 0 3px 6px rgba(0,0,0,0.14); z-index:5;}
 
-  @keyframes crumpleToss{
-    0%{ transform:scale(1,1) rotate(var(--rot,0deg)) translate(0,0); border-radius:3px; opacity:1; }
-    10%{ transform:scale(0.96,0.88) rotate(calc(var(--rot,0deg) + 6deg)) translate(0,0); border-radius:10px; }
-    22%{ transform:scale(0.78,0.82) rotate(calc(var(--rot,0deg) - 14deg)) translate(-2px,2px); border-radius:22px; }
-    36%{ transform:scale(0.58,0.6) rotate(50deg) translate(4px,0px); border-radius:50%; }
-    50%{ transform:scale(0.46) rotate(120deg) translate(14px,-22px); border-radius:50%; opacity:1; }
-    70%{ transform:scale(0.34) rotate(230deg) translate(34px,18px); border-radius:50%; opacity:0.9; }
-    88%{ transform:scale(0.2) rotate(330deg) translate(58px,70px); border-radius:50%; opacity:0.5; }
-    100%{ transform:scale(0.08) rotate(410deg) translate(76px,120px); border-radius:50%; opacity:0; }
+  @keyframes foldSlideOut{
+    0%{ transform:scaleX(1) translateX(0) rotate(var(--rot,0deg)); opacity:1; }
+    45%{ transform:scaleX(0.05) translateX(0) rotate(0deg); opacity:1; }
+    100%{ transform:scaleX(0.05) translateX(480px) rotate(0deg); opacity:0; }
   }
-  .sticky-note.crumpling{
-    animation:crumpleToss 1.15s cubic-bezier(.45,0,.2,1) forwards;
+  .sticky-note.note-exit{
+    animation:foldSlideOut 0.85s cubic-bezier(.45,0,.2,1) forwards;
     pointer-events:none;
-    transform-origin:55% 45%;
-    box-shadow:0 18px 28px -6px rgba(0,0,0,0.5);
+    transform-origin:center center;
+    box-shadow:0 10px 20px -6px rgba(0,0,0,0.4);
   }
   .sticky-note.done{
     filter:grayscale(0.55) brightness(0.88);
@@ -735,7 +730,7 @@
     if(tickBtn){
       const id = tickBtn.dataset.tick;
       const noteEl = document.querySelector(`.sticky-note[data-id="${id}"]`);
-      if(noteEl) noteEl.classList.add('crumpling');
+      if(noteEl) noteEl.classList.add('note-exit');
       const finish = async () => {
         const { error } = await supabaseClient.from('notes')
           .update({ is_done: true, completed_at: new Date().toISOString() }).eq('id', id);
