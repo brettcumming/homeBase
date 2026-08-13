@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!--<link rel="icon" type="image/svg+xml" href="hb_favicon.svg">-->
 <link rel="icon" type="image/svg+xml" href="leaf_icon.png">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -519,7 +518,6 @@
   </main>
 </div>
 
-<!-- Add/Edit Payment Drawer -->
 <div class="overlay" id="overlay"></div>
 <div class="drawer" id="drawer">
   <div class="drawer-header">
@@ -558,7 +556,6 @@
   </div>
 </div>
 
-<!-- Bond Details Drawer -->
 <div class="drawer" id="detailsDrawer">
   <div class="drawer-header">
     <h2>Bond Details</h2>
@@ -810,7 +807,6 @@
     el(id).addEventListener('change', render);
   });
 
-  // ---- Bond Details drawer ----
   function openDetailsDrawer(){
     el('sName').value = settings.name || '';
     el('sOriginal').value = settings.originalAmount || '';
