@@ -158,7 +158,6 @@
   .owner-swatch.brett{background:var(--note-brett); box-shadow:0 0 0 1px var(--note-brett-edge) inset;}
   .owner-swatch.bernice{background:var(--note-bernice); box-shadow:0 0 0 1px var(--note-bernice-edge) inset;}
 
-  /* Whiteboard surface */
   .whiteboard{
     background:
       linear-gradient(160deg, #e9edf5, #dde3ee);
@@ -254,7 +253,6 @@
   .empty-state h3{margin:0 0 6px; color:#4a5170; font-size:15px; font-family:'Sora';}
   .empty-state p{margin:0; font-size:13px;}
 
-  /* Drawer */
   .overlay{
     position:fixed; inset:0; background:rgba(4,7,16,0.6); backdrop-filter:blur(2px);
     opacity:0; pointer-events:none; transition:opacity .2s ease; z-index:40;
@@ -294,7 +292,6 @@
 
   footer.note{margin-top:30px; color:var(--text-muted); font-size:12px; text-align:center;}
 
-  /* Trash can dock */
   .trash-dock{
     position:fixed; right:26px; bottom:26px; width:58px; height:58px; z-index:45;
     display:flex; align-items:center; justify-content:center;
@@ -711,7 +708,6 @@
     }).join('');
   }
 
-  // ---- filters ----
   el('ownerFilterGroup').addEventListener('click', (e) => {
     const btn = e.target.closest('[data-owner-filter]');
     if(!btn) return;
@@ -729,7 +725,6 @@
   el('searchInput').addEventListener('input', renderNotes);
   el('categoryFilter').addEventListener('change', renderNotes);
 
-  // ---- drawer ----
   function updateOwnerFormSelection(){
     document.querySelectorAll('#ownerFormGroup button').forEach(btn => {
       btn.classList.toggle('selected', btn.dataset.owner === formOwner);
