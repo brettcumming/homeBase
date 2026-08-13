@@ -37,9 +37,9 @@
     --radius-lg:18px;
     --shadow-soft: 0 8px 24px rgba(0,0,0,0.35);
     --shadow-lift: 0 16px 40px rgba(0,0,0,0.45);
-    --note-brett:#dbeafe;
-    --note-brett-edge:#b7d3fb;
-    --note-brett-text:#1b3a63;
+    --note-brett:#d97a3a;
+    --note-brett-edge:#8f4318;
+    --note-brett-text:#fff0c4;
     --note-bernice:#3d6fb0;
     --note-bernice-edge:#254a7a;
     --note-bernice-text:#e08a45;
@@ -202,7 +202,10 @@
   }
   .sticky-note.done:hover{transform:scale(0.94) rotate(-1deg) !important;}
   .sticky-note.done .sticky-content{text-decoration:line-through; text-decoration-thickness:1.5px;}
-  .sticky-note.owner-brett{background:var(--note-brett); border-bottom:3px solid var(--note-brett-edge);}
+  .sticky-note.owner-brett{
+    background:linear-gradient(155deg, #e08a45, #b85a24);
+    border-bottom:3px solid var(--note-brett-edge);
+  }
   .sticky-note.owner-bernice{
     background:linear-gradient(155deg, #6ba3e0, #2f5c95);
     border-bottom:3px solid var(--note-bernice-edge);
@@ -235,7 +238,7 @@
     font-family:'Caveat', cursive; font-size:14px; line-height:1.35; white-space:pre-wrap;
     flex:1; word-break:break-word;
   }
-  .owner-brett .sticky-content{color:#284a76;}
+  .owner-brett .sticky-content{color:#fff4d6;}
   .owner-bernice .sticky-content{color:#f0a868;}
 
   .sticky-footer{
