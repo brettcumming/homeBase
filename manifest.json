@@ -1,7 +1,7 @@
 {
   "name": "homeBase",
   "short_name": "homeBase",
-  "start_url": "/index.html",
+  "start_url": "/homeBase/index.html",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait",
