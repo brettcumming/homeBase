@@ -3,11 +3,6 @@
 <head>
 <link rel="apple-touch-icon" href="leaf_gblue.jpg">
 <link rel="icon" type="image/svg+xml" href="leaf_icon.png">  
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#0a0f1e">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="homeBase">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>homeBase — Home</title>
@@ -759,6 +754,12 @@ body {
     const { error } = await supabaseClient.auth.signOut();
     if(error){ showToast('Could not sign out'); console.error(error); }
     // auth.js listens for SIGNED_OUT and reloads the page to show the sign-in screen
+  });
+
+  // The sign-in overlay (auth.js) reveals the page in place without reloading,
+  // so re-populate the widget whenever a fresh sign-in actually completes.
+  supabaseClient.auth.onAuthStateChange((event) => {
+    if(event === 'SIGNED_IN'){ initProfileWidget(); }
   });
 
   // ---- Important notes strip ----
