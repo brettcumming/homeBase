@@ -179,13 +179,7 @@ body {
   .sticky-note:hover{transform:translateY(-4px) rotate(0deg) !important; box-shadow:0 16px 30px -8px rgba(0,0,0,0.45), 0 3px 6px rgba(0,0,0,0.16); z-index:5;}
   .sticky-note.owner-brett{background:linear-gradient(155deg, #e08a45, #b85a24); border-bottom:3px solid var(--note-brett-edge);}
   .sticky-note.owner-bernice{background:linear-gradient(155deg, #6ba3e0, #2f5c95); border-bottom:3px solid var(--note-bernice-edge);}
-
-  .sticky-pin{
-    position:absolute; top:-7px; left:50%; transform:translateX(-50%);
-    width:12px; height:12px; border-radius:50%;
-    background:radial-gradient(circle at 35% 30%, #ff8a7a, #d9432c 70%);
-    box-shadow:0 3px 5px rgba(0,0,0,0.35);
-  }
+  
   .sticky-cat{
     font-family:'Inter'; font-size:8px; font-weight:700; text-transform:uppercase; letter-spacing:0.4px;
     padding:2px 6px; border-radius:20px; background:rgba(0,0,0,0.12); color:#fff; align-self:flex-start;
@@ -661,8 +655,7 @@ body {
       const rot = rotationFor(n.id);
       const subject = n.title && n.title.trim() ? n.title : (n.content || '').slice(0, 40);
       return `
-      <a href="notes.html?note=${encodeURIComponent(n.id)}" class="sticky-note ${ownerClass}" style="transform:rotate(${rot}deg);">
-        <div class="sticky-pin"></div>
+      <a href="notes.html?note=${encodeURIComponent(n.id)}" class="sticky-note ${ownerClass}" style="transform:rotate(${rot}deg);">       
         <span class="sticky-cat">${escapeHtml(n.category)}</span>
         <div class="sticky-title sticky-title-only">${escapeHtml(subject)}</div>
         <div class="sticky-footer">${escapeHtml(n.owner)}</div>
