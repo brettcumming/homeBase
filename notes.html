@@ -1,12 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<link rel="icon" type="image/svg+xml" href="leaf_icon.png">
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#0a0f1e">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="homeBase">
+<link rel="icon" type="image/svg+xml" href="hb_favicon.svg">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>homeBase — Notes</title>
@@ -42,12 +37,12 @@
     --radius-lg:18px;
     --shadow-soft: 0 8px 24px rgba(0,0,0,0.35);
     --shadow-lift: 0 16px 40px rgba(0,0,0,0.45);
-    --note-brett:#d97a3a;
-    --note-brett-edge:#8f4318;
-    --note-brett-text:#fff0c4;
-    --note-bernice:#3d6fb0;
-    --note-bernice-edge:#254a7a;
-    --note-bernice-text:#f0a868;
+    --note-brett:#dbeafe;
+    --note-brett-edge:#b7d3fb;
+    --note-brett-text:#1b3a63;
+    --note-bernice:#fef3c7;
+    --note-bernice-edge:#fbe3a1;
+    --note-bernice-text:#6b4c11;
   }
   *{box-sizing:border-box;}
   html,body{height:100%;}
@@ -163,6 +158,7 @@
   .owner-swatch.brett{background:var(--note-brett); box-shadow:0 0 0 1px var(--note-brett-edge) inset;}
   .owner-swatch.bernice{background:var(--note-bernice); box-shadow:0 0 0 1px var(--note-bernice-edge) inset;}
 
+  /* Whiteboard surface */
   .whiteboard{
     background:
       linear-gradient(160deg, #e9edf5, #dde3ee);
@@ -176,15 +172,15 @@
     min-height:340px;
   }
   .note-grid{
-    display:grid; grid-template-columns:repeat(auto-fill, minmax(248px, 1fr)); gap:26px 20px;
+    display:grid; grid-template-columns:repeat(auto-fill, minmax(220px, 1fr)); gap:34px 26px;
     align-items:start;
   }
 
   .sticky-note{
-    position:relative; min-height:1px; padding:20px 14px 14px;
+    position:relative; min-height:190px; padding:26px 18px 18px;
     border-radius:3px;
     box-shadow:0 10px 22px -6px rgba(0,0,0,0.35), 0 2px 4px rgba(0,0,0,0.12);
-    display:flex; flex-direction:column; gap:6px;
+    display:flex; flex-direction:column; gap:8px;
     transition:transform .18s ease, box-shadow .18s ease;
   }
   .sticky-note:hover{transform:translateY(-4px) rotate(0deg) !important; box-shadow:0 16px 30px -8px rgba(0,0,0,0.4), 0 3px 6px rgba(0,0,0,0.14); z-index:5;}
@@ -206,50 +202,58 @@
   }
   .sticky-note.done:hover{transform:scale(0.94) rotate(-1deg) !important;}
   .sticky-note.done .sticky-content{text-decoration:line-through; text-decoration-thickness:1.5px;}
-  .sticky-note.owner-brett{
-    background:linear-gradient(155deg, #e08a45, #b85a24);
-    border-bottom:3px solid var(--note-brett-edge);
+  .sticky-note.owner-brett{background:var(--note-brett); border-bottom:3px solid var(--note-brett-edge);}
+  .sticky-note.owner-bernice{background:var(--note-bernice); border-bottom:3px solid var(--note-bernice-edge);}
+
+  .sticky-pin{
+    position:absolute; top:-9px; left:50%; transform:translateX(-50%);
+    width:16px; height:16px; border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, #ff8a7a, #d9432c 70%);
+    box-shadow:0 3px 5px rgba(0,0,0,0.35);
   }
-  .sticky-note.owner-bernice{
-    background:linear-gradient(155deg, #2f5c95, #2f5c95, #6ba3e0);
-    border-bottom:3px solid var(--note-bernice-edge);
-  } 
 
   .sticky-top{display:flex; align-items:flex-start; justify-content:space-between; gap:8px;}
   .sticky-cat{
-    font-family:'Inter'; font-size:8px; font-weight:700; text-transform:uppercase; letter-spacing:0.4px;
-    padding:2px 6px; border-radius:20px; background:rgba(0,0,0,0.08); flex-shrink:0;
+    font-family:'Inter'; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px;
+    padding:3px 8px; border-radius:20px; background:rgba(0,0,0,0.08); flex-shrink:0;
   }
   .owner-brett .sticky-cat{color:var(--note-brett-text);}
   .owner-bernice .sticky-cat{color:var(--note-bernice-text);}
 
-  .sticky-actions{display:flex; gap:2px;}  
+  .sticky-actions{display:flex; gap:2px;}
   .sticky-icon-btn{
     width:24px; height:24px; border-radius:6px; display:flex; align-items:center; justify-content:center;
     background:transparent; border:none; cursor:pointer; flex-shrink:0;
   }
   .owner-brett .sticky-icon-btn{color:var(--note-brett-text);}
   .owner-bernice .sticky-icon-btn{color:var(--note-bernice-text);}
-  
-  .sticky-icon-btn svg{width:10px; height:10px;}
+  .sticky-icon-btn:hover{background:rgba(0,0,0,0.08);}
+  .sticky-icon-btn svg{width:13px; height:13px;}
 
-  .sticky-title{font-family:'Sora'; font-weight:700; font-size:11.5px; line-height:1.3;}
+  .sticky-title{font-family:'Sora'; font-weight:700; font-size:15.5px; line-height:1.3;}
   .owner-brett .sticky-title{color:var(--note-brett-text);}
-  .owner-bernice .sticky-title{color:#f0a868;}
+  .owner-bernice .sticky-title{color:var(--note-bernice-text);}
 
-   .sticky-content{
-    font-family:'Caveat', cursive; font-size:14px; line-height:1.35; white-space:pre-wrap;
+  .sticky-content{
+    font-family:'Caveat', cursive; font-size:19px; line-height:1.35; white-space:pre-wrap;
     flex:1; word-break:break-word;
   }
-  .owner-brett .sticky-content{color:#fff4d6;}
-  .owner-bernice .sticky-content{color:#ed9345;}
+  .owner-brett .sticky-content{color:#284a76;}
+  .owner-bernice .sticky-content{color:#7a591a;}
 
   .sticky-footer{
-    font-family:'Inter'; font-size:11px; margin-top:auto; padding-top:5px; opacity:0.9;
+    font-family:'Inter'; font-size:10.5px; margin-top:auto; padding-top:6px; opacity:0.6;
   }
   .owner-brett .sticky-footer{color:var(--note-brett-text);}
   .owner-bernice .sticky-footer{color:var(--note-bernice-text);}
 
+  .sticky-note.note-highlight{
+    animation:noteHighlightPulse 1.1s ease-in-out 2;
+  }
+  @keyframes noteHighlightPulse{
+    0%,100%{ box-shadow:0 10px 22px -6px rgba(0,0,0,0.35), 0 2px 4px rgba(0,0,0,0.12); }
+    50%{ box-shadow:0 0 0 5px rgba(255,255,255,0.55), 0 10px 22px -6px rgba(0,0,0,0.35); }
+  }
   .empty-state{
     display:flex; flex-direction:column; align-items:center; justify-content:center;
     padding:60px 20px; text-align:center; color:#6b7590; grid-column:1/-1;
@@ -258,6 +262,7 @@
   .empty-state h3{margin:0 0 6px; color:#4a5170; font-size:15px; font-family:'Sora';}
   .empty-state p{margin:0; font-size:13px;}
 
+  /* Drawer */
   .overlay{
     position:fixed; inset:0; background:rgba(4,7,16,0.6); backdrop-filter:blur(2px);
     opacity:0; pointer-events:none; transition:opacity .2s ease; z-index:40;
@@ -297,6 +302,7 @@
 
   footer.note{margin-top:30px; color:var(--text-muted); font-size:12px; text-align:center;}
 
+  /* Trash can dock */
   .trash-dock{
     position:fixed; right:26px; bottom:26px; width:58px; height:58px; z-index:45;
     display:flex; align-items:center; justify-content:center;
@@ -339,7 +345,7 @@
     .sidebar-footer{display:none;}
     .main{padding:24px 18px 50px;}
     .whiteboard{padding:20px;}
-    .note-grid{grid-template-columns:repeat(auto-fill, minmax(248px, 1fr)); gap:20px 12px;}
+    .note-grid{grid-template-columns:repeat(auto-fill, minmax(150px, 1fr)); gap:26px 16px;}
     .sticky-note:hover{transform:none !important;}
   }
 </style>
@@ -440,13 +446,10 @@
       </a>
       <a href="notes.html" class="nav-item active">
         <div class="left">
-          <svg
-            xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"
-          >
-           <path d="M4 20l1.2-4.5L15.7 5a2.3 2.3 0 0 1 3.3 3.3L8.5 19.1 4 20z" />
-            <path d="M13.2 7.5l3.3 3.3" />
-            <path d="M5.2 15.5l3.3 3.3" />
-          </svg>          
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 2h6a2 2 0 0 1 2 2v3.5L21 12v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-6l4-4.5V4a2 2 0 0 1 2-2Z"/>
+            <path d="M9 2v6H3.8"/>
+          </svg>
           Notes
         </div>
       </a>
@@ -535,12 +538,12 @@
 
     <div class="field">
       <label for="fTitle">Title</label>
-      <input type="text" id="fTitle" placeholder="">
+      <input type="text" id="fTitle" placeholder="e.g. Weekend list">
     </div>
 
     <div class="field">
       <label for="fContent">Note</label>
-      <textarea id="fContent" placeholder="Write here…"></textarea>
+      <textarea id="fContent" placeholder="Write your note or list here…"></textarea>
     </div>
   </div>
   <div class="drawer-footer">
@@ -577,6 +580,7 @@
   let formOwner = 'Brett';
   let ownerFilter = 'all';
   let statusFilter = 'active';
+  let targetNoteId = new URLSearchParams(window.location.search).get('note');
 
   function showToast(msg){
     const toast = el('toast');
@@ -639,7 +643,34 @@
     if(error){ showToast('Error loading notes'); console.error(error); return; }
     notes = data;
     refreshCategoryOptions();
+
+    if(targetNoteId){
+      const target = notes.find(n => n.id === targetNoteId);
+      if(target){
+        statusFilter = target.is_done ? 'done' : 'active';
+        ownerFilter = 'all';
+        document.querySelectorAll('#statusFilterGroup button').forEach(b => b.classList.toggle('selected', b.dataset.statusFilter === statusFilter));
+        document.querySelectorAll('#ownerFilterGroup button').forEach(b => b.classList.toggle('selected', b.dataset.ownerFilter === 'all'));
+        el('categoryFilter').value = 'all';
+        el('searchInput').value = '';
+      }
+    }
+
     renderNotes();
+
+    if(targetNoteId){
+      const idToFind = targetNoteId;
+      requestAnimationFrame(() => {
+        const targetEl = document.querySelector(`.sticky-note[data-id="${idToFind}"]`);
+        if(targetEl){
+          targetEl.scrollIntoView({ behavior:'smooth', block:'center' });
+          targetEl.classList.add('note-highlight');
+          setTimeout(() => targetEl.classList.remove('note-highlight'), 2300);
+        }
+      });
+      targetNoteId = null;
+      history.replaceState(null, '', window.location.pathname);
+    }
   }
 
   function refreshCategoryOptions(){
@@ -700,7 +731,8 @@
             </button>
           `;
       return `
-      <div class="sticky-note ${ownerClass}${doneClass}" style="--rot:${rot}deg; transform:rotate(${rot}deg);" data-id="${n.id}">       
+      <div class="sticky-note ${ownerClass}${doneClass}" style="--rot:${rot}deg; transform:rotate(${rot}deg);" data-id="${n.id}">
+        <div class="sticky-pin"></div>
         <div class="sticky-top">
           <span class="sticky-cat">${escapeHtml(n.category)}</span>
           <div class="sticky-actions">${actions}</div>
@@ -713,6 +745,7 @@
     }).join('');
   }
 
+  // ---- filters ----
   el('ownerFilterGroup').addEventListener('click', (e) => {
     const btn = e.target.closest('[data-owner-filter]');
     if(!btn) return;
@@ -730,6 +763,7 @@
   el('searchInput').addEventListener('input', renderNotes);
   el('categoryFilter').addEventListener('change', renderNotes);
 
+  // ---- drawer ----
   function updateOwnerFormSelection(){
     document.querySelectorAll('#ownerFormGroup button').forEach(btn => {
       btn.classList.toggle('selected', btn.dataset.owner === formOwner);
