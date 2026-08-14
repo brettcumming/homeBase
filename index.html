@@ -1,13 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<link rel="apple-touch-icon" href="leaf_icon.png">
+<link rel="apple-touch-icon" href="leaf_gblue.jpg">
 <link rel="icon" type="image/svg+xml" href="leaf_icon.png">  
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#0a0f1e">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="homeBase">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>homeBase — Home</title>
@@ -163,6 +158,44 @@ body {
 
   footer.note{color:var(--text-muted); font-size:12px; text-align:center; padding:20px 0 32px;}
 
+  /* Profile / logout widget */
+  .profile-widget{position:fixed; top:22px; right:22px; z-index:55;}
+  .profile-chip{
+    display:flex; align-items:center; gap:6px; padding:5px; border-radius:999px;
+    background:linear-gradient(160deg, var(--panel), var(--panel-alt));
+    border:1px solid var(--border-soft); box-shadow:var(--shadow-soft); cursor:pointer;
+  }
+  .profile-chip:hover{border-color:rgba(255,255,255,0.18);}
+  .profile-chip .chevron{width:14px; height:14px; color:var(--text-muted); margin-right:4px; transition:transform .15s ease;}
+  .profile-chip.open .chevron{transform:rotate(180deg);}
+  .profile-avatar{
+    width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    font-family:'Sora'; font-weight:700; font-size:13px; color:#fff; flex-shrink:0;
+  }
+  .profile-avatar-lg{width:44px; height:44px; font-size:16px;}
+  .profile-menu{
+    position:absolute; top:calc(100% + 10px); right:0; width:230px;
+    background:linear-gradient(180deg, var(--bg-elevated), var(--bg));
+    border:1px solid var(--border); border-radius:14px; box-shadow:var(--shadow-lift);
+    padding:16px; opacity:0; pointer-events:none; transform:translateY(-6px);
+    transition:opacity .15s ease, transform .15s ease;
+  }
+  .profile-menu.show{opacity:1; pointer-events:auto; transform:translateY(0);}
+  .profile-menu-header{display:flex; align-items:center; gap:12px; padding-bottom:14px; margin-bottom:12px; border-bottom:1px solid var(--border-soft);}
+  .profile-name{font-family:'Sora'; font-weight:700; font-size:14px; color:var(--text-primary);}
+  .profile-email{font-size:11.5px; color:var(--text-muted); word-break:break-all;}
+  .profile-menu-item{
+    display:flex; align-items:center; gap:9px; width:100%; padding:9px 10px; border-radius:9px;
+    background:none; border:none; color:var(--text-secondary); font-size:13px; font-weight:600;
+    cursor:pointer; text-align:left; font-family:inherit;
+  }
+  .profile-menu-item:hover{background:var(--danger-soft); color:var(--danger);}
+  .profile-menu-item svg{width:15px; height:15px; flex-shrink:0;}
+
+  @media (max-width:640px){
+    .profile-widget{top:14px; right:14px;}
+  }
+
   /* Important notes strip — replaces the old planner tile */
   .important-notes{width:100%; max-width:900px; margin:0 auto 40px;}
   .important-notes-header{text-align:center; margin-bottom:20px;}
@@ -184,7 +217,13 @@ body {
   .sticky-note:hover{transform:translateY(-4px) rotate(0deg) !important; box-shadow:0 16px 30px -8px rgba(0,0,0,0.45), 0 3px 6px rgba(0,0,0,0.16); z-index:5;}
   .sticky-note.owner-brett{background:linear-gradient(155deg, #e08a45, #b85a24); border-bottom:3px solid var(--note-brett-edge);}
   .sticky-note.owner-bernice{background:linear-gradient(155deg, #6ba3e0, #2f5c95); border-bottom:3px solid var(--note-bernice-edge);}
-  
+
+  .sticky-pin{
+    position:absolute; top:-7px; left:50%; transform:translateX(-50%);
+    width:12px; height:12px; border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, #ff8a7a, #d9432c 70%);
+    box-shadow:0 3px 5px rgba(0,0,0,0.35);
+  }
   .sticky-cat{
     font-family:'Inter'; font-size:8px; font-weight:700; text-transform:uppercase; letter-spacing:0.4px;
     padding:2px 6px; border-radius:20px; background:rgba(0,0,0,0.12); color:#fff; align-self:flex-start;
@@ -263,6 +302,26 @@ body {
 </style>
 </head>
 <body>
+
+<div class="profile-widget" id="profileWidget">
+  <button class="profile-chip" id="profileChip" aria-label="Account menu">
+    <span class="profile-avatar" id="profileAvatar">·</span>
+    <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+  </button>
+  <div class="profile-menu" id="profileMenu">
+    <div class="profile-menu-header">
+      <span class="profile-avatar profile-avatar-lg" id="profileAvatarLg">·</span>
+      <div>
+        <div class="profile-name" id="profileName">Signed in</div>
+        <div class="profile-email" id="profileEmail">—</div>
+      </div>
+    </div>
+    <button class="profile-menu-item" id="logoutBtn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
+      Sign out
+    </button>
+  </div>
+</div>
 
 <div class="wrap">
 
@@ -639,6 +698,64 @@ body {
     return ((hash % 7) - 3) * 1.1;
   }
 
+  // ---- Profile / logout widget ----
+  const AVATAR_COLORS = ['#4c7cf0', '#33d6a6', '#f0b84c', '#f0664c', '#8b6cf0'];
+  function colorForEmail(email){
+    let hash = 0;
+    for(let i = 0; i < email.length; i++){ hash = (hash * 31 + email.charCodeAt(i)) % 1000; }
+    return AVATAR_COLORS[hash % AVATAR_COLORS.length];
+  }
+  function displayNameFromEmail(email){
+    const local = email.split('@')[0] || email;
+    return local.split(/[._\-]+/).filter(Boolean).map(w => w[0].toUpperCase() + w.slice(1)).join(' ');
+  }
+  function initialsFromName(name){
+    const parts = name.trim().split(/\s+/);
+    if(parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+    return (parts[0][0] + parts[1][0]).toUpperCase();
+  }
+
+  async function initProfileWidget(){
+    const { data: { session } } = await supabaseClient.auth.getSession();
+    const email = session && session.user ? session.user.email : null;
+    if(!email) return;
+
+    const name = displayNameFromEmail(email);
+    const initials = initialsFromName(name);
+    const color = colorForEmail(email);
+
+    [el('profileAvatar'), el('profileAvatarLg')].forEach(node => {
+      if(!node) return;
+      node.textContent = initials;
+      node.style.background = `linear-gradient(155deg, ${color}, ${color}cc)`;
+    });
+    if(el('profileName')) el('profileName').textContent = name;
+    if(el('profileEmail')) el('profileEmail').textContent = email;
+  }
+
+  const profileChip = el('profileChip');
+  const profileMenu = el('profileMenu');
+  function closeProfileMenu(){
+    profileMenu.classList.remove('show');
+    profileChip.classList.remove('open');
+  }
+  profileChip.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const isOpen = profileMenu.classList.toggle('show');
+    profileChip.classList.toggle('open', isOpen);
+  });
+  document.addEventListener('click', (e) => {
+    if(!el('profileWidget').contains(e.target)) closeProfileMenu();
+  });
+  document.addEventListener('keydown', (e) => { if(e.key === 'Escape') closeProfileMenu(); });
+
+  el('logoutBtn').addEventListener('click', async () => {
+    closeProfileMenu();
+    const { error } = await supabaseClient.auth.signOut();
+    if(error){ showToast('Could not sign out'); console.error(error); }
+    // auth.js listens for SIGNED_OUT and reloads the page to show the sign-in screen
+  });
+
   // ---- Important notes strip ----
   async function loadImportantNotes(){
     const row = el('importantNotesRow');
@@ -660,7 +777,8 @@ body {
       const rot = rotationFor(n.id);
       const subject = n.title && n.title.trim() ? n.title : (n.content || '').slice(0, 40);
       return `
-      <a href="notes.html?note=${encodeURIComponent(n.id)}" class="sticky-note ${ownerClass}" style="transform:rotate(${rot}deg);">       
+      <a href="notes.html?note=${encodeURIComponent(n.id)}" class="sticky-note ${ownerClass}" style="transform:rotate(${rot}deg);">
+        <div class="sticky-pin"></div>
         <span class="sticky-cat">${escapeHtml(n.category)}</span>
         <div class="sticky-title sticky-title-only">${escapeHtml(subject)}</div>
         <div class="sticky-footer">${escapeHtml(n.owner)}</div>
@@ -691,6 +809,7 @@ body {
 
   loadImportantNotes();
   checkRecentExpenseActivity();
+  initProfileWidget();
   setInterval(checkRecentExpenseActivity, 5 * 60 * 1000);
 })();
 </script>
