@@ -1,12 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<link rel="icon" type="image/svg+xml" href="leaf_icon.png">
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#0a0f1e">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="homeBase">
+<link rel="icon" type="image/svg+xml" href="hb_favicon.svg"> 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>homeBase — Expenses</title>
@@ -248,7 +243,14 @@
     display:inline-block; padding:4px 11px; border-radius:20px; font-size:11.5px; font-weight:600;
     background:var(--accent-soft); color:var(--accent-hover);
   }
-  .row-actions{display:flex; gap:6px; justify-content:flex-end;}
+  .row-actions{display:flex; gap:6px; justify-content:flex-end; align-items:center;}
+  .receipt-count-btn{
+    display:inline-flex; align-items:center; gap:4px; padding:5px 9px; border-radius:20px;
+    background:var(--panel-alt); border:1px solid var(--border); color:var(--text-muted);
+    font-size:11px; font-weight:600; cursor:pointer; flex-shrink:0;
+  }
+  .receipt-count-btn.has{color:var(--success); border-color:rgba(51,214,166,0.35); background:var(--success-soft);}
+  .receipt-count-btn svg{width:12px; height:12px;}
   .icon-btn{
     width:30px; height:30px; border-radius:8px; display:flex; align-items:center; justify-content:center;
     background:transparent; border:1px solid transparent; color:var(--text-muted); cursor:pointer;
@@ -295,6 +297,43 @@
   .drawer-footer{padding:18px 24px; border-top:1px solid var(--border-soft); display:flex; gap:10px;}
   .drawer-footer .btn{flex:1; justify-content:center;}
 
+  .section-block{border-top:1px dashed var(--border); padding-top:16px; margin-top:4px;}
+  .section-block-header{display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;}
+  .section-label{
+    font-size:11px; text-transform:uppercase; letter-spacing:0.8px; color:var(--text-muted); font-weight:700;
+  }
+  .save-hint{
+    font-size:11.5px; color:var(--text-muted); background:var(--panel); border:1px solid var(--border-soft);
+    border-radius:8px; padding:10px 12px; line-height:1.5;
+  }
+  .mini-list{display:flex; flex-direction:column; gap:8px;}
+  .no-items{font-size:12.5px; color:var(--text-muted); text-align:center; padding:10px 0;}
+
+  .mini-dropzone{
+    border:2px dashed var(--border); border-radius:10px; padding:18px; text-align:center;
+    transition:border-color .15s ease, background .15s ease; background:var(--panel);
+  }
+  .mini-dropzone.drag{border-color:var(--accent); background:var(--accent-soft);}
+  .mini-dropzone svg{width:22px; height:22px; color:var(--text-muted); margin-bottom:6px;}
+  .mini-dropzone p{margin:0 0 2px; font-size:13px; color:var(--text-secondary); font-weight:500;}
+  .mini-dropzone span{font-size:11.5px; color:var(--text-muted);}
+  .mini-dropzone .browse{color:var(--accent-hover); font-weight:600; cursor:pointer;}
+  .mini-dropzone input[type=file]{display:none;}
+
+  .doc-row{
+    display:flex; align-items:center; gap:10px; padding:10px 12px; background:var(--panel);
+    border:1px solid var(--border-soft); border-radius:9px; font-size:12.5px;
+  }
+  .doc-row .dicon{
+    width:30px; height:30px; border-radius:7px; background:var(--panel-alt); display:flex;
+    align-items:center; justify-content:center; flex-shrink:0; overflow:hidden;
+  }
+  .doc-row .dicon img{width:100%; height:100%; object-fit:cover;}
+  .doc-row .dicon svg{width:14px; height:14px; color:var(--text-muted);}
+  .doc-row .dname{flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-weight:500;}
+  .doc-row .dmeta{color:var(--text-muted); font-size:11px; flex-shrink:0;}
+  .doc-row .drow-actions{display:flex; gap:4px; flex-shrink:0;}
+
   .toast{
     position:fixed; bottom:26px; right:26px; background:var(--panel-alt); border:1px solid var(--border);
     padding:13px 18px; border-radius:10px; font-size:13.5px; display:flex; align-items:center; gap:10px;
@@ -317,6 +356,7 @@
     .field-row{grid-template-columns:1fr;}
     .breakdown-row .cname{width:90px;}
 
+    /* Table becomes a stacked card list, matching the doc-card look on Documents */
     .table-wrap{background:transparent; border:none; box-shadow:none; overflow:visible;}
     table, tbody{display:block; width:100%;}
     thead{display:none;}
@@ -353,7 +393,22 @@
   <aside class="sidebar">
     <div class="brand">
       <div class="brand-mark">
-        <img src="leaf_icon.png" width="30" height="30" alt="">  
+        <svg
+        viewBox="0 0 24 24"
+        width="68"
+        height="68"
+        fill="none"
+        stroke="#eaf0fb"
+        stroke-width="2.2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-label="Home"
+      >
+        <path d="M4 21V3h3v7" />
+        <path d="M7 10 12 5l7 5v11" />
+        <path d="M4 21h5" />
+        <path d="M15 21h4" />
+      </svg>
       </div>
       <div class="brand-text">
         <strong>homeBase</strong>
@@ -419,16 +474,24 @@
       <a href="property.html" class="nav-item">
         <div class="left">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M14.7 2.7a5.2 5.2 0 0 0-6.9 6.9l-5.1 5.1a2 2 0 0 0 0 2.8l1.8 1.8a2 2 0 0 0 2.8 0l5.1-5.1a5.2 5.2 0 0 0 6.9-6.9l-3.2 3.2-2.6-.6-.6-2.6 3.2-3.2a5.2 5.2 0 0 0-1.4-1.4Z"/>
-            <circle cx="5.5" cy="18.5" r="1"/>
-          </svg>
+  <path d="M14.7 2.7a5.2 5.2 0 0 0-6.9 6.9l-5.1 5.1a2 2 0 0 0 0 2.8l1.8 1.8a2 2 0 0 0 2.8 0l5.1-5.1a5.2 5.2 0 0 0 6.9-6.9l-3.2 3.2-2.6-.6-.6-2.6 3.2-3.2a5.2 5.2 0 0 0-1.4-1.4Z"/>
+  <circle cx="5.5" cy="18.5" r="1"/>
+</svg>
           Home Maintenance
         </div>
       </a> 
       <a href="goals.html" class="nav-item">
         <div class="left">
           <svg
-            xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.4"
+            stroke-linecap="round"
+            stroke-linejoin="round"
           >
             <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z" />
             <path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z" />
@@ -440,12 +503,9 @@
       </a>
       <a href="notes.html" class="nav-item">
         <div class="left">
-          <svg
-            xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"
-          >
-            <path d="M4 20l1.2-4.5L15.7 5a2.3 2.3 0 0 1 3.3 3.3L8.5 19.1 4 20z" />
-            <path d="M13.2 7.5l3.3 3.3" />
-            <path d="M5.2 15.5l3.3 3.3" />
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 2h6a2 2 0 0 1 2 2v3.5L21 12v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-6l4-4.5V4a2 2 0 0 1 2-2Z"/>
+            <path d="M9 2v6H3.8"/>
           </svg>
           Notes
         </div>
@@ -462,6 +522,7 @@
   </aside>
 
   <main class="main">
+
     
     <div id="vaultWrap">
     <div class="topbar">
@@ -616,6 +677,20 @@
       <label for="fNotes">Notes (optional)</label>
       <input type="text" id="fNotes" placeholder="Any extra detail…">
     </div>
+
+    <div class="section-block" id="receiptsBlock" style="display:none;">
+      <div class="section-block-header">
+        <div class="section-label">Receipts / Documents</div>
+      </div>
+      <div class="mini-dropzone" id="receiptDropzone">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 16V4m0 0 4 4m-4-4L8 8"/><path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></svg>
+        <p>Drag files here, or <span class="browse" id="receiptBrowseLink">browse</span></p>
+        <span>Photos, PDFs — saved against this expense</span>
+        <input type="file" id="receiptFileInput" multiple>
+      </div>
+      <div class="mini-list" id="receiptList" style="margin-top:10px;"></div>
+    </div>
+    <div class="save-hint" id="newExpenseHint">Save this expense first to attach receipts.</div>
   </div>
   <div class="drawer-footer">
     <button class="btn btn-ghost" id="cancelBtn">Cancel</button>
@@ -630,10 +705,13 @@
 <script>
 (function(){
   const el = (id) => document.getElementById(id);
+  const BUCKET = 'expense-receipts';
 
   let expenses = [];
   let editingId = null;
   let selectedPaidBy = 'Brett';
+  let currentReceipts = [];
+  let receiptThumbs = {};
 
   function currency(n){
     return 'R' + Number(n).toLocaleString('en-ZA', {minimumFractionDigits:2, maximumFractionDigits:2});
@@ -641,6 +719,12 @@
   function formatDate(d){
     if(!d) return '—';
     return new Date(d + 'T00:00:00').toLocaleDateString('en-ZA', {day:'2-digit', month:'short', year:'numeric'});
+  }
+  function formatBytes(bytes){
+    if(!bytes) return '0 KB';
+    const kb = bytes / 1024;
+    if(kb < 1024) return kb.toFixed(0) + ' KB';
+    return (kb/1024).toFixed(1) + ' MB';
   }
   function monthKey(d){ return d ? d.slice(0,7) : ''; }
   function monthLabel(key){
@@ -662,13 +746,14 @@
   async function loadExpenses(){
     const { data, error } = await supabaseClient
       .from('expenses')
-      .select('*')
+      .select('*, expense_receipts(id)')
       .order('expense_date', { ascending: false });
     if(error){ showToast('Error loading expenses'); console.error(error); return; }
     expenses = data.map(e => ({
       id: e.id, description: e.description, amount: e.amount,
       date: e.expense_date, category: e.category, notes: e.notes,
-      paidBy: e.paid_by || 'Brett'
+      paidBy: e.paid_by || 'Brett',
+      receiptCount: (e.expense_receipts || []).length
     }));
     render();
   }
@@ -789,6 +874,10 @@
         <td data-label="Date">${formatDate(e.date)}</td>
         <td>
           <div class="row-actions">
+            <button class="receipt-count-btn ${e.receiptCount ? 'has' : ''}" data-receipts="${e.id}" aria-label="Receipts">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/></svg>
+              ${e.receiptCount || 0}
+            </button>
             <button class="icon-btn" data-edit="${e.id}" aria-label="Edit expense">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5Z"/></svg>
             </button>
@@ -807,7 +896,7 @@
     });
   }
 
-  function openDrawer(expense){
+  async function openDrawer(expense){
     editingId = expense ? expense.id : null;
     el('drawerTitle').textContent = expense ? 'Edit Expense' : 'Add Expense';
     el('editId').value = expense ? expense.id : '';
@@ -818,6 +907,17 @@
     el('fNotes').value = expense ? (expense.notes||'') : '';
     selectedPaidBy = expense ? (expense.paidBy || 'Brett') : 'Brett';
     updatePaidBySelection();
+
+    if(expense){
+      el('receiptsBlock').style.display = 'block';
+      el('newExpenseHint').style.display = 'none';
+      await loadReceipts(expense.id);
+    } else {
+      el('receiptsBlock').style.display = 'none';
+      el('newExpenseHint').style.display = 'block';
+      currentReceipts = [];
+    }
+
     el('drawer').classList.add('show');
     el('overlay').classList.add('show');
     setTimeout(() => el('fDesc').focus(), 200);
@@ -826,6 +926,105 @@
     el('drawer').classList.remove('show');
     el('overlay').classList.remove('show');
     editingId = null;
+  }
+
+  // ---- Receipts ----
+  async function loadReceipts(expenseId){
+    const { data, error } = await supabaseClient
+      .from('expense_receipts').select('*').eq('expense_id', expenseId).order('added_at', { ascending: false });
+    if(error){ showToast('Error loading receipts'); console.error(error); return; }
+    currentReceipts = data;
+    await renderReceiptList();
+  }
+  async function renderReceiptList(){
+    const list = el('receiptList');
+    receiptThumbs = {};
+    if(currentReceipts.length === 0){
+      list.innerHTML = '<div class="no-items">No receipts yet</div>';
+      return;
+    }
+    await Promise.all(currentReceipts.filter(r => r.is_image).map(async (r) => {
+      const { data, error } = await supabaseClient.storage.from(BUCKET).createSignedUrl(r.storage_path, 3600);
+      if(!error) receiptThumbs[r.id] = data.signedUrl;
+    }));
+    list.innerHTML = currentReceipts.map(r => `
+      <div class="doc-row">
+        <div class="dicon">
+          ${r.is_image && receiptThumbs[r.id]
+            ? `<img src="${receiptThumbs[r.id]}" alt="">`
+            : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/></svg>`}
+        </div>
+        <div class="dname" title="${escapeHtml(r.name)}">${escapeHtml(r.name)}</div>
+        <div class="dmeta">${formatBytes(r.size)}</div>
+        <div class="drow-actions">
+          <button class="icon-btn" data-rdownload="${r.id}" aria-label="Download">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+          </button>
+          <button class="icon-btn danger" data-rdel="${r.id}" aria-label="Delete">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0-1 14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L4 6"/></svg>
+          </button>
+        </div>
+      </div>
+    `).join('');
+  }
+  el('receiptList').addEventListener('click', async (e) => {
+    const dl = e.target.closest('[data-rdownload]');
+    const delBtn = e.target.closest('[data-rdel]');
+    if(dl){
+      const r = currentReceipts.find(x => x.id === dl.dataset.rdownload);
+      if(!r) return;
+      const { data, error } = await supabaseClient.storage.from(BUCKET).createSignedUrl(r.storage_path, 60);
+      if(error){ showToast('Could not download that file'); return; }
+      const a = document.createElement('a');
+      a.href = data.signedUrl; a.download = r.name; a.click();
+    }
+    if(delBtn){
+      const id = delBtn.dataset.rdel;
+      const r = currentReceipts.find(x => x.id === id);
+      if(!r) return;
+      if(!confirm(`Delete "${r.name}"? This can't be undone.`)) return;
+
+      const { error: storageErr } = await supabaseClient.storage.from(BUCKET).remove([r.storage_path]);
+      if(storageErr){ showToast('Could not delete file from storage'); console.error(storageErr); return; }
+      const { error: dbErr } = await supabaseClient.from('expense_receipts').delete().eq('id', id);
+      if(dbErr){ showToast('Could not delete receipt record'); return; }
+
+      await loadReceipts(editingId);
+      await loadExpenses();
+      showToast('Receipt deleted');
+    }
+  });
+
+  const receiptDropzone = el('receiptDropzone');
+  const receiptFileInput = el('receiptFileInput');
+  el('receiptBrowseLink').addEventListener('click', () => receiptFileInput.click());
+  receiptDropzone.addEventListener('dragover', (e) => { e.preventDefault(); receiptDropzone.classList.add('drag'); });
+  receiptDropzone.addEventListener('dragleave', () => receiptDropzone.classList.remove('drag'));
+  receiptDropzone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    receiptDropzone.classList.remove('drag');
+    handleReceiptFiles(e.dataTransfer.files);
+  });
+  receiptFileInput.addEventListener('change', () => handleReceiptFiles(receiptFileInput.files));
+
+  async function handleReceiptFiles(fileList){
+    if(!editingId) return;
+    for(const file of Array.from(fileList)){
+      if(file.size > 50 * 1024 * 1024){ showToast(`${file.name} is over 50MB — skipped`); continue; }
+      const storagePath = `receipts/${editingId}/${crypto.randomUUID()}_${file.name}`;
+      const { error: uploadErr } = await supabaseClient.storage.from(BUCKET).upload(storagePath, file);
+      if(uploadErr){ showToast(`Could not upload ${file.name}`); console.error(uploadErr); continue; }
+
+      const { error: dbErr } = await supabaseClient.from('expense_receipts').insert({
+        expense_id: editingId, name: file.name, storage_path: storagePath,
+        size: file.size, is_image: file.type.startsWith('image/')
+      });
+      if(dbErr){ showToast(`Uploaded but failed to save record for ${file.name}`); continue; }
+      showToast(`${file.name} saved`);
+    }
+    receiptFileInput.value = '';
+    await loadReceipts(editingId);
+    await loadExpenses();
   }
 
   el('paidByGroup').addEventListener('click', (e) => {
@@ -849,23 +1048,39 @@
       paid_by: selectedPaidBy
     };
 
-    let error;
     if(editingId){
-      ({ error } = await supabaseClient.from('expenses').update(data).eq('id', editingId));
+      const { error } = await supabaseClient.from('expenses').update(data).eq('id', editingId);
+      if(error){ showToast('Save failed'); console.error(error); return; }
+      showToast('Expense updated');
+      await loadExpenses();
+      closeDrawer();
     } else {
-      ({ error } = await supabaseClient.from('expenses').insert(data));
+      const { data: inserted, error } = await supabaseClient.from('expenses').insert(data).select().single();
+      if(error){ showToast('Save failed'); console.error(error); return; }
+      showToast('Expense added');
+      await loadExpenses();
+      // Re-open in edit mode so receipts can be attached right away
+      const newExpense = expenses.find(x => x.id === inserted.id);
+      if(newExpense) await openDrawer(newExpense);
     }
-    if(error){ showToast('Save failed'); console.error(error); return; }
-
-    showToast(editingId ? 'Expense updated' : 'Expense added');
-    closeDrawer();
-    await loadExpenses();
   });
 
   async function handleDelete(id){
     const target = expenses.find(e => e.id === id);
     if(!target) return;
     if(!confirm(`Remove "${target.description}"? This can't be undone.`)) return;
+
+    if(target.receiptCount > 0){
+      const { data: receiptRows, error: recErr } = await supabaseClient
+        .from('expense_receipts').select('storage_path').eq('expense_id', id);
+      if(recErr){ showToast('Could not check receipts'); console.error(recErr); return; }
+      const paths = (receiptRows || []).map(r => r.storage_path);
+      if(paths.length){
+        const { error: storageErr } = await supabaseClient.storage.from(BUCKET).remove(paths);
+        if(storageErr){ showToast('Could not delete receipt files'); console.error(storageErr); return; }
+      }
+    }
+
     const { error } = await supabaseClient.from('expenses').delete().eq('id', id);
     if(error){ showToast('Delete failed'); console.error(error); return; }
     await loadExpenses();
@@ -895,8 +1110,13 @@
   el('tableBody').addEventListener('click', (e) => {
     const editId = e.target.closest('[data-edit]');
     const delId = e.target.closest('[data-del]');
+    const receiptsId = e.target.closest('[data-receipts]');
     if(editId){
       const item = expenses.find(x => x.id === editId.dataset.edit);
+      if(item) openDrawer(item);
+    }
+    if(receiptsId){
+      const item = expenses.find(x => x.id === receiptsId.dataset.receipts);
       if(item) openDrawer(item);
     }
     if(delId){ handleDelete(delId.dataset.del); }
