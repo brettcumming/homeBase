@@ -245,7 +245,14 @@
   .pill.overdue{background:var(--danger-soft); color:var(--danger);}
   .pill.overdue::before{background:var(--danger);}
 
-  .row-actions{display:flex; gap:6px; justify-content:flex-end;}
+  .row-actions{display:flex; gap:6px; justify-content:flex-end; align-items:center;}
+  .receipt-count-btn{
+    display:inline-flex; align-items:center; gap:4px; padding:5px 9px; border-radius:20px;
+    background:var(--panel-alt); border:1px solid var(--border); color:var(--text-muted);
+    font-size:11px; font-weight:600; cursor:pointer; flex-shrink:0;
+  }
+  .receipt-count-btn.has{color:var(--success); border-color:rgba(51,214,166,0.35); background:var(--success-soft);}
+  .receipt-count-btn svg{width:12px; height:12px;}
   .icon-btn{
     width:30px; height:30px; border-radius:8px; display:flex; align-items:center; justify-content:center;
     background:transparent; border:1px solid transparent; color:var(--text-muted); cursor:pointer;
@@ -294,6 +301,43 @@
     padding:18px 24px; border-top:1px solid var(--border-soft); display:flex; gap:10px;
   }
   .drawer-footer .btn{flex:1; justify-content:center;}
+
+  .section-block{border-top:1px dashed var(--border); padding-top:16px; margin-top:4px;}
+  .section-block-header{display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;}
+  .section-label{
+    font-size:11px; text-transform:uppercase; letter-spacing:0.8px; color:var(--text-muted); font-weight:700;
+  }
+  .save-hint{
+    font-size:11.5px; color:var(--text-muted); background:var(--panel); border:1px solid var(--border-soft);
+    border-radius:8px; padding:10px 12px; line-height:1.5;
+  }
+  .mini-list{display:flex; flex-direction:column; gap:8px;}
+  .no-items{font-size:12.5px; color:var(--text-muted); text-align:center; padding:10px 0;}
+
+  .mini-dropzone{
+    border:2px dashed var(--border); border-radius:10px; padding:18px; text-align:center;
+    transition:border-color .15s ease, background .15s ease; background:var(--panel);
+  }
+  .mini-dropzone.drag{border-color:var(--accent); background:var(--accent-soft);}
+  .mini-dropzone svg{width:22px; height:22px; color:var(--text-muted); margin-bottom:6px;}
+  .mini-dropzone p{margin:0 0 2px; font-size:13px; color:var(--text-secondary); font-weight:500;}
+  .mini-dropzone span{font-size:11.5px; color:var(--text-muted);}
+  .mini-dropzone .browse{color:var(--accent-hover); font-weight:600; cursor:pointer;}
+  .mini-dropzone input[type=file]{display:none;}
+
+  .doc-row{
+    display:flex; align-items:center; gap:10px; padding:10px 12px; background:var(--panel);
+    border:1px solid var(--border-soft); border-radius:9px; font-size:12.5px;
+  }
+  .doc-row .dicon{
+    width:30px; height:30px; border-radius:7px; background:var(--panel-alt); display:flex;
+    align-items:center; justify-content:center; flex-shrink:0; overflow:hidden;
+  }
+  .doc-row .dicon img{width:100%; height:100%; object-fit:cover;}
+  .doc-row .dicon svg{width:14px; height:14px; color:var(--text-muted);}
+  .doc-row .dname{flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-weight:500;}
+  .doc-row .dmeta{color:var(--text-muted); font-size:11px; flex-shrink:0;}
+  .doc-row .drow-actions{display:flex; gap:4px; flex-shrink:0;}
 
   .toast{
     position:fixed; bottom:26px; right:26px; background:var(--panel-alt);
@@ -630,6 +674,20 @@
       <label for="fNotes">Notes (optional)</label>
       <input type="text" id="fNotes" placeholder="Any extra detail…">
     </div>
+
+    <div class="section-block" id="receiptsBlock" style="display:none;">
+      <div class="section-block-header">
+        <div class="section-label">Receipts / Documents</div>
+      </div>
+      <div class="mini-dropzone" id="receiptDropzone">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 16V4m0 0 4 4m-4-4L8 8"/><path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></svg>
+        <p>Drag files here, or <span class="browse" id="receiptBrowseLink">browse</span></p>
+        <span>Photos, PDFs — saved against this payment</span>
+        <input type="file" id="receiptFileInput" multiple>
+      </div>
+      <div class="mini-list" id="receiptList" style="margin-top:10px;"></div>
+    </div>
+    <div class="save-hint" id="newPaymentHint">Save this payment first to attach receipts.</div>
   </div>
   <div class="drawer-footer">
     <button class="btn btn-ghost" id="cancelBtn">Cancel</button>
@@ -645,8 +703,12 @@
 <script>
 (function(){
   const el = (id) => document.getElementById(id);
+  const BUCKET = 'payment-receipts';
+
   let payments = [];
   let editingId = null;
+  let currentReceipts = [];
+  let receiptThumbs = {};
 
   const tableBody = el('tableBody');
   const emptyState = el('emptyState');
@@ -661,17 +723,34 @@
     const dt = new Date(d + 'T00:00:00');
     return dt.toLocaleDateString('en-ZA', {day:'2-digit', month:'short', year:'numeric'});
   }
+  function formatBytes(bytes){
+    if(!bytes) return '0 KB';
+    const kb = bytes / 1024;
+    if(kb < 1024) return kb.toFixed(0) + ' KB';
+    return (kb/1024).toFixed(1) + ' MB';
+  }
+  function escapeHtml(str){
+    return String(str ?? '').replace(/[&<>"']/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]));
+  }
+  function showToast(msg){
+    const toast = el('toast');
+    el('toastText').textContent = msg;
+    toast.classList.add('show');
+    clearTimeout(showToast._t);
+    showToast._t = setTimeout(() => toast.classList.remove('show'), 2200);
+  }
 
   async function loadPayments(){
     const { data, error } = await supabaseClient
       .from('payments')
-      .select('*')
+      .select('*, payment_receipts(id)')
       .order('due_date', { ascending: false });
     if(error){ showToast('Error loading payments'); console.error(error); return; }
     payments = data.map(p => ({
       id: p.id, recipient: p.recipient, reference: p.reference,
       amount: p.amount, date: p.due_date, category: p.category,
-      method: p.method, status: p.status, notes: p.notes
+      method: p.method, status: p.status, notes: p.notes,
+      receiptCount: (p.payment_receipts || []).length
     }));
     render();
   }
@@ -749,6 +828,10 @@
         <td data-label="Status"><span class="pill ${p.status}">${p.status.charAt(0).toUpperCase()+p.status.slice(1)}</span></td>
         <td>
           <div class="row-actions">
+            <button class="receipt-count-btn ${p.receiptCount ? 'has' : ''}" data-receipts="${p.id}" aria-label="Receipts">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/></svg>
+              ${p.receiptCount || 0}
+            </button>
             <button class="icon-btn" data-edit="${p.id}" aria-label="Edit payment">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5Z"/></svg>
             </button>
@@ -761,11 +844,7 @@
     `).join('');
   }
 
-  function escapeHtml(str){
-    return String(str ?? '').replace(/[&<>"']/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]));
-  }
-
-  function openDrawer(payment){
+  async function openDrawer(payment){
     editingId = payment ? payment.id : null;
     el('drawerTitle').textContent = payment ? 'Edit Payment' : 'Add Payment';
     el('editId').value = payment ? payment.id : '';
@@ -777,6 +856,17 @@
     el('fMethod').value = payment ? payment.method : 'EFT';
     el('fStatus').value = payment ? payment.status : 'pending';
     el('fNotes').value = payment ? (payment.notes||'') : '';
+
+    if(payment){
+      el('receiptsBlock').style.display = 'block';
+      el('newPaymentHint').style.display = 'none';
+      await loadReceipts(payment.id);
+    } else {
+      el('receiptsBlock').style.display = 'none';
+      el('newPaymentHint').style.display = 'block';
+      currentReceipts = [];
+    }
+
     drawer.classList.add('show');
     overlay.classList.add('show');
     setTimeout(() => el('fRecipient').focus(), 200);
@@ -787,12 +877,103 @@
     editingId = null;
   }
 
-  function showToast(msg){
-    const toast = el('toast');
-    el('toastText').textContent = msg;
-    toast.classList.add('show');
-    clearTimeout(showToast._t);
-    showToast._t = setTimeout(() => toast.classList.remove('show'), 2200);
+  // ---- Receipts ----
+  async function loadReceipts(paymentId){
+    const { data, error } = await supabaseClient
+      .from('payment_receipts').select('*').eq('payment_id', paymentId).order('added_at', { ascending: false });
+    if(error){ showToast('Error loading receipts'); console.error(error); return; }
+    currentReceipts = data;
+    await renderReceiptList();
+  }
+  async function renderReceiptList(){
+    const list = el('receiptList');
+    receiptThumbs = {};
+    if(currentReceipts.length === 0){
+      list.innerHTML = '<div class="no-items">No receipts yet</div>';
+      return;
+    }
+    await Promise.all(currentReceipts.filter(r => r.is_image).map(async (r) => {
+      const { data, error } = await supabaseClient.storage.from(BUCKET).createSignedUrl(r.storage_path, 3600);
+      if(!error) receiptThumbs[r.id] = data.signedUrl;
+    }));
+    list.innerHTML = currentReceipts.map(r => `
+      <div class="doc-row">
+        <div class="dicon">
+          ${r.is_image && receiptThumbs[r.id]
+            ? `<img src="${receiptThumbs[r.id]}" alt="">`
+            : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/></svg>`}
+        </div>
+        <div class="dname" title="${escapeHtml(r.name)}">${escapeHtml(r.name)}</div>
+        <div class="dmeta">${formatBytes(r.size)}</div>
+        <div class="drow-actions">
+          <button class="icon-btn" data-rdownload="${r.id}" aria-label="Download">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+          </button>
+          <button class="icon-btn danger" data-rdel="${r.id}" aria-label="Delete">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0-1 14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L4 6"/></svg>
+          </button>
+        </div>
+      </div>
+    `).join('');
+  }
+  el('receiptList').addEventListener('click', async (e) => {
+    const dl = e.target.closest('[data-rdownload]');
+    const delBtn = e.target.closest('[data-rdel]');
+    if(dl){
+      const r = currentReceipts.find(x => x.id === dl.dataset.rdownload);
+      if(!r) return;
+      const { data, error } = await supabaseClient.storage.from(BUCKET).createSignedUrl(r.storage_path, 60);
+      if(error){ showToast('Could not download that file'); return; }
+      const a = document.createElement('a');
+      a.href = data.signedUrl; a.download = r.name; a.click();
+    }
+    if(delBtn){
+      const id = delBtn.dataset.rdel;
+      const r = currentReceipts.find(x => x.id === id);
+      if(!r) return;
+      if(!confirm(`Delete "${r.name}"? This can't be undone.`)) return;
+
+      const { error: storageErr } = await supabaseClient.storage.from(BUCKET).remove([r.storage_path]);
+      if(storageErr){ showToast('Could not delete file from storage'); console.error(storageErr); return; }
+      const { error: dbErr } = await supabaseClient.from('payment_receipts').delete().eq('id', id);
+      if(dbErr){ showToast('Could not delete receipt record'); return; }
+
+      await loadReceipts(editingId);
+      await loadPayments();
+      showToast('Receipt deleted');
+    }
+  });
+
+  const receiptDropzone = el('receiptDropzone');
+  const receiptFileInput = el('receiptFileInput');
+  el('receiptBrowseLink').addEventListener('click', () => receiptFileInput.click());
+  receiptDropzone.addEventListener('dragover', (e) => { e.preventDefault(); receiptDropzone.classList.add('drag'); });
+  receiptDropzone.addEventListener('dragleave', () => receiptDropzone.classList.remove('drag'));
+  receiptDropzone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    receiptDropzone.classList.remove('drag');
+    handleReceiptFiles(e.dataTransfer.files);
+  });
+  receiptFileInput.addEventListener('change', () => handleReceiptFiles(receiptFileInput.files));
+
+  async function handleReceiptFiles(fileList){
+    if(!editingId) return;
+    for(const file of Array.from(fileList)){
+      if(file.size > 50 * 1024 * 1024){ showToast(`${file.name} is over 50MB — skipped`); continue; }
+      const storagePath = `receipts/${editingId}/${crypto.randomUUID()}_${file.name}`;
+      const { error: uploadErr } = await supabaseClient.storage.from(BUCKET).upload(storagePath, file);
+      if(uploadErr){ showToast(`Could not upload ${file.name}`); console.error(uploadErr); continue; }
+
+      const { error: dbErr } = await supabaseClient.from('payment_receipts').insert({
+        payment_id: editingId, name: file.name, storage_path: storagePath,
+        size: file.size, is_image: file.type.startsWith('image/')
+      });
+      if(dbErr){ showToast(`Uploaded but failed to save record for ${file.name}`); continue; }
+      showToast(`${file.name} saved`);
+    }
+    receiptFileInput.value = '';
+    await loadReceipts(editingId);
+    await loadPayments();
   }
 
   async function handleSave(){
@@ -812,23 +993,39 @@
       notes: el('fNotes').value.trim()
     };
 
-    let error;
     if(editingId){
-      ({ error } = await supabaseClient.from('payments').update(data).eq('id', editingId));
+      const { error } = await supabaseClient.from('payments').update(data).eq('id', editingId);
+      if(error){ showToast('Error saving payment'); console.error(error); return; }
+      showToast('Payment updated');
+      await loadPayments();
+      closeDrawer();
     } else {
-      ({ error } = await supabaseClient.from('payments').insert(data));
+      const { data: inserted, error } = await supabaseClient.from('payments').insert(data).select().single();
+      if(error){ showToast('Error saving payment'); console.error(error); return; }
+      showToast('Payment added');
+      await loadPayments();
+      // Re-open in edit mode so receipts can be attached right away
+      const newPayment = payments.find(x => x.id === inserted.id);
+      if(newPayment) await openDrawer(newPayment);
     }
-    if(error){ showToast('Error saving payment'); console.error(error); return; }
-
-    showToast(editingId ? 'Payment updated' : 'Payment added');
-    closeDrawer();
-    await loadPayments();
   }
 
   async function handleDelete(id){
     const target = payments.find(p => p.id === id);
     if(!target) return;
     if(!confirm(`Remove the payment to "${target.recipient}"? This can't be undone.`)) return;
+
+    if(target.receiptCount > 0){
+      const { data: receiptRows, error: recErr } = await supabaseClient
+        .from('payment_receipts').select('storage_path').eq('payment_id', id);
+      if(recErr){ showToast('Could not check receipts'); console.error(recErr); return; }
+      const paths = (receiptRows || []).map(r => r.storage_path);
+      if(paths.length){
+        const { error: storageErr } = await supabaseClient.storage.from(BUCKET).remove(paths);
+        if(storageErr){ showToast('Could not delete receipt files'); console.error(storageErr); return; }
+      }
+    }
+
     const { error } = await supabaseClient.from('payments').delete().eq('id', id);
     if(error){ showToast('Error deleting payment'); console.error(error); return; }
     await loadPayments();
@@ -859,8 +1056,13 @@
   tableBody.addEventListener('click', (e) => {
     const editId = e.target.closest('[data-edit]');
     const delId = e.target.closest('[data-del]');
+    const receiptsId = e.target.closest('[data-receipts]');
     if(editId){
       const p = payments.find(x => x.id === editId.dataset.edit);
+      if(p) openDrawer(p);
+    }
+    if(receiptsId){
+      const p = payments.find(x => x.id === receiptsId.dataset.receipts);
       if(p) openDrawer(p);
     }
     if(delId){
