@@ -731,6 +731,7 @@ body {
   const PAYMENT_HIGHLIGHT_HOURS = 6;
   const NOTE_HIGHLIGHT_HOURS = 6;
   const IMPORTANT_NOTE_LIMIT = 6;
+  const SHOPPING_HIGHLIGHT_HOURS = 6;
 
   function showToast(msg){
     const toast = el('toast');
@@ -900,11 +901,31 @@ body {
     }
   }
 
+  async function checkRecentShoppingActivity(){
+    const cutoff = new Date(Date.now() - SHOPPING_HIGHLIGHT_HOURS * 3600 * 1000).toISOString();
+    const { count, error } = await supabaseClient
+      .from('shoppingList')
+      .select('id', { count: 'exact', head: true })
+      .gte('created_at', cutoff);
+    if(error){ console.error(error); return; }
+    const n = count || 0;
+    const badge = el('shoppingBadge');
+    if(badge){
+      badge.textContent = n > 99 ? '99+' : n;
+      badge.classList.toggle('show', n > 0);
+    }
+    const shoppingCard = document.querySelector('a[href="shoppingList.html"].card');
+    if(shoppingCard){
+      shoppingCard.classList.toggle('recent-activity', n > 0);
+    }
+  }
+
 
   loadImportantNotes();
   checkRecentExpenseActivity();
   checkRecentPaymentActivity();
   checkRecentNoteActivity();
+  checkRecentShoppingActivity();
   initProfileWidget();
   setInterval(checkRecentExpenseActivity, 5 * 60 * 1000);
   setInterval(checkRecentPaymentActivity, 5 * 60 * 1000);
