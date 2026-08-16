@@ -91,6 +91,44 @@
     font-size:11.5px; color:var(--text-muted); display:flex; flex-direction:column; gap:4px;
   }
 
+  .main{padding:32px 40px 60px; max-width:1280px; width:100%;}
+  .topbar{
+    display:flex; align-items:flex-start; justify-content:space-between; gap:24px;
+    margin-bottom:28px; flex-wrap:wrap;
+  }
+  .topbar h1{font-size:26px; font-weight:700; margin:0 0 6px; letter-spacing:-0.3px;}
+  .topbar p{margin:0; color:var(--text-secondary); font-size:14px; max-width:50ch;}
+
+  .btn{
+    display:inline-flex; align-items:center; gap:8px; padding:10px 18px; border-radius:10px;
+    border:1px solid transparent; font-size:13.5px; font-weight:600; cursor:pointer;
+    transition:transform .12s ease, box-shadow .12s ease, background .15s ease, border-color .15s ease;
+    white-space:nowrap;
+  }
+  .btn svg{width:16px; height:16px;}
+  .btn-primary{
+    background:linear-gradient(155deg, var(--accent-hover), var(--accent)); color:#08101f;
+    box-shadow:0 8px 20px rgba(76,124,240,0.28);
+  }
+  .btn-primary:hover{transform:translateY(-1px); box-shadow:0 10px 24px rgba(76,124,240,0.38);}
+  .btn-ghost{background:var(--panel); color:var(--text-secondary); border-color:var(--border);}
+  .btn-ghost:hover{color:var(--text-primary); border-color:rgba(255,255,255,0.18); background:var(--panel-alt);}
+  .actions-row{display:flex; gap:10px; flex-shrink:0; flex-wrap:wrap;}
+
+  .filters{display:flex; gap:10px; align-items:center; margin-bottom:22px; flex-wrap:wrap;}
+  .search-wrap{position:relative; flex:1; min-width:200px;}
+  .search-wrap svg{
+    position:absolute; left:13px; top:50%; transform:translateY(-50%); width:15px; height:15px; color:var(--text-muted);
+  }
+  .search-wrap input{padding-left:36px;}
+  input, select, textarea{
+    background:var(--panel); border:1px solid var(--border); color:var(--text-primary);
+    padding:9px 12px; border-radius:9px; font-size:13.5px; width:100%; font-family:inherit;
+  }
+  textarea{resize:vertical; min-height:110px;}
+  input::placeholder, textarea::placeholder{color:var(--text-muted);}
+  select{cursor:pointer; min-width:150px; width:auto;}
+  
 
   .fridge-scene{ position:relative; z-index:1; }
 
