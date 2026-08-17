@@ -245,13 +245,13 @@
   @keyframes popIn{ from{ opacity:0; transform:translateY(-4px);} to{ opacity:1; transform:translateY(0);} }
 
   .item .box{
-    width:30px; height:30px; flex-shrink:0; border-radius:5px;
+    width:25px; height:25px; flex-shrink:0; border-radius:5px;
     border:2.2px solid var(--ink-soft);
     display:flex; align-items:center; justify-content:center; cursor:pointer;
     background:transparent;
   }
-  .item .box svg{ width:18px; height:18px; opacity:0; stroke:var(--check); stroke-width:5.4; transition:opacity .1s ease; }
-  .item.done .box{ height:18px; border-color:var(--check); background:rgba(47,158,94,0.08); }
+  .item .box svg{ width:23px; height:23px; opacity:0; stroke:var(--check); stroke-width:5.4; transition:opacity .1s ease; }
+  .item.done .box{ width:25px; height:252px; border-color:var(--check); background:rgba(47,158,94,0.08); }
   .item.done .box svg{ opacity:1; }
 
   .item .label{ flex:1; cursor:pointer; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
