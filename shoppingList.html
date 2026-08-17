@@ -164,7 +164,7 @@
   .notepad{
     position:relative; z-index:1;
     width:340px;
-    height:550px;
+    min-height:550px;
     max-width:82vw;
     background:var(--paper);
     border-radius:4px;
@@ -177,6 +177,8 @@
     background-size:100% 34px;
     background-position:0 78px;
     font-family:'Kalam', cursive;
+    height: auto;
+    overflow: visible;
   }
   .notepad::before{
     content:"";
@@ -285,9 +287,9 @@
     .nav-label{display:none;}
     .sidebar-footer{display:none;}
     .main{padding:24px 18px 50px;}
-    .fridge-board{padding:44px 14px; min-height:460px;}
+    .fridge-board{padding:44px 14px; min-height:460px; height:auto;  overflow:visible;}
     .fridge-handle-group{display:none;}
-    .notepad{width:300px; height:550px; padding:30px 18px 20px;}
+    .notepad{width:300px; min-height:550px; padding:30px 18px 20px; height:auto;  overflow:visible;}
     .notepad h2{font-size:21px;}
   }
   @media (max-width:640px){
@@ -298,9 +300,9 @@
     .nav-label{display:none;}
     .sidebar-footer{display:none;}
     .main{padding:24px 18px 50px;}
-    .fridge-board{padding:44px 14px; min-height:460px; width:345px;}
+    .fridge-board{padding:44px 14px; min-height:460px; width:345px; height:auto;  overflow:visible;}
     .fridge-handle-group{display:none;}
-    .notepad{width:260px; height:550px; padding:30px 18px 20px;}
+    .notepad{width:260px; height:550px; padding:30px 18px 20px; height:auto;  overflow:visible;}
     .notepad h2{font-size:21px;}
   }
 </style>
