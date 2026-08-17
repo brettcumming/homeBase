@@ -132,8 +132,8 @@
     display:flex; align-items:flex-start; justify-content:center;
     overflow:hidden;
     background:
-      radial-gradient(700px 300px at 15% 0%, rgba(255,255,255,0.08), transparent 60%),
-      linear-gradient(155deg, #c7ccd4, #9aa1ac 45%, #7d838d 100%);
+      radial-gradient(700px 300px at 15% 0%, rgba(255,255,255,0.06), transparent 60%),
+      linear-gradient(155deg, #1c1d20, #303236 45%, #45484d 100%);
   }
   .fridge-board::before{
     content:"";
@@ -148,16 +148,18 @@
     mix-blend-mode:overlay;
   }
   .fridge-handle{
-    position:absolute; top:24px; bottom:24px; right:22px; width:10px; border-radius:6px;
+    position:absolute; top:24px; bottom:24px; width:9px; border-radius:6px;
     background:linear-gradient(90deg, #e7eaef, #b7bcc4 45%, #8b909a);
     box-shadow:0 3px 8px rgba(0,0,0,0.35);
   }
+  .fridge-handle.left{ left:22px; }
+  .fridge-handle.right{ right:22px; }
 
   /* the notepad, "stuck" to the fridge at a slight tilt */
   .notepad{
     position:relative; z-index:1;
     width:340px;
-    height:600px;
+    height:550px;
     max-width:82vw;
     background:var(--paper);
     border-radius:4px;
@@ -178,7 +180,7 @@
       linear-gradient(135deg, transparent 50%, var(--paper) 50%) 0 0/14px 14px repeat-x,
       linear-gradient(-135deg, transparent 50%, var(--paper) 50%) 0 0/14px 14px repeat-x;
     background-position: 0 0, 7px 0;
-  }
+  }  
   .magnet::after{
     content:""; position:absolute; inset:13px; border-radius:50%;
     background:rgba(255,255,255,0.35);
@@ -251,8 +253,7 @@
   .item .del{
     width:22px; height:22px; border:none; background:none; cursor:pointer; flex-shrink:0;
     color:#c6ccd6; display:flex; align-items:center; justify-content:center; border-radius:50%;
-  }
-  
+  }  
   .item .del svg{ width:13px; height:13px; }
 
   .empty-msg{ text-align:center; color:#a6adba; font-size:14px; padding:14px 0 6px; font-style:italic; }
@@ -267,8 +268,7 @@
   .footer-actions button{
     background:none; border:none; cursor:pointer; color:var(--ink-soft);
     font-family:'Kalam', cursive; font-size:12.5px; text-decoration:underline; padding:0;
-  }
-  .footer-actions button:hover{ color:var(--magnet-red); }
+  }  
 
   footer.note{margin-top:30px; color:var(--text-muted); font-size:12px; text-align:center;}
 
@@ -282,7 +282,7 @@
     .main{padding:24px 18px 50px;}
     .fridge-board{padding:44px 14px; min-height:460px;}
     .fridge-handle{display:none;}
-    .notepad{width:300px; height:600px; padding:30px 18px 20px;}
+    .notepad{width:300px; height:550px; padding:30px 18px 20px;}
     .notepad h2{font-size:21px;}
   }
 </style>
@@ -307,15 +307,6 @@
         <div class="left">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v10a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V10"/></svg>
           Home
-        </div>
-      </a>
-      <a href="shoppingList.html" class="nav-item active">
-        <div class="left">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="9" cy="21" r="1"/><circle cx="19" cy="21" r="1"/>
-            <path d="M2.5 3h2l2.6 12.4a2 2 0 0 0 2 1.6h8.4a2 2 0 0 0 2-1.6L21 8H6"/>
-          </svg>
-          Shopping List
         </div>
       </a>
       <a href="payments.html" class="nav-item">
@@ -393,7 +384,16 @@
           </svg>
           Notes
         </div>
-      </a>      
+      </a>
+      <a href="shopping-list.html" class="nav-item active">
+        <div class="left">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="9" cy="21" r="1"/><circle cx="19" cy="21" r="1"/>
+            <path d="M2.5 3h2l2.6 12.4a2 2 0 0 0 2 1.6h8.4a2 2 0 0 0 2-1.6L21 8H6"/>
+          </svg>
+          Shopping List
+        </div>
+      </a>
     </nav>
 
     <script>
@@ -414,9 +414,9 @@
     </div>
 
     <div class="fridge-board">
-      <div class="fridge-handle"></div>
-      <div class="notepad">
-        <!--<div class="magnet"></div>-->
+      <div class="fridge-handle left"></div>
+      <div class="fridge-handle right"></div>
+      <div class="notepad">        
         <div class="deco-magnet a">🍅</div>
         <div class="deco-magnet b">🥦</div>
 
@@ -426,12 +426,12 @@
         <p class="notepad-subtitle">Stuck to the fridge, as usual.</p>
 
         <div class="add-row">
-          <input type="text" id="itemInput" placeholder="" maxlength="80">
+          <input type="text" id="itemInput" placeholder="milk, eggs, bread…" maxlength="80">
           <button class="add-btn" id="addBtn" aria-label="Add item">+</button>
         </div>
 
         <ul class="list" id="list"></ul>
-        <div class="empty-msg" id="emptyMsg" style="display:none;">Empty list... add something.</div>
+        <div class="empty-msg" id="emptyMsg" style="display:none;">List's empty — go on, add something.</div>
 
         <div class="footer-row">
           <span><span class="count" id="countLabel">0</span> to get</span>
@@ -447,7 +447,6 @@
 
 <script>
 (function(){
-  const STORAGE_KEY = 'fridgeShoppingList';
   const el = (id) => document.getElementById(id);
 
   const EMOJI_MAP = [
@@ -465,15 +464,6 @@
 
   let items = [];
 
-  function load(){
-    try{
-      const raw = localStorage.getItem(STORAGE_KEY);
-      items = raw ? JSON.parse(raw) : [];
-    } catch(e){ items = []; }
-  }
-  function save(){
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
-  }
   function escapeHtml(str){
     return String(str ?? '').replace(/[&<>"']/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]));
   }
@@ -483,6 +473,16 @@
       if(re.test(lower)) return emoji + ' ';
     }
     return '';
+  }
+
+  async function loadItems(){
+    const { data, error } = await supabaseClient
+      .from('shopping_items')
+      .select('*')
+      .order('created_at', { ascending: false });
+    if(error){ console.error(error); return; }
+    items = data.map(i => ({ id: i.id, text: i.text, done: i.is_done }));
+    render();
   }
 
   function render(){
@@ -511,12 +511,12 @@
     el('countLabel').textContent = remaining;
   }
 
-  function addItem(text){
+  async function addItem(text){
     const trimmed = text.trim();
     if(!trimmed) return;
-    items.unshift({ id: crypto.randomUUID(), text: trimmed, done: false });
-    save();
-    render();
+    const { error } = await supabaseClient.from('shopping_items').insert({ text: trimmed, is_done: false });
+    if(error){ console.error(error); return; }
+    await loadItems();
   }
 
   el('addBtn').addEventListener('click', () => {
@@ -531,36 +531,39 @@
     }
   });
 
-  el('list').addEventListener('click', (e) => {
+  el('list').addEventListener('click', async (e) => {
     const toggleBtn = e.target.closest('[data-toggle]');
     const delBtn = e.target.closest('[data-del]');
     if(toggleBtn){
       const item = items.find(i => i.id === toggleBtn.dataset.toggle);
-      if(item){ item.done = !item.done; save(); render(); }
+      if(item){
+        const { error } = await supabaseClient.from('shopping_items').update({ is_done: !item.done }).eq('id', item.id);
+        if(error){ console.error(error); return; }
+        await loadItems();
+      }
     }
     if(delBtn){
-      items = items.filter(i => i.id !== delBtn.dataset.del);
-      save();
-      render();
+      const { error } = await supabaseClient.from('shopping_items').delete().eq('id', delBtn.dataset.del);
+      if(error){ console.error(error); return; }
+      await loadItems();
     }
   });
 
-  el('clearCheckedBtn').addEventListener('click', () => {
+  el('clearCheckedBtn').addEventListener('click', async () => {
     if(!items.some(i => i.done)) return;
-    items = items.filter(i => !i.done);
-    save();
-    render();
+    const { error } = await supabaseClient.from('shopping_items').delete().eq('is_done', true);
+    if(error){ console.error(error); return; }
+    await loadItems();
   });
-  el('clearAllBtn').addEventListener('click', () => {
+  el('clearAllBtn').addEventListener('click', async () => {
     if(items.length === 0) return;
     if(!confirm('Clear the whole list?')) return;
-    items = [];
-    save();
-    render();
+    const { error } = await supabaseClient.from('shopping_items').delete().not('id', 'is', null);
+    if(error){ console.error(error); return; }
+    await loadItems();
   });
 
-  load();
-  render();
+  loadItems();
 })();
 </script>
 
