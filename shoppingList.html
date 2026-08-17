@@ -147,13 +147,17 @@
     );
     mix-blend-mode:overlay;
   }
+  .fridge-handle-group{
+    position:absolute; top:24px; bottom:24px; right:22px; width:9px;
+    display:flex; flex-direction:column; gap:14px;
+  }
   .fridge-handle{
-    position:absolute; top:24px; bottom:24px; width:9px; border-radius:6px;
+    border-radius:6px;
     background:linear-gradient(90deg, #e7eaef, #b7bcc4 45%, #8b909a);
     box-shadow:0 3px 8px rgba(0,0,0,0.35);
   }
-  .fridge-handle.left{ left:22px; }
-  .fridge-handle.right{ right:22px; }
+  .fridge-handle.small{ flex:1; }
+  .fridge-handle.large{ flex:3; }
 
   /* the notepad, "stuck" to the fridge at a slight tilt */
   .notepad{
@@ -180,7 +184,7 @@
       linear-gradient(135deg, transparent 50%, var(--paper) 50%) 0 0/14px 14px repeat-x,
       linear-gradient(-135deg, transparent 50%, var(--paper) 50%) 0 0/14px 14px repeat-x;
     background-position: 0 0, 7px 0;
-  }  
+  } 
   .magnet::after{
     content:""; position:absolute; inset:13px; border-radius:50%;
     background:rgba(255,255,255,0.35);
@@ -253,7 +257,7 @@
   .item .del{
     width:22px; height:22px; border:none; background:none; cursor:pointer; flex-shrink:0;
     color:#c6ccd6; display:flex; align-items:center; justify-content:center; border-radius:50%;
-  }  
+  } 
   .item .del svg{ width:13px; height:13px; }
 
   .empty-msg{ text-align:center; color:#a6adba; font-size:14px; padding:14px 0 6px; font-style:italic; }
@@ -268,7 +272,7 @@
   .footer-actions button{
     background:none; border:none; cursor:pointer; color:var(--ink-soft);
     font-family:'Kalam', cursive; font-size:12.5px; text-decoration:underline; padding:0;
-  }  
+  }
 
   footer.note{margin-top:30px; color:var(--text-muted); font-size:12px; text-align:center;}
 
@@ -281,7 +285,7 @@
     .sidebar-footer{display:none;}
     .main{padding:24px 18px 50px;}
     .fridge-board{padding:44px 14px; min-height:460px;}
-    .fridge-handle{display:none;}
+    .fridge-handle-group{display:none;}
     .notepad{width:300px; height:550px; padding:30px 18px 20px;}
     .notepad h2{font-size:21px;}
   }
@@ -414,9 +418,11 @@
     </div>
 
     <div class="fridge-board">
-      <div class="fridge-handle left"></div>
-      <div class="fridge-handle right"></div>
-      <div class="notepad">        
+      <div class="fridge-handle-group">
+        <div class="fridge-handle small"></div>
+        <div class="fridge-handle large"></div>
+      </div>
+      <div class="notepad">
         <div class="deco-magnet a">🍅</div>
         <div class="deco-magnet b">🥦</div>
 
