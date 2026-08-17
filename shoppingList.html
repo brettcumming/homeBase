@@ -47,7 +47,6 @@
     --ink:#2b2b33;
     --ink-soft:#5c5c68;
     --check:#2f9e5e;
-    --magnet-red:#e3473c;
     --magnet-blue:#3b6fe0;
     --magnet-yellow:#f0b93c;
   }
@@ -179,16 +178,6 @@
       linear-gradient(-135deg, transparent 50%, var(--paper) 50%) 0 0/14px 14px repeat-x;
     background-position: 0 0, 7px 0;
   }
-  .magnet{
-    position:absolute; top:-22px; left:50%; transform:translateX(-50%) rotate(4deg);
-    width:44px; height:44px; border-radius:50%;
-    background:radial-gradient(circle at 32% 28%, #ff9c8e, var(--magnet-red) 65%);
-    box-shadow:
-      0 6px 10px rgba(0,0,0,0.4),
-      inset 0 -3px 6px rgba(0,0,0,0.25),
-      inset 0 3px 4px rgba(255,255,255,0.4);
-    z-index:3;
-  }
   .magnet::after{
     content:""; position:absolute; inset:13px; border-radius:50%;
     background:rgba(255,255,255,0.35);
@@ -262,7 +251,7 @@
     width:22px; height:22px; border:none; background:none; cursor:pointer; flex-shrink:0;
     color:#c6ccd6; display:flex; align-items:center; justify-content:center; border-radius:50%;
   }
-  .item .del:hover{ color:var(--magnet-red); background:rgba(227,71,60,0.08); }
+  
   .item .del svg{ width:13px; height:13px; }
 
   .empty-msg{ text-align:center; color:#a6adba; font-size:14px; padding:14px 0 6px; font-style:italic; }
@@ -426,7 +415,7 @@
     <div class="fridge-board">
       <div class="fridge-handle"></div>
       <div class="notepad">
-        <div class="magnet"></div>
+        <!--<div class="magnet"></div>-->
         <div class="deco-magnet a">🍅</div>
         <div class="deco-magnet b">🥦</div>
 
