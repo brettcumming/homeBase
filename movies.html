@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="icon" type="image/svg+xml" href="leaf_icon.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0a0f1e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="homeBase">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>homeBase — Movies</title>
+<style>body{visibility:hidden;}</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="supabase-client.js"></script>
+<script src="auth.js" defer></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Special+Elite&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0f1e;
+    --bg-elevated:#0d1426;
+    --panel:#121b31;
+    --panel-alt:#16213b;
+    --border:#22304f;
+    --border-soft:rgba(255,255,255,0.06);
+    --text-primary:#eaf0fb;
+    --text-secondary:#9aa8c7;
+    --text-muted:#66759c;
+    --accent:#4c7cf0;
+    --accent-hover:#6690ff;
+    --accent-soft:rgba(76,124,240,0.14);
+    --success:#33d6a6;
+    --success-soft:rgba(51,214,166,0.12);
+    --warning:#f0b84c;
+    --warning-soft:rgba(240,184,76,0.12);
+    --danger:#f0664c;
+    --danger-soft:rgba(240,102,76,0.13);
+    --radius-sm:8px;
+    --radius-md:12px;
+    --radius-lg:18px;
+    --shadow-soft: 0 8px 24px rgba(0,0,0,0.35);
+    --shadow-lift: 0 16px 40px rgba(0,0,0,0.45);
+    --ticket-paper:#f3e9d2;
+    --ticket-ink:#3a2c1a;
+    --ticket-muted:#8a7a54;
+    --ticket-line:#c9bb95;
+    --gold:#d8b45a;
+  }
+  *{box-sizing:border-box;}
+  html,body{height:100%;}
+  body{
+    margin:0;
+    background:
+      radial-gradient(1100px 600px at 85% -10%, rgba(76,124,240,0.10), transparent 60%),
+      radial-gradient(900px 500px at -10% 110%, rgba(51,214,166,0.05), transparent 60%),
+      var(--bg);
+    color:var(--text-primary);
+    font-family:'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+  }
+  h1,h2,h3{font-family:'Sora', sans-serif;}
+  .mono{font-family:'JetBrains Mono', monospace;}
+  a{color:inherit;}
+  button{font-family:inherit;}
+  ::selection{background:var(--accent-soft);}
+  button:focus-visible, input:focus-visible, select:focus-visible{
+    outline:2px solid var(--accent); outline-offset:2px;
+  }
+
+  .app{display:grid; grid-template-columns:260px 1fr; min-height:100vh;}
+
+  .sidebar{
+    background:linear-gradient(180deg, var(--bg-elevated), var(--bg));
+    border-right:1px solid var(--border-soft);
+    padding:28px 20px; display:flex; flex-direction:column; gap:32px; position:relative;
+  }
+  .sidebar::before{
+    content:""; position:absolute; top:0; left:0; bottom:0; width:2px;
+    background:linear-gradient(180deg, var(--accent), transparent 70%); opacity:0.6;
+  }
+  .brand{display:flex; align-items:center; gap:12px; padding:0 4px;}
+  .brand-mark{
+    width:40px; height:40px; border-radius:11px;
+    background:linear-gradient(155deg, var(--accent), #2a4fc4);
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 6px 16px rgba(76,124,240,0.35); flex-shrink:0;
+  }
+  .brand-mark img{width:24px; height:24px;}
+  .brand-text{display:flex; flex-direction:column; line-height:1.25;}
+  .brand-text strong{font-family:'Sora'; font-size:15.5px; font-weight:700; letter-spacing:0.2px;}
+  .brand-text span{font-size:11.5px; color:var(--text-muted); font-weight:500;}
+  .nav{display:flex; flex-direction:column; gap:4px;}
+  .nav-label{
+    font-size:10.5px; text-transform:uppercase; letter-spacing:1.2px;
+    color:var(--text-muted); font-weight:600; padding:0 12px; margin-bottom:6px;
+  }
+  .nav-item{
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    padding:10px 12px; border-radius:8px; font-size:14px; font-weight:500;
+    color:var(--text-secondary); cursor:pointer; transition:background .15s ease, color .15s ease;
+    border:1px solid transparent; text-decoration:none;
+  }
+  .nav-item .left{display:flex; align-items:center; gap:10px;}
+  .nav-item svg{width:17px; height:17px; opacity:0.85;}
+  .nav-item.active{background:var(--accent-soft); color:var(--text-primary); border-color:rgba(76,124,240,0.35);}
+  .nav-item:not(.active):hover{background:rgba(255,255,255,0.03); color:var(--text-primary);}
+  .sidebar-footer{
+    margin-top:auto; padding-top:18px; border-top:1px dashed var(--border);
+    font-size:11.5px; color:var(--text-muted); display:flex; flex-direction:column; gap:4px;
+  }
+
+  .main{padding:32px 40px 60px; max-width:1280px; width:100%;}
+  .topbar{
+    display:flex; align-items:flex-start; justify-content:space-between; gap:24px;
+    margin-bottom:28px; flex-wrap:wrap;
+  }
+  .topbar h1{font-size:26px; font-weight:700; margin:0 0 6px; letter-spacing:-0.3px;}
+  .topbar p{margin:0; color:var(--text-secondary); font-size:14px; max-width:50ch;}
+
+  /* Velvet curtain board — replaces the whiteboard / fridge-door surfaces used elsewhere */
+  .curtain-board{
+    position:relative;
+    border-radius:var(--radius-lg);
+    padding:56px 24px 40px;
+    box-shadow:inset 0 2px 14px rgba(0,0,0,0.5), var(--shadow-soft);
+    min-height:520px;
+    overflow:hidden;
+    background:
+      repeating-linear-gradient(
+        90deg,
+        rgba(0,0,0,0.16) 0px,
+        rgba(0,0,0,0.16) 14px,
+        rgba(255,255,255,0.05) 14px,
+        rgba(255,255,255,0.05) 26px,
+        transparent 26px,
+        transparent 40px
+      ),
+      linear-gradient(180deg, #5c0e18 0%, #7d1322 40%, #9c1c2c 70%, #6a0f1b 100%);
+  }
+  .curtain-board::before{
+    content:"";
+    position:absolute; inset:0; pointer-events:none;
+    background:radial-gradient(900px 260px at 50% -10%, rgba(0,0,0,0.45), transparent 65%);
+  }
+  .curtain-tassel{
+    position:absolute; top:-8px; width:26px; height:60px; z-index:2;
+    background:radial-gradient(circle at 35% 20%, #f0d78a, var(--gold) 70%);
+    border-radius:0 0 13px 13px;
+    box-shadow:0 6px 12px rgba(0,0,0,0.4);
+  }
+  .curtain-tassel.left{ left:26px; transform:rotate(-8deg); }
+  .curtain-tassel.right{ right:26px; transform:rotate(8deg); }
+
+  .ticket-add-wrap{
+    position:relative; z-index:1; max-width:420px; margin:0 auto 34px;
+    background:var(--ticket-paper); border-radius:10px;
+    box-shadow:0 12px 26px rgba(0,0,0,0.5);
+    padding:14px 16px; display:flex; gap:10px; align-items:center;
+    transform:rotate(-0.6deg);
+  }
+  .ticket-add-wrap input{
+    flex:1; border:none; border-bottom:2px dashed var(--ticket-line); background:transparent;
+    font-family:'Special Elite', monospace; font-size:14.5px; color:var(--ticket-ink); padding:6px 2px;
+  }
+  .ticket-add-wrap input::placeholder{ color:#a9997a; }
+  .ticket-add-wrap input:focus{ outline:none; border-bottom-color:#8a1622; }
+  .ticket-add-btn{
+    width:34px; height:34px; border-radius:50%; border:none; cursor:pointer; flex-shrink:0;
+    background:#8a1622; color:#fff2e0; font-size:20px; line-height:1;
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 3px 6px rgba(0,0,0,0.3);
+  }
+  .ticket-add-btn:active{ transform:scale(0.94); }
+
+  .ticket-grid{
+    position:relative; z-index:1;
+    display:flex; flex-wrap:wrap; justify-content:center; gap:22px 18px;
+  }
+
+  .ticket{
+    display:flex; width:290px; min-height:100px;
+    background:var(--ticket-paper); border-radius:9px; overflow:hidden;
+    box-shadow:0 12px 24px -6px rgba(0,0,0,0.5), 0 2px 5px rgba(0,0,0,0.25);
+    font-family:'Special Elite', monospace;
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .ticket:hover{ transform:translateY(-3px); box-shadow:0 18px 30px -8px rgba(0,0,0,0.55); }
+
+  .ticket-stub{
+    width:44px; flex-shrink:0; border-right:2px dashed var(--ticket-line);
+    display:flex; flex-direction:column; align-items:center; justify-content:space-between;
+    padding:10px 0; position:relative; background:rgba(0,0,0,0.03);
+  }
+  .ticket-stub .stub-text{
+    writing-mode:vertical-rl; transform:rotate(180deg);
+    font-size:10px; letter-spacing:2px; color:var(--ticket-muted); text-transform:uppercase;
+  }
+  .stub-toggle{
+    width:22px; height:22px; border-radius:50%; border:2px solid var(--ticket-muted);
+    background:transparent; cursor:pointer; flex-shrink:0;
+    display:flex; align-items:center; justify-content:center; padding:0;
+  }
+  .stub-toggle svg{ width:12px; height:12px; opacity:0; stroke:#8a1622; stroke-width:3.4; }
+  .ticket.watched .stub-toggle{ border-color:#8a1622; background:rgba(138,22,34,0.08); }
+  .ticket.watched .stub-toggle svg{ opacity:1; }
+
+  .ticket-main{
+    flex:1; padding:12px 14px 10px; position:relative;
+    display:flex; flex-direction:column; gap:4px;
+  }
+  .ticket-eyebrow{
+    font-size:9px; letter-spacing:1.6px; color:var(--ticket-muted); text-transform:uppercase;
+  }
+  .ticket-title{
+    font-size:15px; color:var(--ticket-ink); line-height:1.25;
+    overflow:hidden; text-overflow:ellipsis; display:-webkit-box;
+    -webkit-line-clamp:2; -webkit-box-orient:vertical;
+  }
+  .ticket.watched .ticket-title{ color:#a99a7c; text-decoration:line-through; text-decoration-thickness:1.5px; }
+  .ticket-barcode{
+    margin-top:auto; height:14px;
+    background-image:repeating-linear-gradient(90deg, var(--ticket-ink) 0px, var(--ticket-ink) 1.5px, transparent 1.5px, transparent 3.5px);
+    opacity:0.55;
+  }
+  .ticket-del{
+    position:absolute; top:8px; right:8px; width:20px; height:20px; border-radius:50%;
+    border:none; background:none; cursor:pointer; color:#b7a884;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .ticket-del:hover{ color:#8a1622; background:rgba(138,22,34,0.08); }
+  .ticket-del svg{ width:11px; height:11px; }
+
+  .empty-msg{
+    position:relative; z-index:1; text-align:center; color:#f0d9c8; font-size:14px;
+    padding:18px 0 4px; font-style:italic; opacity:0.85;
+  }
+
+  .curtain-footer{
+    position:relative; z-index:1; display:flex; align-items:center; justify-content:center; gap:18px;
+    margin-top:26px; font-size:12.5px; color:#f0d9c8;
+  }
+  .curtain-footer .count{ font-weight:700; }
+  .curtain-footer button{
+    background:none; border:none; cursor:pointer; color:#f0d9c8;
+    font-family:'Special Elite', monospace; font-size:12px; text-decoration:underline; padding:0; opacity:0.85;
+  }
+  .curtain-footer button:hover{ opacity:1; color:#ffe9d8; }
+
+  footer.note{margin-top:30px; color:var(--text-muted); font-size:12px; text-align:center;}
+
+  @media (max-width:900px){
+    .app{grid-template-columns:1fr;}
+    .sidebar{flex-direction:row; align-items:center; padding:16px 20px; gap:16px; overflow-x:auto;}
+    .sidebar::before{display:none;}
+    .nav{flex-direction:row;}
+    .nav-label{display:none;}
+    .sidebar-footer{display:none;}
+    .main{padding:24px 18px 50px;}
+    .curtain-board{padding:44px 14px 30px;}
+    .curtain-tassel{display:none;}
+    .ticket{width:250px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark">
+        <img src="leaf_icon.png" width="24" height="24" alt="">
+      </div>
+      <div class="brand-text">
+        <strong>homeBase</strong>
+        <span>Movies</span>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <div class="nav-label">Workspace</div>
+      <a href="index.html" class="nav-item">
+        <div class="left">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v10a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V10"/></svg>
+          Home
+        </div>
+      </a>
+      <a href="payments.html" class="nav-item">
+        <div class="left">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 9h18M7 14h4"/></svg>
+          Payments
+        </div>
+      </a>
+      <a href="expenses.html" class="nav-item">
+        <div class="left">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          Expenses
+        </div>
+      </a>
+      <a href="documents.html" class="nav-item">
+        <div class="left">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/></svg>
+          Documents
+        </div>
+      </a>
+      <a href="family-details.html" class="nav-item">
+        <div class="left">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 21a8 8 0 0 0-16 0"/><circle cx="12" cy="7" r="4"/></svg>
+          Family Details
+        </div>
+      </a>
+      <a href="bond.html" class="nav-item">
+        <div class="left">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-9"/><path d="M9 20v-6h6v6"/></svg>
+          Bond Payments
+        </div>
+      </a>
+      <a href="medical.html" class="nav-item">
+        <div class="left">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M19 14c1.5-1.5 3-3.5 3-5.5A4.5 4.5 0 0 0 17.5 4c-1.7 0-3 .7-4.5 2.5C11.5 4.7 10.2 4 8.5 4A4.5 4.5 0 0 0 4 8.5C4 13 12 21 12 21s2.5-2.4 4.5-4.5"/><path d="M9 11h3m0 0h3m-3 0V8m0 3v3"/></svg>
+          Medical
+        </div>
+      </a>
+      <a href="pets.html" class="nav-item">
+        <div class="left">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+            <ellipse cx="12" cy="16.2" rx="7" ry="5.5"/>
+            <ellipse cx="5.5" cy="7.5" rx="2.9" ry="4"/>
+            <ellipse cx="12" cy="4.8" rx="2.9" ry="4"/>
+            <ellipse cx="18.5" cy="7.5" rx="2.9" ry="4"/>
+          </svg>
+          Pets
+        </div>
+      </a>
+      <a href="property.html" class="nav-item">
+        <div class="left">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14.7 2.7a5.2 5.2 0 0 0-6.9 6.9l-5.1 5.1a2 2 0 0 0 0 2.8l1.8 1.8a2 2 0 0 0 2.8 0l5.1-5.1a5.2 5.2 0 0 0 6.9-6.9l-3.2 3.2-2.6-.6-.6-2.6 3.2-3.2a5.2 5.2 0 0 0-1.4-1.4Z"/>
+            <circle cx="5.5" cy="18.5" r="1"/>
+          </svg>
+          Home Maintenance
+        </div>
+      </a>
+      <a href="goals.html" class="nav-item">
+        <div class="left">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z" />
+            <path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z" />
+            <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0" />
+            <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5" />
+          </svg>
+          Goal Tracker
+        </div>
+      </a>
+      <a href="notes.html" class="nav-item">
+        <div class="left">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 2h6a2 2 0 0 1 2 2v3.5L21 12v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-6l4-4.5V4a2 2 0 0 1 2-2Z"/>
+            <path d="M9 2v6H3.8"/>
+          </svg>
+          Notes
+        </div>
+      </a>
+      <a href="shopping-list.html" class="nav-item">
+        <div class="left">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="9" cy="21" r="1"/><circle cx="19" cy="21" r="1"/>
+            <path d="M2.5 3h2l2.6 12.4a2 2 0 0 0 2 1.6h8.4a2 2 0 0 0 2-1.6L21 8H6"/>
+          </svg>
+          Shopping List
+        </div>
+      </a>
+      <a href="movies.html" class="nav-item active">
+        <div class="left">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2.5" y="5.5" width="19" height="13" rx="2"/>
+            <path d="M7 5.5v13M17 5.5v13M2.5 9h4.5M2.5 15h4.5M17 9h4.5M17 15h4.5"/>
+          </svg>
+          Movies
+        </div>
+      </a>
+    </nav>
+
+    <script>
+      document.querySelector('.nav .nav-item.active')?.scrollIntoView({ inline: 'center', block: 'nearest' });
+    </script>
+
+    <div class="sidebar-footer">
+      <span>homeBase · v0.1</span>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <div>
+        <h1>Movies</h1>
+        <p>Films to watch, one ticket stub at a time.</p>
+      </div>
+    </div>
+
+    <div class="curtain-board">
+      <div class="curtain-tassel left"></div>
+      <div class="curtain-tassel right"></div>
+
+      <div class="ticket-add-wrap">
+        <input type="text" id="movieInput" placeholder="Add a movie title…" maxlength="120">
+        <button class="ticket-add-btn" id="addBtn" aria-label="Add movie">+</button>
+      </div>
+
+      <div class="ticket-grid" id="ticketGrid"></div>
+      <div class="empty-msg" id="emptyMsg" style="display:none;">No tickets yet — add a movie to start the queue.</div>
+
+      <div class="curtain-footer">
+        <span><span class="count" id="countLabel">0</span> to watch</span>
+        <button id="clearWatchedBtn">Clear watched</button>
+        <button id="clearAllBtn">Clear all</button>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+(function(){
+  const el = (id) => document.getElementById(id);
+  let movies = [];
+
+  function escapeHtml(str){
+    return String(str ?? '').replace(/[&<>"']/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]));
+  }
+
+  async function loadMovies(){
+    const { data, error } = await supabaseClient
+      .from('movies')
+      .select('*')
+      .order('created_at', { ascending: false });
+    if(error){ console.error(error); return; }
+    movies = data.map(m => ({ id: m.id, title: m.title, watched: m.is_watched }));
+    render();
+  }
+
+  function render(){
+    const grid = el('ticketGrid');
+    const emptyMsg = el('emptyMsg');
+
+    if(movies.length === 0){
+      grid.innerHTML = '';
+      emptyMsg.style.display = 'block';
+    } else {
+      emptyMsg.style.display = 'none';
+      grid.innerHTML = movies.map(m => `
+        <div class="ticket ${m.watched ? 'watched' : ''}" data-id="${m.id}">
+          <div class="ticket-stub">
+            <button class="stub-toggle" data-toggle="${m.id}" aria-label="Mark watched">
+              <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            </button>
+            <span class="stub-text">ADMIT ONE</span>
+          </div>
+          <div class="ticket-main">
+            <button class="ticket-del" data-del="${m.id}" aria-label="Remove movie">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+            </button>
+            <span class="ticket-eyebrow">Feature Presentation</span>
+            <span class="ticket-title">${escapeHtml(m.title)}</span>
+            <div class="ticket-barcode"></div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    const remaining = movies.filter(m => !m.watched).length;
+    el('countLabel').textContent = remaining;
+  }
+
+  async function addMovie(text){
+    const trimmed = text.trim();
+    if(!trimmed) return;
+    const { error } = await supabaseClient.from('movies').insert({ title: trimmed, is_watched: false });
+    if(error){ console.error(error); return; }
+    await loadMovies();
+  }
+
+  el('addBtn').addEventListener('click', () => {
+    addMovie(el('movieInput').value);
+    el('movieInput').value = '';
+    el('movieInput').focus();
+  });
+  el('movieInput').addEventListener('keydown', (e) => {
+    if(e.key === 'Enter'){
+      addMovie(el('movieInput').value);
+      el('movieInput').value = '';
+    }
+  });
+
+  el('ticketGrid').addEventListener('click', async (e) => {
+    const toggleBtn = e.target.closest('[data-toggle]');
+    const delBtn = e.target.closest('[data-del]');
+    if(toggleBtn){
+      const movie = movies.find(m => m.id === toggleBtn.dataset.toggle);
+      if(movie){
+        const { error } = await supabaseClient.from('movies').update({ is_watched: !movie.watched }).eq('id', movie.id);
+        if(error){ console.error(error); return; }
+        await loadMovies();
+      }
+    }
+    if(delBtn){
+      const { error } = await supabaseClient.from('movies').delete().eq('id', delBtn.dataset.del);
+      if(error){ console.error(error); return; }
+      await loadMovies();
+    }
+  });
+
+  el('clearWatchedBtn').addEventListener('click', async () => {
+    if(!movies.some(m => m.watched)) return;
+    const { error } = await supabaseClient.from('movies').delete().eq('is_watched', true);
+    if(error){ console.error(error); return; }
+    await loadMovies();
+  });
+  el('clearAllBtn').addEventListener('click', async () => {
+    if(movies.length === 0) return;
+    if(!confirm('Clear the whole list?')) return;
+    const { error } = await supabaseClient.from('movies').delete().not('id', 'is', null);
+    if(error){ console.error(error); return; }
+    await loadMovies();
+  });
+
+  loadMovies();
+})();
+</script>
+
+</body>
+</html>
