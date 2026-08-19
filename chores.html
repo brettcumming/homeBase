@@ -501,6 +501,43 @@
     { text: "Deep clean the oven cavity & microwave interior", period: "Monthly" },
     { text: "Dust window blinds & wipe down baseboards", period: "Monthly" }
   ];
+
+    // Add this variable near your document targets at the top of your script:
+  const frame = document.querySelector('.wheel-frame');
+
+  spinBtn.addEventListener('click', () => {
+    if (isSpinning) return;
+    
+    isSpinning = true;
+    spinBtn.disabled = true;
+    
+    // ADD THIS LINE: Activates premium neon aura glow stream
+    frame.classList.add('is-active'); 
+    
+    annTitle.innerText = "Selecting Target...";
+    annText.innerHTML = "<em>The wheel is spinning...</em>";
+
+    const baseRevolutions = 1440; 
+    const extraDegrees = Math.floor(Math.random() * 360);
+    currentRotation += baseRevolutions + extraDegrees;
+    wheel.style.transform = `rotate(${currentRotation}deg)`;
+
+    setTimeout(() => {
+      isSpinning = false;
+      spinBtn.disabled = false;
+      
+      // ADD THIS LINE: Softly fades the neon aura away upon coming to a rest
+      frame.classList.remove('is-active'); 
+
+      const normalizedAngle = (360 - (currentRotation % 360)) % 360;
+      const targetIndex = Math.floor(normalizedAngle / 90) % 4;
+      const selectedMember = members[targetIndex];
+      const randomChore = chores[Math.floor(Math.random() * chores.length)];
+
+      annTitle.innerText = `${randomChore.period} Duty Assigned`;
+      annText.innerHTML = `<span class="highlight-name" style="color: ${selectedMember.color}">${selectedMember.name}</span> is on: <strong>${randomChore.text}</strong>`;
+    }, 4500);
+  });
   
   const members = [
     { name: "Bernice", color: "var(--clr-bernice)" }, 
