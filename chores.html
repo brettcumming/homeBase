@@ -483,26 +483,23 @@
           <p class="announcement-text" id="announcementText">Ready to launch assignments. Press SPIN!</p>
         </div>
       </div>
-
     </div>
   </div>
 
 <script>
-  // Complete Household Task Pool Matrix
+
   const chores = [
     { text: "Wash the dishes & wipe kitchen counters", period: "Daily" },
-    { text: "Take out the trash & recycling bins", period: "Daily" },
+    { text: "Take out the trash", period: "Daily" },
     { text: "Feed the pets & clean water bowls", period: "Daily" },
-    { text: "Vacuum the living room & sweep hallways", period: "Weekly" },
+    { text: "Vacuum the living room & passage", period: "Weekly" },
     { text: "Mop the kitchen floors & clean spillages", period: "Weekly" },
-    { text: "Scrub the shower doors & bathroom sinks", period: "Weekly" },
+    { text: "Clean the showers & basins", period: "Weekly" },
     { text: "Wipe down light switches & door handles", period: "Weekly" },
-    { text: "De-clutter the fridge & discard old items", period: "Monthly" },
-    { text: "Deep clean the oven cavity & microwave interior", period: "Monthly" },
+    { text: "De-clutter the fridge & discard vrot items", period: "Monthly" },
     { text: "Dust window blinds & wipe down baseboards", period: "Monthly" }
   ];
 
-  // Precise mechanical mapping sequence tracking clockwise rotation stops accurately
   const members = [
     { name: "Bernice", color: "var(--clr-bernice)" }, 
     { name: "Cole", color: "var(--clr-cole)" },       
@@ -510,53 +507,46 @@
     { name: "Brett", color: "var(--clr-brett)" }      
   ];
 
-  // Target DOM Nodes safely
   const wheel = document.getElementById('wheel');
   const spinBtn = document.getElementById('spinBtn');
   const annTitle = document.getElementById('announcementTitle');
   const annText = document.getElementById('announcementText');
-  const frame = document.querySelector('.wheel-frame'); // Fixed frame selector target link
+  const frame = document.querySelector('.wheel-frame'); 
 
   let currentRotation = 0;
   let isSpinning = false;
 
   spinBtn.addEventListener('click', () => {
-    // Prevent mid-spin double clicks
     if (isSpinning) return;
     
     isSpinning = true;
-    spinBtn.disabled = true;
-    
-    // Activate premium neon glow overlay stream on the ring frame
+    spinBtn.disabled = true;    
+
     if (frame) frame.classList.add('is-active'); 
     
     annTitle.innerText = "Selecting Target...";
     annText.innerHTML = "<em>The wheel is spinning...</em>";
 
-    // Inject rich angular velocity momentum curves
-    const baseRevolutions = 1440; // 4 full loops
+    const baseRevolutions = 1440; 
     const extraDegrees = Math.floor(Math.random() * 360);
     
-    currentRotation += baseRevolutions + extraDegrees;
-    
-    // Fire the hardware accelerated visual rotation transform
+    currentRotation += baseRevolutions + extraDegrees;    
+
     if (wheel) wheel.style.transform = `rotate(${currentRotation}deg)`;
 
-    // Wait exactly 4.5 seconds for the transition easing curve to safely conclude
+
     setTimeout(() => {
       isSpinning = false;
       spinBtn.disabled = false;
       
-      // Deactivate neon frame glow aura smoothly
+
       if (frame) frame.classList.remove('is-active'); 
 
-      // Extract precise stopping position bounds relative to 0deg (Top Center)
       const normalizedAngle = (360 - (currentRotation % 360)) % 360;
       const targetIndex = Math.floor(normalizedAngle / 90) % 4;
       const selectedMember = members[targetIndex];
       const randomChore = chores[Math.floor(Math.random() * chores.length)];
 
-      // Print output strings on card logger read-outs
       annTitle.innerText = `${randomChore.period} Duty Assigned`;
       annText.innerHTML = `<span class="highlight-name" style="color: ${selectedMember.color}">${selectedMember.name}</span> is on: <strong>${randomChore.text}</strong>`;
     }, 4500);
