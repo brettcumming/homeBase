@@ -139,23 +139,10 @@
         transparent 40px
       ),
       linear-gradient(180deg, #5c0e18 0%, #7d1322 40%, #9c1c2c 70%, #6a0f1b 100%);
-  }
-  .curtain-board::before{
-    content:"";
-    position:absolute; inset:0; pointer-events:none;
-    background:radial-gradient(900px 260px at 50% -10%, rgba(0,0,0,0.45), transparent 65%);
-  }
-  .curtain-tassel{
-    position:absolute; top:-8px; width:26px; height:60px; z-index:2;
-    background:radial-gradient(circle at 35% 20%, #f0d78a, var(--gold) 70%);
-    border-radius:0 0 13px 13px;
-    box-shadow:0 6px 12px rgba(0,0,0,0.4);
-  }
-  .curtain-tassel.left{ left:26px; transform:rotate(-8deg); }
-  .curtain-tassel.right{ right:26px; transform:rotate(8deg); }
+  }  
 
   .ticket-add-wrap{
-    position:relative; z-index:1; max-width:420px; margin:0 auto 34px;
+    max-width:420px; margin:0 auto 34px;
     background:var(--ticket-paper); border-radius:10px;
     box-shadow:0 12px 26px rgba(0,0,0,0.5);
     padding:14px 16px; display:flex; gap:10px; align-items:center;
@@ -262,8 +249,7 @@
     .nav-label{display:none;}
     .sidebar-footer{display:none;}
     .main{padding:24px 18px 50px;}
-    .curtain-board{padding:44px 14px 30px;}
-    .curtain-tassel{display:none;}
+    .curtain-board{padding:44px 14px 30px;} 
     .ticket{width:250px;}
   }
 </style>
@@ -403,9 +389,7 @@
       </div>
     </div>
 
-    <div class="curtain-board">
-      <div class="curtain-tassel left"></div>
-      <div class="curtain-tassel right"></div>
+    <div class="curtain-board">     
 
       <div class="ticket-add-wrap">
         <input type="text" id="movieInput" placeholder="Add a movie title…" maxlength="120">
