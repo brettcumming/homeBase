@@ -121,67 +121,75 @@
   .topbar p{margin:0; color:var(--text-secondary); font-size:14px; max-width:50ch;}
 
   /* Chore Arena Board Component */
+    /* Premium Chore Arena Board — Sleek and modern */
   .chore-board {
     position: relative;
     border-radius: var(--radius-lg);
-    padding: 50px 24px;
-    box-shadow: inset 0 4px 30px rgba(0,0,0,0.7), var(--shadow-lift);
-    min-height: 560px;
+    padding: 60px 24px;
+    box-shadow: inset 0 2px 20px rgba(0,0,0,0.4), var(--shadow-lift);
+    min-height: 580px;
     overflow: hidden;    
     background: 
-      radial-gradient(circle at 50% 30%, rgba(76,124,240,0.14) 0%, transparent 65%),
-      linear-gradient(180deg, #0d162d 0%, #070b16 100%);
+      radial-gradient(circle at 50% 35%, rgba(76,124,240,0.08) 0%, transparent 70%),
+      linear-gradient(180deg, #0b1120 0%, #070a12 100%);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 40px;
+    gap: 45px;
   }
 
-  /* Cybernetic Grid Overlay */
+  /* Sophisticated, subtle grid texture background */
   .chore-board::before {
     content: "";
     position: absolute;
     inset: 0;
     pointer-events: none;
     background-image: 
-      linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
-    background-size: 30px 30px;
+      linear-gradient(rgba(255,255,255,0.01) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.01) 1px, transparent 1px);
+    background-size: 40px 40px;
     background-position: center top;
-    mask-image: radial-gradient(circle at 50% 50%, black 40%, transparent 90%);
+    mask-image: radial-gradient(circle at 50% 40%, black 30%, transparent 80%);
   }
 
-  /* Wheel Outer Chassis Assembly */
+  /* Elegant Outer Ring Rim Asset */
   .wheel-frame {
     position: relative;
     width: 360px;
     height: 360px;
     border-radius: 50%;
-    padding: 12px;
-    background: linear-gradient(135deg, #1b2847, #0b1121);
+    padding: 8px;
+    background: linear-gradient(135deg, #223154, #121a2d);
     box-shadow: 
-      0 0 0 4px #223563,
-      0 14px 36px rgba(0,0,0,0.6),
-      inset 0 4px 12px rgba(255,255,255,0.05);
+      0 12px 40px rgba(0, 0, 0, 0.5),
+      inset 0 1px 3px rgba(255,255,255,0.1);
+    transition: box-shadow 0.4s ease;
+  }
+  
+  /* Adds a premium neon aura ring flare when active */
+  .wheel-frame.is-active {
+    box-shadow: 
+      0 0 30px rgba(76,124,240,0.25),
+      0 12px 50px rgba(0, 0, 0, 0.6);
   }
 
-  /* Top Fixed Pointer Arrow */
+  /* Sleek Minimalist Top Arrow Pointer */
   .wheel-pointer {
     position: absolute;
-    top: -12px;
+    top: -8px;
     left: 50%;
     transform: translateX(-50%);
     width: 0;
     height: 0;
-    border-left: 16px solid transparent;
-    border-right: 16px solid transparent;
-    border-top: 24px solid #ffffff;
-    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5));
+    border-left: 12px solid transparent;
+    border-right: 12px solid transparent;
+    border-top: 18px solid #eaf0fb;
+    filter: drop-shadow(0 3px 4px rgba(0,0,0,0.3));
     z-index: 10;
   }
 
-  /* The Rotating Canvas element */
+  /* The Rotating Canvas Surface Component */
   .wheel-canvas {
     width: 100%;
     height: 100%;
@@ -189,11 +197,11 @@
     overflow: hidden;
     position: relative;
     transform: rotate(0deg);
-    transition: transform 4.5s cubic-bezier(0.15, 0.85, 0.35, 1);
-    box-shadow: inset 0 0 25px rgba(0,0,0,0.7);
+    transition: transform 4.5s cubic-bezier(0.1, 0.8, 0.25, 1);
+    box-shadow: inset 0 0 30px rgba(0,0,0,0.4);
   }
 
-  /* Visual Sector Quadrants */
+  /* Custom sector gradient combinations for a cleaner visual spectrum */
   .wheel-sector {
     position: absolute;
     width: 50%;
@@ -202,89 +210,100 @@
     left: 0;
     top: 0;
   }
-  
-  .sector-1 { transform: rotate(0deg); background: var(--clr-brett); }
-  .sector-2 { transform: rotate(90deg); background: var(--clr-bernice); }
-  .sector-3 { transform: rotate(180deg); background: var(--clr-cole); }
-  .sector-4 { transform: rotate(270deg); background: var(--clr-dakota); }
+  .sector-1 { transform: rotate(0deg); background: linear-gradient(135deg, #ff7b65, #f0664c); }
+  .sector-2 { transform: rotate(90deg); background: linear-gradient(135deg, #4ef2c2, #33d6a6); }
+  .sector-3 { transform: rotate(180deg); background: linear-gradient(135deg, #6ba4ff, #4c7cf0); }
+  .sector-4 { transform: rotate(270deg); background: linear-gradient(135deg, #ffd375, #f0b84c); }
 
-  /* Segment Identity Text */
+  /* Premium typography alignment styling for labels */
   .sector-name {
     position: absolute;
-    bottom: 35px;
-    right: 35px;
+    bottom: 38px;
+    right: 38px;
     font-family: 'Sora', sans-serif;
-    font-weight: 800;
-    font-size: 19px;
-    color: #060a13;
+    font-weight: 700;
+    font-size: 16px;
+    color: #070b14;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 1px;
     transform: rotate(45deg);
     transform-origin: center;
+    opacity: 0.9;
   }
 
-  /* Center Spin Button */
+  /* Glassmorphism / Frosted-Metallic central core trigger button */
   .wheel-trigger {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 78px;
-    height: 78px;
+    width: 84px;
+    height: 84px;
     border-radius: 50%;
-    background: #ffffff;
-    border: 5px solid #1c2b4f;
-    color: #0a0f1e;
+    background: linear-gradient(135deg, #ffffff 0%, #e2e8f5 100%);
+    border: none;
+    color: #0d1426;
     font-family: 'Sora', sans-serif;
-    font-weight: 800;
-    font-size: 13px;
+    font-weight: 700;
+    font-size: 12px;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 1.5px;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 6px 16px rgba(0,0,0,0.5), inset 0 2px 4px rgba(255,255,255,0.4);
+    box-shadow: 
+      0 8px 24px rgba(0,0,0,0.35),
+      inset 0 2px 4px rgba(255,255,255,0.6);
     z-index: 5;
-    transition: transform 0.1s ease, background-color 0.2s;
+    transition: transform 0.1s ease, box-shadow 0.2s, background 0.2s;
   }
-  .wheel-trigger:not(:disabled):hover { background-color: #eaf0fb; }
-  .wheel-trigger:active { transform: translate(-50%, -50%) scale(0.92); }
-  .wheel-trigger:disabled { background-color: #66759c; color: #22304f; cursor: not-allowed; }
+  .wheel-trigger:not(:disabled):hover { 
+    transform: translate(-50%, -50%) scale(1.04);
+    box-shadow: 0 10px 28px rgba(0,0,0,0.45);
+  }
+  .wheel-trigger:active { transform: translate(-50%, -50%) scale(0.95); }
+  .wheel-trigger:disabled { 
+    background: #1c263d; 
+    color: #4b597d; 
+    box-shadow: none;
+    cursor: not-allowed; 
+  }
 
-  /* Results Display Box */
+  /* Clean Display Read-Out Logging panel card */
   .announcement-box {
-    min-height: 90px;
+    min-height: 84px;
     text-align: center;
-    max-width: 520px;
+    max-width: 480px;
     width: 100%;
-    padding: 20px;
-    background: var(--panel);
-    border: 1px solid var(--border);
+    padding: 18px 24px;
+    background: #0f1626;
+    border: 1px solid rgba(255,255,255,0.03);
     border-radius: var(--radius-md);
-    box-shadow: var(--shadow-soft);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
   }
   .announcement-title {
-    font-size: 11.5px;
+    font-size: 11px;
     text-transform: uppercase;
     color: var(--text-muted);
-    letter-spacing: 1.2px;
+    letter-spacing: 1.5px;
     margin: 0 0 6px;
+    font-weight: 600;
   }
   .announcement-text {
-    font-size: 17px;
-    font-weight: 600;
+    font-size: 16px;
+    font-weight: 500;
     color: var(--text-primary);
     margin: 0;
-    line-height: 1.4;
+    line-height: 1.5;
   }
-  .highlight-name { font-family: 'Sora'; font-weight: 800; }
+  .highlight-name { font-family: 'Sora'; font-weight: 800; letter-spacing: -0.2px;
+  }
 
-  /* Mobile Responsive Overrides */
   @media (max-width: 768px) {
     .app { display: flex; flex-direction: column; }
     .main { padding: 16px; margin: 0 auto; }
