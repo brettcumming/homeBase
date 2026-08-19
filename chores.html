@@ -297,7 +297,7 @@
 </head>
 <body>
 
-
+<div class="app">
   <aside class="sidebar">
     <div class="brand">
       <div class="brand-mark">
@@ -438,6 +438,36 @@
       <span>homeBase · v0.1</span>
     </div>
   </aside>
+
+  <div class="main">
+      <div class="topbar">
+        <div>
+          <h1>Duty Roster Wheel</h1>
+          <p>Spin the arena wheel to fairly allocate random daily, weekly, or monthly duties across house members.</p>
+        </div>
+      </div>
+
+      <div class="chore-board">
+        <div class="wheel-frame">
+          <div class="wheel-pointer"></div>
+          <button class="wheel-trigger" id="spinBtn">Spin</button>
+          
+          <div class="wheel-canvas" id="wheel">
+            <div class="wheel-sector sector-1"><span class="sector-name">Brett</span></div>
+            <div class="wheel-sector sector-2"><span class="sector-name">Bernice</span></div>
+            <div class="wheel-sector sector-3"><span class="sector-name">Cole</span></div>
+            <div class="wheel-sector sector-4"><span class="sector-name">Dakota</span></div>
+          </div>
+        </div>
+
+        <div class="announcement-box">
+          <p class="announcement-title" id="announcementTitle">Roster Status</p>
+          <p class="announcement-text" id="announcementText">Ready to launch assignments. Press SPIN!</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
 
 <script>
   const chores = [
