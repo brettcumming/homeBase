@@ -139,14 +139,27 @@
         transparent 40px
       ),
       linear-gradient(180deg, #5c0e18 0%, #7d1322 40%, #9c1c2c 70%, #6a0f1b 100%);
-  }  
+  }
+  .curtain-board::before{
+    content:"";
+    position:absolute; inset:0; pointer-events:none;
+    background:radial-gradient(900px 260px at 50% -10%, rgba(0,0,0,0.45), transparent 65%);
+  }
+  .curtain-tassel{
+    position:absolute; top:-8px; width:26px; height:60px; z-index:2;
+    background:radial-gradient(circle at 35% 20%, #f0d78a, var(--gold) 70%);
+    border-radius:0 0 13px 13px;
+    box-shadow:0 6px 12px rgba(0,0,0,0.4);
+  }
+  .curtain-tassel.left{ left:26px; transform:rotate(-8deg); }
+  .curtain-tassel.right{ right:26px; transform:rotate(8deg); }
 
   .ticket-add-wrap{
-    position:relative; z-index:1;
-    max-width:420px; margin:0 auto 34px;
+    position:relative; z-index:1; max-width:420px; margin:0 auto 34px;
     background:var(--ticket-paper); border-radius:10px;
     box-shadow:0 12px 26px rgba(0,0,0,0.5);
-    padding:14px 16px; display:flex; gap:10px; align-items:center;    
+    padding:14px 16px; display:flex; gap:10px; align-items:center;
+    transform:rotate(-0.6deg);
   }
   .ticket-add-wrap input{
     flex:1; border:none; border-bottom:2px dashed var(--ticket-line); background:transparent;
@@ -164,12 +177,8 @@
 
   .ticket-grid{
     position:relative; z-index:1;
-    column-gap:20px;
+    column-count:3; column-gap:20px;
     padding-top:22px;
-    margin-top:20px;
-    row-gap:20px;
-    column-count:3;
-    width: 500px;
   }
 
   .ticket{
@@ -178,7 +187,7 @@
     box-shadow:0 12px 24px -6px rgba(0,0,0,0.5), 0 2px 5px rgba(0,0,0,0.25);
     font-family:'Special Elite', monospace;
     transition:transform .15s ease, box-shadow .15s ease;
-    position:relative; z-index:1;
+    margin-top:-22px; position:relative; z-index:1;
     break-inside:avoid;
   }
   .ticket:hover{ transform:translateY(-3px); box-shadow:0 18px 30px -8px rgba(0,0,0,0.55); z-index:5; }
@@ -253,7 +262,7 @@
     .nav-label{display:none;}
     .sidebar-footer{display:none;}
     .main{padding:24px 18px 50px;}
-    .curtain-board{padding:44px 14px 30px;} 
+    .curtain-board{padding:44px 14px 30px;}    
     .ticket{width:250px;}
   }
 </style>
@@ -278,15 +287,6 @@
         <div class="left">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v10a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V10"/></svg>
           Home
-        </div>
-      </a>
-      <a href="shoppingList.html" class="nav-item">
-        <div class="left">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="9" cy="21" r="1"/><circle cx="19" cy="21" r="1"/>
-            <path d="M2.5 3h2l2.6 12.4a2 2 0 0 0 2 1.6h8.4a2 2 0 0 0 2-1.6L21 8H6"/>
-          </svg>
-          Shopping List
         </div>
       </a>
       <a href="payments.html" class="nav-item">
@@ -364,7 +364,16 @@
           </svg>
           Notes
         </div>
-      </a>      
+      </a>
+      <a href="shopping-list.html" class="nav-item">
+        <div class="left">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="9" cy="21" r="1"/><circle cx="19" cy="21" r="1"/>
+            <path d="M2.5 3h2l2.6 12.4a2 2 0 0 0 2 1.6h8.4a2 2 0 0 0 2-1.6L21 8H6"/>
+          </svg>
+          Shopping List
+        </div>
+      </a>
       <a href="movies.html" class="nav-item active">
         <div class="left">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -393,7 +402,7 @@
       </div>
     </div>
 
-    <div class="curtain-board">     
+    <div class="curtain-board">
 
       <div class="ticket-add-wrap">
         <input type="text" id="movieInput" placeholder="Add a movie title…" maxlength="120">
