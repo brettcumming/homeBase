@@ -10,7 +10,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>homeBase — Chores</title>
-<style>body{visibility:hidden;}</style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="supabase-client.js"></script>
 <script src="auth.js" defer></script>
@@ -85,11 +84,11 @@
   .brand{display:flex; align-items:center; gap:12px; padding:0 4px;}
   .brand-mark{
     width:40px; height:40px; border-radius:11px;
-    background:linear-gradient(155deg, var(--accent), #befffd);
+    background:linear-gradient(155deg, var(--accent), #2a4fc4);
     display:flex; align-items:center; justify-content:center;
     box-shadow:0 6px 16px rgba(76,124,240,0.35); flex-shrink:0;
   }
-  .brand-mark img{width:24px; height:24px;}
+  .brand-mark svg{width:22px; height:22px;}
   .brand-text{display:flex; flex-direction:column; line-height:1.25;}
   .brand-text strong{font-family:'Sora'; font-size:15.5px; font-weight:700; letter-spacing:0.2px;}
   .brand-text span{font-size:11.5px; color:var(--text-muted); font-weight:500;}
@@ -121,16 +120,16 @@
   .topbar h1{font-size:26px; font-weight:700; margin:0 0 6px; letter-spacing:-0.3px;}
   .topbar p{margin:0; color:var(--text-secondary); font-size:14px; max-width:50ch;}
 
-  /* Chore Arena Board Component - Replacing Curtain Layout */
+  /* Chore Arena Board Component */
   .chore-board {
     position: relative;
     border-radius: var(--radius-lg);
-    padding: 40px 24px;
+    padding: 50px 24px;
     box-shadow: inset 0 4px 30px rgba(0,0,0,0.7), var(--shadow-lift);
-    min-height: 580px;
+    min-height: 560px;
     overflow: hidden;    
     background: 
-      radial-gradient(circle at 50% 30%, rgba(76,124,240,0.12) 0%, transparent 65%),
+      radial-gradient(circle at 50% 30%, rgba(76,124,240,0.14) 0%, transparent 65%),
       linear-gradient(180deg, #0d162d 0%, #070b16 100%);
     display: flex;
     flex-direction: column;
@@ -139,7 +138,7 @@
     gap: 40px;
   }
 
-  /* Cybernetic Grid Overlay Lines */
+  /* Cybernetic Grid Overlay */
   .chore-board::before {
     content: "";
     position: absolute;
@@ -153,7 +152,7 @@
     mask-image: radial-gradient(circle at 50% 50%, black 40%, transparent 90%);
   }
 
-  /* Wheel Main Outer Ring Assembly */
+  /* Wheel Outer Chassis Assembly */
   .wheel-frame {
     position: relative;
     width: 360px;
@@ -167,7 +166,7 @@
       inset 0 4px 12px rgba(255,255,255,0.05);
   }
 
-  /* Physical Top Center Indicator Arrow pointer */
+  /* Top Fixed Pointer Arrow */
   .wheel-pointer {
     position: absolute;
     top: -12px;
@@ -177,23 +176,24 @@
     height: 0;
     border-left: 16px solid transparent;
     border-right: 16px solid transparent;
-    border-top: 24px solid #fff;
-    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.4));
+    border-top: 24px solid #ffffff;
+    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5));
     z-index: 10;
   }
 
-  /* The Turning Component Elements */
+  /* The Rotating Canvas element */
   .wheel-canvas {
     width: 100%;
     height: 100%;
     border-radius: 50%;
     overflow: hidden;
     position: relative;
+    transform: rotate(0deg);
     transition: transform 4.5s cubic-bezier(0.15, 0.85, 0.35, 1);
-    box-shadow: inset 0 0 20px rgba(0,0,0,0.6);
+    box-shadow: inset 0 0 25px rgba(0,0,0,0.7);
   }
 
-  /* Visual Sector Graphics */
+  /* Visual Sector Quadrants */
   .wheel-sector {
     position: absolute;
     width: 50%;
@@ -203,20 +203,19 @@
     top: 0;
   }
   
-  /* Slices rotated perfectly by 90-degree quadrant metrics */
   .sector-1 { transform: rotate(0deg); background: var(--clr-brett); }
   .sector-2 { transform: rotate(90deg); background: var(--clr-bernice); }
   .sector-3 { transform: rotate(180deg); background: var(--clr-cole); }
   .sector-4 { transform: rotate(270deg); background: var(--clr-dakota); }
 
-  /* Family Labels text tracking inside sectors */
+  /* Segment Identity Text */
   .sector-name {
     position: absolute;
-    bottom: 30px;
-    right: 30px;
+    bottom: 35px;
+    right: 35px;
     font-family: 'Sora', sans-serif;
     font-weight: 800;
-    font-size: 18px;
+    font-size: 19px;
     color: #060a13;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -224,14 +223,14 @@
     transform-origin: center;
   }
 
-  /* Central Mechanical Actuator Trigger */
+  /* Center Spin Button */
   .wheel-trigger {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 76px;
-    height: 76px;
+    width: 78px;
+    height: 78px;
     border-radius: 50%;
     background: #ffffff;
     border: 5px solid #1c2b4f;
@@ -245,48 +244,186 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 6px 14px rgba(0,0,0,0.5), inset 0 2px 4px rgba(255,255,255,0.4);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.5), inset 0 2px 4px rgba(255,255,255,0.4);
     z-index: 5;
-    transition: transform 0.1s ease;
+    transition: transform 0.1s ease, background-color 0.2s;
   }
-  .wheel-trigger:active { transform: translate(-50%, -50%) scale(0.93); }
+  .wheel-trigger:not(:disabled):hover { background-color: #eaf0fb; }
+  .wheel-trigger:active { transform: translate(-50%, -50%) scale(0.92); }
+  .wheel-trigger:disabled { background-color: #66759c; color: #22304f; cursor: not-allowed; }
 
-  /* Live Display read-out tracking target allocations */
+  /* Results Display Box */
   .announcement-box {
-    min-height: 80px;
+    min-height: 90px;
     text-align: center;
-    max-width: 500px;
+    max-width: 520px;
     width: 100%;
-    padding: 16px;
+    padding: 20px;
     background: var(--panel);
     border: 1px solid var(--border);
     border-radius: var(--radius-md);
     box-shadow: var(--shadow-soft);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
   .announcement-title {
-    font-size: 12px;
+    font-size: 11.5px;
     text-transform: uppercase;
     color: var(--text-muted);
-    letter-spacing: 1px;
+    letter-spacing: 1.2px;
     margin: 0 0 6px;
   }
   .announcement-text {
-    font-size: 18px;
-    font-weight: 700;
+    font-size: 17px;
+    font-weight: 600;
     color: var(--text-primary);
     margin: 0;
+    line-height: 1.4;
   }
-  .highlight-name { font-family: 'Sora'; font-weight: 800; transition: color 0.3s; }
+  .highlight-name { font-family: 'Sora'; font-weight: 800; }
 
-  /* Mobile Media Configuration adjustments */
+  /* Mobile Responsive Overrides */
   @media (max-width: 768px) {
     .app { display: flex; flex-direction: column; }
     .main { padding: 16px; margin: 0 auto; }
-    .wheel-frame { width: 290px; height: 290px; }
-    .sector-name { bottom: 20px; right: 20px; font-size: 15px; }
-    .chore-board { min-height: 480px; padding: 24px 12px; }
+    .wheel-frame { width: 300px; height: 300px; padding: 10px; }
+    .sector-name { bottom: 25px; right: 25px; font-size: 16px; }
+    .chore-board { min-height: 460px; padding: 30px 12px; gap: 30px; }
+    .announcement-text { font-size: 15px; }
   }
 </style>
 </head>
-<body style="visibility: visible;">
+<body>
 
+  <div class="app">
+    <div class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#eaf0fb" stroke-width="2.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+        </div>
+        <div class="brand-text">
+          <strong>homeBase</strong>
+          <span>Household Hub</span>
+        </div>
+      </div>
+      
+      <div class="nav">
+        <div class="nav-label">Management</div>
+        <a href="dashboard.html" class="nav-item">
+          <div class="left">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
+            <span>Dashboard</span>
+          </div>
+        </a>
+        <a href="chores.html" class="nav-item active">
+          <div class="left">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 7.89M9 11l3 3L22 4"/></svg>
+            <span>Duty Roster</span>
+          </div>
+        </a>
+        <a href="movies.html" class="nav-item">
+          <div class="left">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/><path d="M7 2v20M17 2v20M2 12h20M2 7h5M2 17h5M17 17h5M17 7h5"/></svg>
+            <span>Movie Board</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="sidebar-footer">
+        <span>Connected to homeBase_DB</span>
+        <span class="mono" style="font-size: 10px; opacity:0.5;">v2.4.1-stable</span>
+      </div>
+    </div>
+
+    <div class="main">
+      <div class="topbar">
+        <div>
+          <h1>Duty Roster Wheel</h1>
+          <p>Spin the arena wheel to fairly allocate random daily, weekly, or monthly duties across house members.</p>
+        </div>
+      </div>
+
+      <div class="chore-board">
+        <div class="wheel-frame">
+          <div class="wheel-pointer"></div>
+          <button class="wheel-trigger" id="spinBtn">Spin</button>
+          
+          <div class="wheel-canvas" id="wheel">
+            <div class="wheel-sector sector-1"><span class="sector-name">Brett</span></div>
+            <div class="wheel-sector sector-2"><span class="sector-name">Bernice</span></div>
+            <div class="wheel-sector sector-3"><span class="sector-name">Cole</span></div>
+            <div class="wheel-sector sector-4"><span class="sector-name">Dakota</span></div>
+          </div>
+        </div>
+
+        <div class="announcement-box">
+          <p class="announcement-title" id="announcementTitle">Roster Status</p>
+          <p class="announcement-text" id="announcementText">Ready to launch assignments. Press SPIN!</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+<script>
+  const chores = [
+    { text: "Wash the dishes & wipe kitchen counters", period: "Daily" },
+    { text: "Take out the trash & recycling bins", period: "Daily" },
+    { text: "Feed the pets & clean water bowls", period: "Daily" },
+    { text: "Vacuum the living room & sweep hallways", period: "Weekly" },
+    { text: "Mop the kitchen floors & clean spillages", period: "Weekly" },
+    { text: "Scrub the shower doors & bathroom sinks", period: "Weekly" },
+    { text: "Wipe down light switches & door handles", period: "Weekly" },
+    { text: "De-clutter the fridge & discard old items", period: "Monthly" },
+    { text: "Deep clean the oven cavity & microwave interior", period: "Monthly" },
+    { text: "Dust window blinds & wipe down baseboards", period: "Monthly" }
+  ];
+
+  const members = [
+    { name: "Brett", color: "var(--clr-brett)" },
+    { name: "Dakota", color: "var(--clr-dakota)" },
+    { name: "Cole", color: "var(--clr-cole)" },
+    { name: "Bernice", color: "var(--clr-bernice)" }
+  ];
+
+  const wheel = document.getElementById('wheel');
+  const spinBtn = document.getElementById('spinBtn');
+  const annTitle = document.getElementById('announcementTitle');
+  const annText = document.getElementById('announcementText');
+
+  let currentRotation = 0;
+  let isSpinning = false;
+
+  spinBtn.addEventListener('click', () => {
+    if (isSpinning) return;
+    
+    isSpinning = true;
+    spinBtn.disabled = true;
+    annTitle.innerText = "Selecting Target...";
+    annText.innerHTML = "<em>The wheel is spinning...</em>";
+
+    const baseRevolutions = 1440; 
+    const extraDegrees = Math.floor(Math.random() * 360);
+    
+    currentRotation += baseRevolutions + extraDegrees;
+    wheel.style.transform = `rotate(${currentRotation}deg)`;
+
+    setTimeout(() => {
+      isSpinning = false;
+      spinBtn.disabled = false;
+
+      const normalizedAngle = (360 - (currentRotation % 360)) % 360;
+      const targetIndex = Math.floor(normalizedAngle / 90) % 4;
+      const selectedMember = members[targetIndex];
+      const randomChore = chores[Math.floor(Math.random() * chores.length)];
+
+      annTitle.innerText = `${randomChore.period} Duty Assigned`;
+      annText.innerHTML = `<span class="highlight-name" style="color: ${selectedMember.color}">${selectedMember.name}</span> is on: <strong>${randomChore.text}</strong>`;
+    }, 4500);
+  });
+</script>
+
+</body>
+</html>
