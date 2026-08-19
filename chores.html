@@ -350,563 +350,134 @@
 </head>
 <body>
 
-<div class="app">
-  <aside class="sidebar">
-    <div class="brand">
-      <div class="brand-mark">
-        <img src="leaf_icon.png" width="30" height="30" alt="">  
+  <div class="app">
+    <div class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#eaf0fb" stroke-width="2.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+        </div>
+        <div class="brand-text">
+          <strong>homeBase</strong>
+          <span>Household Hub</span>
+        </div>
       </div>
-      <div class="brand-text">
-        <strong>homeBase</strong>
-        <span>Notes</span>
+      
+      <div class="nav">
+        <div class="nav-label">Management</div>
+        <a href="dashboard.html" class="nav-item">
+          <div class="left">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
+            <span>Dashboard</span>
+          </div>
+        </a>
+        <a href="chores.html" class="nav-item active">
+          <div class="left">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 7.89M9 11l3 3L22 4"/></svg>
+            <span>Duty Roster</span>
+          </div>
+        </a>
+        <a href="movies.html" class="nav-item">
+          <div class="left">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/><path d="M7 2v20M17 2v20M2 12h20M2 7h5M2 17h5M17 17h5M17 7h5"/></svg>
+            <span>Movie Board</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="sidebar-footer">
+        <span>Connected to homeBase_DB</span>
+        <span class="mono" style="font-size: 10px; opacity:0.5;">v2.4.1-stable</span>
       </div>
     </div>
 
-    <nav class="nav">
-      <div class="nav-label">Workspace</div>
-      <a href="index.html" class="nav-item">
-        <div class="left">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v10a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V10"/></svg>
-          Home
-        </div>
-      </a>
-      <a href="shoppingList.html" class="nav-item">
-        <div class="left">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="9" cy="21" r="1"/><circle cx="19" cy="21" r="1"/>
-            <path d="M2.5 3h2l2.6 12.4a2 2 0 0 0 2 1.6h8.4a2 2 0 0 0 2-1.6L21 8H6"/>
-          </svg>
-          Shopping List
-        </div>
-      </a>
-      <a href="payments.html" class="nav-item">
-        <div class="left">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 9h18M7 14h4"/></svg>
-          Payments
-        </div>
-      </a>
-      <a href="expenses.html" class="nav-item">
-        <div class="left">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-          Expenses
-        </div>
-      </a>
-      <a href="documents.html" class="nav-item">
-        <div class="left">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/></svg>
-          Documents
-        </div>
-      </a>
-      <a href="family-details.html" class="nav-item">
-        <div class="left">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 21a8 8 0 0 0-16 0"/><circle cx="12" cy="7" r="4"/></svg>
-          Family Details
-        </div>
-      </a>
-      <a href="bond.html" class="nav-item">
-        <div class="left">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-9"/><path d="M9 20v-6h6v6"/></svg>
-          Bond Payments
-        </div>
-      </a>
-      <a href="medical.html" class="nav-item">
-        <div class="left">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M19 14c1.5-1.5 3-3.5 3-5.5A4.5 4.5 0 0 0 17.5 4c-1.7 0-3 .7-4.5 2.5C11.5 4.7 10.2 4 8.5 4A4.5 4.5 0 0 0 4 8.5C4 13 12 21 12 21s2.5-2.4 4.5-4.5"/><path d="M9 11h3m0 0h3m-3 0V8m0 3v3"/></svg>
-          Medical
-        </div>
-      </a>
-      <a href="pets.html" class="nav-item">
-        <div class="left">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
-            <ellipse cx="12" cy="16.2" rx="7" ry="5.5"/>
-            <ellipse cx="5.5" cy="7.5" rx="2.9" ry="4"/>
-            <ellipse cx="12" cy="4.8" rx="2.9" ry="4"/>
-            <ellipse cx="18.5" cy="7.5" rx="2.9" ry="4"/>
-          </svg>
-          Pets
-        </div>
-      </a>
-      <a href="property.html" class="nav-item">
-        <div class="left">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M14.7 2.7a5.2 5.2 0 0 0-6.9 6.9l-5.1 5.1a2 2 0 0 0 0 2.8l1.8 1.8a2 2 0 0 0 2.8 0l5.1-5.1a5.2 5.2 0 0 0 6.9-6.9l-3.2 3.2-2.6-.6-.6-2.6 3.2-3.2a5.2 5.2 0 0 0-1.4-1.4Z"/>
-            <circle cx="5.5" cy="18.5" r="1"/>
-          </svg>
-          Home Maintenance
-        </div>
-      </a>
-      <a href="goals.html" class="nav-item">
-        <div class="left">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z" />
-            <path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z" />
-            <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0" />
-            <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5" />
-          </svg>
-          Goal Tracker
-        </div>
-      </a>
-      <a href="notes.html" class="nav-item active">
-        <div class="left">
-          <svg
-            xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"
-          >
-            <path d="M4 20l1.2-4.5L15.7 5a2.3 2.3 0 0 1 3.3 3.3L8.5 19.1 4 20z" />
-            <path d="M13.2 7.5l3.3 3.3" />
-            <path d="M5.2 15.5l3.3 3.3" />
-          </svg>
-          Notes
-        </div>
-      </a>
-      <a href="movies.html" class="nav-item">
-        <div class="left">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="2.5" y="5.5" width="19" height="13" rx="2"/>
-            <path d="M7 5.5v13M17 5.5v13M2.5 9h4.5M2.5 15h4.5M17 9h4.5M17 15h4.5"/>
-          </svg>
-          Movies
-        </div>
-      </a>
-    </nav>
-
-    <script>
-      document.querySelector('.nav .nav-item.active')?.scrollIntoView({ inline: 'center', block: 'nearest' });
-    </script>
-
-    <div class="sidebar-footer">
-      <span>homeBase · v0.1</span>
-    </div>
-  </aside>
-
-  <main class="main">
-    <div id="vaultWrap">
+    <div class="main">
       <div class="topbar">
         <div>
-          <h1>Notes</h1>
-          <p>Sticky notes and lists for Brett & Bernice — jot it down, tick it off.</p>
-        </div>
-        <div class="actions-row">
-          <button class="btn btn-primary" id="addNoteBtn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
-            Add Note
-          </button>
+          <h1>Duty Roster Wheel</h1>
+          <p>Spin the arena wheel to fairly allocate random daily, weekly, or monthly duties across house members.</p>
         </div>
       </div>
 
-      <div class="filters">
-        <div class="search-wrap">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
-          <input type="text" id="searchInput" placeholder="Search notes…">
+      <div class="chore-board">
+        <div class="wheel-frame">
+          <div class="wheel-pointer"></div>
+          <button class="wheel-trigger" id="spinBtn">Spin</button>
+          
+          <div class="wheel-canvas" id="wheel">
+            <div class="wheel-sector sector-1"><span class="sector-name">Brett</span></div>
+            <div class="wheel-sector sector-2"><span class="sector-name">Bernice</span></div>
+            <div class="wheel-sector sector-3"><span class="sector-name">Cole</span></div>
+            <div class="wheel-sector sector-4"><span class="sector-name">Dakota</span></div>
+          </div>
         </div>
-        <div class="owner-toggle" id="ownerFilterGroup">
-          <button type="button" class="selected" data-owner-filter="all">All</button>
-          <button type="button" data-owner-filter="Brett"><span class="owner-swatch brett"></span> Brett</button>
-          <button type="button" data-owner-filter="Bernice"><span class="owner-swatch bernice"></span> Bernice</button>
+
+        <div class="announcement-box">
+          <p class="announcement-title" id="announcementTitle">Roster Status</p>
+          <p class="announcement-text" id="announcementText">Ready to launch assignments. Press SPIN!</p>
         </div>
-        <div class="owner-toggle" id="statusFilterGroup">
-          <button type="button" class="selected" data-status-filter="active">Active</button>
-          <button type="button" data-status-filter="done">Done</button>
-        </div>
-        <select id="categoryFilter">
-          <option value="all">All categories</option>
-        </select>
       </div>
 
-      <div class="whiteboard">
-        <div class="note-grid" id="noteGrid"></div>
-      </div>
-    </div>
-  </main>
-</div>
-
-<div class="overlay" id="overlay"></div>
-<div class="drawer" id="drawer">
-  <div class="drawer-header">
-    <h2 id="drawerTitle">Add Note</h2>
-    <button class="drawer-close" id="drawerClose">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><path d="M18 6 6 18M6 6l12 12"/></svg>
-    </button>
-  </div>
-  <div class="drawer-body">
-    <input type="hidden" id="editId">
-
-    <div class="field">
-      <label>Whose note</label>
-      <div class="owner-toggle" id="ownerFormGroup">
-        <button type="button" data-owner="Brett"><span class="owner-swatch brett"></span> Brett</button>
-        <button type="button" data-owner="Bernice"><span class="owner-swatch bernice"></span> Bernice</button>
-      </div>
-    </div>
-
-    <div class="field">
-      <label for="fCategory">Category</label>
-      <select id="fCategory">
-        <option>To Do</option>
-        <option>Shopping List</option>
-        <option>Reminder</option>
-        <option>Idea</option>
-        <option>Important</option>
-        <option>Other</option>
-      </select>
-    </div>
-
-    <div class="field">
-      <label for="fTitle">Title</label>
-      <input type="text" id="fTitle" placeholder="e.g. Weekend list">
-    </div>
-
-    <div class="field">
-      <label for="fContent">Note</label>
-      <textarea id="fContent" placeholder="Write your note or list here…"></textarea>
     </div>
   </div>
-  <div class="drawer-footer">
-    <button class="btn btn-ghost danger-ghost" id="deleteNoteBtn" style="display:none;">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0-1 14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L4 6"/></svg>
-    </button>
-    <button class="btn btn-ghost" id="cancelBtn">Cancel</button>
-    <button class="btn btn-primary" id="saveBtn">Save Note</button>
-  </div>
-</div>
-
-<div class="toast" id="toast">
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>
-  <span id="toastText">Saved</span>
-</div>
-
-<div class="trash-dock" id="trashDock" title="Trash">
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M4 7h16"/>
-    <path d="M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"/>
-    <path d="M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13"/>
-    <path d="M10 11v6"/>
-    <path d="M14 11v6"/>
-  </svg>
-  <div class="trash-pile" id="trashPile"></div>
-</div>
 
 <script>
-(function(){
-  const el = (id) => document.getElementById(id);
+  const chores = [
+    { text: "Wash the dishes & wipe kitchen counters", period: "Daily" },
+    { text: "Take out the trash & recycling bins", period: "Daily" },
+    { text: "Feed the pets & clean water bowls", period: "Daily" },
+    { text: "Vacuum the living room & sweep hallways", period: "Weekly" },
+    { text: "Mop the kitchen floors & clean spillages", period: "Weekly" },
+    { text: "Scrub the shower doors & bathroom sinks", period: "Weekly" },
+    { text: "Wipe down light switches & door handles", period: "Weekly" },
+    { text: "De-clutter the fridge & discard old items", period: "Monthly" },
+    { text: "Deep clean the oven cavity & microwave interior", period: "Monthly" },
+    { text: "Dust window blinds & wipe down baseboards", period: "Monthly" }
+  ];
 
-  let notes = [];
-  let editingId = null;
-  let formOwner = 'Brett';
-  let ownerFilter = 'all';
-  let statusFilter = 'active';
-  let targetNoteId = new URLSearchParams(window.location.search).get('note');
+  const members = [
+    { name: "Brett", color: "var(--clr-brett)" },
+    { name: "Dakota", color: "var(--clr-dakota)" },
+    { name: "Cole", color: "var(--clr-cole)" },
+    { name: "Bernice", color: "var(--clr-bernice)" }
+  ];
 
-  function showToast(msg){
-    const toast = el('toast');
-    el('toastText').textContent = msg;
-    toast.classList.add('show');
-    clearTimeout(showToast._t);
-    showToast._t = setTimeout(() => toast.classList.remove('show'), 2200);
-  }
-  function escapeHtml(str){
-    return String(str ?? '').replace(/[&<>"']/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]));
-  }
-  function formatDate(d){
-    return new Date(d).toLocaleDateString('en-ZA', {day:'2-digit', month:'short', year:'numeric'});
-  }
-  function rotationFor(id){
-    let hash = 0;
-    for(let i = 0; i < id.length; i++){ hash = (hash * 31 + id.charCodeAt(i)) % 1000; }
-    return ((hash % 7) - 3) * 1.1; // -3.3deg to 3.3deg
-  }
+  const wheel = document.getElementById('wheel');
+  const spinBtn = document.getElementById('spinBtn');
+  const annTitle = document.getElementById('announcementTitle');
+  const annText = document.getElementById('announcementText');
 
-  function spawnTrashBall(ownerKey){
-    const pile = el('trashPile');
-    if(!pile) return;
-    const ball = document.createElement('div');
-    ball.className = 'trash-ball ' + (ownerKey === 'Bernice' ? 'ball-bernice' : 'ball-brett');
-    pile.appendChild(ball);
-    while(pile.children.length > 6){ pile.removeChild(pile.firstChild); }
+  let currentRotation = 0;
+  let isSpinning = false;
+
+  spinBtn.addEventListener('click', () => {
+    if (isSpinning) return;
+    
+    isSpinning = true;
+    spinBtn.disabled = true;
+    annTitle.innerText = "Selecting Target...";
+    annText.innerHTML = "<em>The wheel is spinning...</em>";
+
+    const baseRevolutions = 1440; 
+    const extraDegrees = Math.floor(Math.random() * 360);
+    
+    currentRotation += baseRevolutions + extraDegrees;
+    wheel.style.transform = `rotate(${currentRotation}deg)`;
+
     setTimeout(() => {
-      ball.classList.add('fading');
-      setTimeout(() => ball.remove(), 1200);
-    }, 3 * 60 * 1000); // crumpled ball lingers in the can, then fades after ~3 minutes
-  }
+      isSpinning = false;
+      spinBtn.disabled = false;
 
-  function sendNoteToTrash(id, ownerKey, onLanded){
-    const noteEl = document.querySelector(`.sticky-note[data-id="${id}"]`);
-    const trash = el('trashDock');
-    if(noteEl && trash){
-      const noteRect = noteEl.getBoundingClientRect();
-      const trashRect = trash.getBoundingClientRect();
-      const dx = (trashRect.left + trashRect.width / 2) - (noteRect.left + noteRect.width / 2);
-      const dy = (trashRect.top + trashRect.height / 2) - (noteRect.top + noteRect.height / 2);
-      noteEl.style.setProperty('--tx', dx + 'px');
-      noteEl.style.setProperty('--ty', dy + 'px');
-      noteEl.classList.add('note-to-trash');
-      noteEl.addEventListener('animationend', () => {
-        trash.classList.add('bounce');
-        setTimeout(() => trash.classList.remove('bounce'), 450);
-        spawnTrashBall(ownerKey);
-        onLanded();
-      }, { once: true });
-    } else {
-      spawnTrashBall(ownerKey);
-      onLanded();
-    }
-  }
+      const normalizedAngle = (360 - (currentRotation % 360)) % 360;
+      const targetIndex = Math.floor(normalizedAngle / 90) % 4;
+      const selectedMember = members[targetIndex];
+      const randomChore = chores[Math.floor(Math.random() * chores.length)];
 
-  async function loadNotes(){
-    const { data, error } = await supabaseClient
-      .from('notes').select('*').order('created_at', { ascending: false });
-    if(error){ showToast('Error loading notes'); console.error(error); return; }
-    notes = data;
-    refreshCategoryOptions();
-
-    if(targetNoteId){
-      const target = notes.find(n => n.id === targetNoteId);
-      if(target){
-        statusFilter = target.is_done ? 'done' : 'active';
-        ownerFilter = 'all';
-        document.querySelectorAll('#statusFilterGroup button').forEach(b => b.classList.toggle('selected', b.dataset.statusFilter === statusFilter));
-        document.querySelectorAll('#ownerFilterGroup button').forEach(b => b.classList.toggle('selected', b.dataset.ownerFilter === 'all'));
-        el('categoryFilter').value = 'all';
-        el('searchInput').value = '';
-      }
-    }
-
-    renderNotes();
-
-    if(targetNoteId){
-      const idToFind = targetNoteId;
-      requestAnimationFrame(() => {
-        const targetEl = document.querySelector(`.sticky-note[data-id="${idToFind}"]`);
-        if(targetEl){
-          targetEl.scrollIntoView({ behavior:'smooth', block:'center' });
-          targetEl.classList.add('note-highlight');
-          setTimeout(() => targetEl.classList.remove('note-highlight'), 2300);
-        }
-      });
-      targetNoteId = null;
-      history.replaceState(null, '', window.location.pathname);
-    }
-  }
-
-  function refreshCategoryOptions(){
-    const catFilter = el('categoryFilter');
-    const cats = Array.from(new Set(notes.map(n => n.category))).sort();
-    const current = catFilter.value;
-    catFilter.innerHTML = '<option value="all">All categories</option>' + cats.map(c => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('');
-    if(cats.includes(current)) catFilter.value = current;
-  }
-
-  function getFiltered(){
-    const q = el('searchInput').value.trim().toLowerCase();
-    const cat = el('categoryFilter').value;
-    return notes.filter(n => {
-      const matchesQ = !q || n.title.toLowerCase().includes(q) || n.content.toLowerCase().includes(q);
-      const matchesOwner = ownerFilter === 'all' || n.owner === ownerFilter;
-      const matchesCat = cat === 'all' || n.category === cat;
-      const matchesStatus = statusFilter === 'done' ? !!n.is_done : !n.is_done;
-      return matchesQ && matchesOwner && matchesCat && matchesStatus;
-    });
-  }
-
-  function renderNotes(){
-    const grid = el('noteGrid');
-    const list = getFiltered();
-    if(list.length === 0){
-      const msg = statusFilter === 'done'
-        ? { title: 'No done notes', body: 'Tick a note off and it\'ll land here.' }
-        : { title: 'No notes yet', body: 'Click Add Note to stick the first one up.' };
-      grid.innerHTML = `
-        <div class="empty-state">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 2h6a2 2 0 0 1 2 2v3.5L21 12v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-6l4-4.5V4a2 2 0 0 1 2-2Z"/><path d="M9 2v6H3.8"/></svg>
-          <h3>${msg.title}</h3>
-          <p>${msg.body}</p>
-        </div>`;
-      return;
-    }
-    grid.innerHTML = list.map(n => {
-      const ownerClass = n.owner === 'Bernice' ? 'owner-bernice' : 'owner-brett';
-      const rot = rotationFor(n.id);
-      const doneClass = n.is_done ? ' done' : '';
-      const actions = n.is_done ? `
-            <button class="sticky-icon-btn" data-restore="${n.id}" aria-label="Restore note">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>
-            </button>
-            <button class="sticky-icon-btn" data-del="${n.id}" aria-label="Delete note forever">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0-1 14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L4 6"/></svg>
-            </button>
-          ` : `
-            <button class="sticky-icon-btn" data-tick="${n.id}" aria-label="Mark done">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>
-            </button>
-            <button class="sticky-icon-btn" data-edit="${n.id}" aria-label="Edit note">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5Z"/></svg>
-            </button>
-            <button class="sticky-icon-btn" data-del="${n.id}" aria-label="Delete note">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 6 6 18M6 6l12 12"/></svg>
-            </button>
-          `;
-      return `
-      <div class="sticky-note ${ownerClass}${doneClass}" style="--rot:${rot}deg; transform:rotate(${rot}deg);" data-id="${n.id}">
-        <div class="sticky-pin"></div>
-        <div class="sticky-top">
-          <span class="sticky-cat">${escapeHtml(n.category)}</span>
-          <div class="sticky-actions">${actions}</div>
-        </div>
-        ${n.title ? `<div class="sticky-title">${escapeHtml(n.title)}</div>` : ''}
-        <div class="sticky-content">${escapeHtml(n.content)}</div>
-        <div class="sticky-footer">${escapeHtml(n.owner)} · ${formatDate(n.created_at)}</div>
-      </div>
-    `;
-    }).join('');
-  }
-
-  // ---- filters ----
-  el('ownerFilterGroup').addEventListener('click', (e) => {
-    const btn = e.target.closest('[data-owner-filter]');
-    if(!btn) return;
-    ownerFilter = btn.dataset.ownerFilter;
-    document.querySelectorAll('#ownerFilterGroup button').forEach(b => b.classList.toggle('selected', b === btn));
-    renderNotes();
+      annTitle.innerText = `${randomChore.period} Duty Assigned`;
+      annText.innerHTML = `<span class="highlight-name" style="color: ${selectedMember.color}">${selectedMember.name}</span> is on: <strong>${randomChore.text}</strong>`;
+    }, 4500);
   });
-  el('statusFilterGroup').addEventListener('click', (e) => {
-    const btn = e.target.closest('[data-status-filter]');
-    if(!btn) return;
-    statusFilter = btn.dataset.statusFilter;
-    document.querySelectorAll('#statusFilterGroup button').forEach(b => b.classList.toggle('selected', b === btn));
-    renderNotes();
-  });
-  el('searchInput').addEventListener('input', renderNotes);
-  el('categoryFilter').addEventListener('change', renderNotes);
-
-  // ---- drawer ----
-  function updateOwnerFormSelection(){
-    document.querySelectorAll('#ownerFormGroup button').forEach(btn => {
-      btn.classList.toggle('selected', btn.dataset.owner === formOwner);
-    });
-  }
-  el('ownerFormGroup').addEventListener('click', (e) => {
-    const btn = e.target.closest('[data-owner]');
-    if(!btn) return;
-    formOwner = btn.dataset.owner;
-    updateOwnerFormSelection();
-  });
-
-  function openDrawer(note){
-    editingId = note ? note.id : null;
-    el('drawerTitle').textContent = note ? 'Edit Note' : 'Add Note';
-    el('editId').value = note ? note.id : '';
-    formOwner = note ? note.owner : 'Brett';
-    updateOwnerFormSelection();
-    el('fCategory').value = note ? note.category : 'To Do';
-    el('fTitle').value = note ? (note.title || '') : '';
-    el('fContent').value = note ? (note.content || '') : '';
-    el('deleteNoteBtn').style.display = note ? 'flex' : 'none';
-    el('drawer').classList.add('show');
-    el('overlay').classList.add('show');
-    setTimeout(() => el('fTitle').focus(), 200);
-  }
-  function closeDrawer(){
-    el('drawer').classList.remove('show');
-    el('overlay').classList.remove('show');
-    editingId = null;
-  }
-
-  el('addNoteBtn').addEventListener('click', () => openDrawer(null));
-  el('drawerClose').addEventListener('click', closeDrawer);
-  el('cancelBtn').addEventListener('click', closeDrawer);
-  el('overlay').addEventListener('click', closeDrawer);
-  document.addEventListener('keydown', (e) => { if(e.key === 'Escape' && el('drawer').classList.contains('show')) closeDrawer(); });
-
-  el('saveBtn').addEventListener('click', async () => {
-    const content = el('fContent').value.trim();
-    if(!content){ el('fContent').focus(); return; }
-    const payload = {
-      owner: formOwner,
-      category: el('fCategory').value,
-      title: el('fTitle').value.trim(),
-      content
-    };
-
-    let error;
-    if(editingId){
-      ({ error } = await supabaseClient.from('notes').update(payload).eq('id', editingId));
-    } else {
-      ({ error } = await supabaseClient.from('notes').insert(payload));
-    }
-    if(error){ showToast('Save failed'); console.error(error); return; }
-
-    showToast(editingId ? 'Note updated' : 'Note added');
-    closeDrawer();
-    await loadNotes();
-  });
-
-  el('deleteNoteBtn').addEventListener('click', async () => {
-    if(!editingId) return;
-    if(!confirm('Remove this note? This can\'t be undone.')) return;
-    const id = editingId;
-    const note = notes.find(n => n.id === id);
-    closeDrawer();
-    sendNoteToTrash(id, note ? note.owner : 'Brett', () => {
-      supabaseClient.from('notes').delete().eq('id', id).then(({ error }) => {
-        if(error){ showToast('Delete failed'); console.error(error); return; }
-        loadNotes();
-        showToast('Note removed');
-      });
-    });
-  });
-
-  el('noteGrid').addEventListener('click', (e) => {
-    const tickBtn = e.target.closest('[data-tick]');
-    const restoreBtn = e.target.closest('[data-restore]');
-    const editBtn = e.target.closest('[data-edit]');
-    const delBtn = e.target.closest('[data-del]');
-
-    if(tickBtn){
-      const id = tickBtn.dataset.tick;
-      const note = notes.find(n => n.id === id);
-      sendNoteToTrash(id, note ? note.owner : 'Brett', async () => {
-        const { error } = await supabaseClient.from('notes')
-          .update({ is_done: true, completed_at: new Date().toISOString() }).eq('id', id);
-        if(error){ showToast('Could not mark note done'); console.error(error); await loadNotes(); return; }
-        await loadNotes();
-        showToast('Note marked done');
-      });
-      return;
-    }
-
-    if(restoreBtn){
-      const id = restoreBtn.dataset.restore;
-      supabaseClient.from('notes').update({ is_done: false, completed_at: null }).eq('id', id).then(({ error }) => {
-        if(error){ showToast('Could not restore note'); console.error(error); return; }
-        loadNotes();
-        showToast('Note restored');
-      });
-      return;
-    }
-
-    if(editBtn){
-      const note = notes.find(n => n.id === editBtn.dataset.edit);
-      if(note) openDrawer(note);
-      return;
-    }
-
-    if(delBtn){
-      const note = notes.find(n => n.id === delBtn.dataset.del);
-      if(!note) return;
-      if(!confirm('Remove this note? This can\'t be undone.')) return;
-      sendNoteToTrash(note.id, note.owner, () => {
-        supabaseClient.from('notes').delete().eq('id', note.id).then(({ error }) => {
-          if(error){ showToast('Delete failed'); console.error(error); return; }
-          loadNotes();
-          showToast('Note removed');
-        });
-      });
-    }
-  });
-
-  updateOwnerFormSelection();
-  loadNotes();
-})();
 </script>
 
 </body>
+
 </html>
