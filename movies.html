@@ -263,6 +263,18 @@
     .ticket-grid{gap:-4px;}
     .ticket{width:250px;}
   }
+   @media (max-width:640px){
+    .app{grid-template-columns:1fr;}
+    .sidebar{flex-direction:row; align-items:center; padding:16px 20px; gap:16px; overflow-x:auto;}
+    .sidebar::before{display:none;}
+    .nav{flex-direction:row;}
+    .nav-label{display:none;}
+    .sidebar-footer{display:none;}
+    .main{padding:24px 18px 50px;}
+    .curtain-board{padding:44px 14px 30px;} 
+    .ticket-grid{gap:-4px;}
+    .ticket{width:250px;}
+  }
 </style>
 </head>
 <body>
