@@ -175,9 +175,12 @@
   .ticket-add-btn:active{ transform:scale(0.94); }
 
   .ticket-grid{
-    position:relative; z-index:1;
-    column-count:3; column-gap:20px;
-    padding-top:22px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    column-gap: 20px;
+    row-gap: 20px;   
+    align-items: start;    
+    padding-top: 22px;
   }
 
   .ticket{
@@ -186,8 +189,7 @@
     box-shadow:0 12px 24px -6px rgba(0,0,0,0.5), 0 2px 5px rgba(0,0,0,0.25);
     font-family:'Special Elite', monospace;
     transition:transform .15s ease, box-shadow .15s ease;
-    margin-top:-22px; position:relative; z-index:1;
-    break-inside:avoid;
+    position:relative; z-index:1;   
   }
   .ticket:hover{ transform:translateY(-3px); box-shadow:0 18px 30px -8px rgba(0,0,0,0.55); z-index:5; }
 
