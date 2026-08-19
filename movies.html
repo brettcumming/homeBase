@@ -173,15 +173,20 @@
     box-shadow:0 3px 6px rgba(0,0,0,0.3);
   }
   .ticket-add-btn:active{ transform:scale(0.94); }
-
-  .ticket-grid{
+  
+  .ticket-grid {
+    position: relative; 
+    z-index: 1;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    column-gap: 10px;
-    row-gap: 20px;   
-    align-items: start;    
-    padding-top: 22px;
+    grid-template-columns: repeat(3, 1fr); 
+    column-gap: 20px;                      
+    row-gap: 20px;                         
+    align-items: start; 
+    padding-top: 22px;  
+    max-width: 900px; 
+    margin: 0 auto;
   }
+
   .ticket{
     display:flex; width:100%; max-width: 300px; min-height:100px;  margin: 0 auto; 
     background:var(--ticket-paper); border-radius:9px; overflow:hidden;
