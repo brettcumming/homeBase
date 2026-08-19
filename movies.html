@@ -267,6 +267,21 @@
     .curtain-tassel{display:none;}
     .ticket{width:250px;}
   }
+  
+  @media (max-width: 768px) {   
+    .app {
+      display: flex;
+      flex-direction: column;
+    }  
+    .main {
+      padding: 16px;
+    }   
+    .ticket-grid {
+      grid-template-columns: 1fr;
+      row-gap: 20px;
+    }
+  }
+
 </style>
 </head>
 <body>
