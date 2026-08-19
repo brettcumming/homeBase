@@ -151,49 +151,6 @@
       radial-gradient(100% 100% at 50% 0%, transparent 40%, rgba(0,0,0,0.5) 90%);
     z-index: 1;
   } 
-    /* The Animated Spotlight Layer — High Intensity Cinema Beam */
-  .curtain-board::after {
-    content: "";
-    position: absolute;
-    top: -150px; 
-    left: 50%;
-    width: 750px; /* Slightly wider beam for a larger throw */
-    height: 1200px;
-    z-index: 1;
-    pointer-events: none; 
-    
-    /* Layered gradients: A blazing hot white-gold core that bleeds out into an intense ambient light cone */
-    background: 
-      /* Inner hyper-bright light core */
-      radial-gradient(ellipse at top, rgba(255, 250, 235, 0.45) 0%, rgba(255, 240, 200, 0.15) 25%, transparent 55%),
-      /* Outer intense atmospheric wash */
-      radial-gradient(ellipse at top, rgba(255, 235, 180, 0.25) 0%, rgba(255, 215, 130, 0.08) 50%, transparent 75%);
-    
-    /* Shapes the light beam into a tight triangle cone */
-    clip-path: polygon(46% 0%, 54% 0%, 100% 100%, 0% 100%);
-    
-    /* Animates the spotlight movement */
-    transform-origin: top center;
-    animation: spotlight-sweep 12s ease-in-out infinite alternate;
-    
-    /* 'screen' or 'color-dodge' blend modes maximize brightness over the red curtain */
-    mix-blend-mode: screen; 
-    
-    /* Adds a soft volumetric atmospheric blur to the edges of the beam */
-    filter: drop-shadow(0 0 15px rgba(255, 240, 200, 0.3));
-  }
-
-
-  /* The Sweeping Motion Animation */
-  @keyframes spotlight-sweep {
-    0% {
-      transform: translateX(-50%) rotate(-18deg);
-    }
-    100% {
-      transform: translateX(-50%) rotate(18deg);
-    }
-  }
-
   .ticket-add-wrap{
     position:relative; z-index:1; max-width:420px; margin:0 auto 34px;
     background:var(--ticket-paper); border-radius:10px;
