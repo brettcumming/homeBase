@@ -19,8 +19,8 @@
         box-shadow:0 16px 40px rgba(0,0,0,0.45); color:#eaf0fb; box-sizing:border-box;
       }
       #familyLockOverlay .mark{
-        width:44px; height:44px; border-radius:12px; margin:0 auto 16px;
-        background:linear-gradient(155deg,#4c7cf0,#2a4fc4);
+        width:44px; height:44px; border-radius:12px; margin:0 auto 16px;        
+        background:linear-gradient(155deg, #4c7cf0, #befffd);
         display:flex; align-items:center; justify-content:center;
         box-shadow:0 8px 20px rgba(76,124,240,0.3);
       }
