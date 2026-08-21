@@ -98,7 +98,6 @@ button:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px soli
 .veggie-deco{position:absolute;z-index:2;pointer-events:none;filter:drop-shadow(0 8px 10px rgba(0,0,0,.55)) drop-shadow(0 1px 2px rgba(0,0,0,.4));}
 .veggie-deco svg{display:block}
 @media(max-width:900px){.veggie-deco{display:none}}
-
 .planner-head{display:grid;grid-template-columns:repeat(5,minmax(150px,1fr));border-bottom:1px solid var(--border);background:rgba(22,33,59,.7)}
 .day-head{padding:15px 14px 13px;text-align:center;border-right:1px solid var(--border)}.day-head:last-child{border-right:0}
 .day-name{font-family:Sora;font-size:13px;font-weight:700}.day-date{font-size:11px;color:var(--text-muted);margin-top:4px}.day-head.today{background:var(--accent-soft)}
@@ -133,14 +132,16 @@ button:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px soli
 }
 @media(max-width:900px){
   .app{grid-template-columns:1fr}.sidebar{flex-direction:row;align-items:center;padding:16px 20px;gap:16px;overflow-x:auto}.sidebar::before{display:none}.nav{flex-direction:row}.nav-label,.sidebar-footer{display:none}
-  .sidebar{flex-direction:row; align-items:center; padding:16px 20px; gap:16px; overflow-x:auto;}
+  
 }
 @media(max-width:640px){.main{padding:20px 12px 40px}.week-controls{width:100%;justify-content:center}.week-label{min-width:170px}.topbar{margin-bottom:18px}
-  .sidebar{flex-direction:row; align-items:center; padding:16px 20px; gap:16px; overflow-x:auto;}                        
+  .sidebar{flex-direction:row; align-items:center; padding:16px 20px; gap:16px; overflow-x:auto; .sidebar::before{display:none}                        
 }
 
 /* ===== iPhone / narrow-phone layout: stack the planner into single-column day cards ===== */
 @media(max-width:680px){
+  .sidebar{flex-direction:row; align-items:center; padding:16px 20px; gap:16px; overflow-x:auto;}
+  .sidebar::before{display:none;}
   .planner-shell{overflow-x:visible;padding:30px 22px}
   .planner-head{display:none}
   .planner-grid{display:block;min-width:0}
