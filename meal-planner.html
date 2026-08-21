@@ -537,6 +537,16 @@ button:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px soli
 
   loadMeals();
 })();
+
+(function(){
+  var activeItem = document.querySelector('.sidebar .nav-item.active');
+  if(activeItem){
+    requestAnimationFrame(function(){
+      activeItem.scrollIntoView({inline:'center', block:'nearest'});
+    });
+  }
+})();
+  
 </script>
 </body>
 </html>
