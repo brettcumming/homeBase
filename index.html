@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<link rel="apple-touch-icon" href="leaf_icon_grad.png">
-<link rel="icon" type="image/svg+xml" href="leaf_icon.png">  
+<link rel="icon" type="image/svg+xml" href="leaf_icon.png">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#0a0f1e">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -10,20 +9,20 @@
 <meta name="apple-mobile-web-app-title" content="homeBase">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>homeBase — Home</title>
+<title>homeBase — Dashboard</title>
 <style>body{visibility:hidden;}</style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="supabase-client.js"></script>
 <script src="auth.js" defer></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
     --bg:#0a0f1e;
     --bg-elevated:#0d1426;
     --panel:#121b31;
-    --panel-alt:#121b31;
+    --panel-alt:#16213b;
     --border:#22304f;
     --border-soft:rgba(255,255,255,0.06);
     --text-primary:#eaf0fb;
@@ -38,765 +37,339 @@
     --warning-soft:rgba(240,184,76,0.12);
     --danger:#f0664c;
     --danger-soft:rgba(240,102,76,0.13);
+    --radius-sm:8px;
     --radius-md:12px;
     --radius-lg:18px;
     --shadow-soft: 0 8px 24px rgba(0,0,0,0.35);
     --shadow-lift: 0 16px 40px rgba(0,0,0,0.45);
     --note-brett:#d97a3a;
-    --note-brett-edge:#8f4318;
-    --note-brett-text:#fff0c4;
     --note-bernice:#3d6fb0;
-    --note-bernice-edge:#254a7a;
-    --note-bernice-text:#f0a868;
   }
   *{box-sizing:border-box;}
-  html {
-  min-height: 100%;
-  background:
-    radial-gradient(1200px 650px at 82% -8%, rgba(76,124,240,0.14), transparent 60%),
-    radial-gradient(900px 550px at -5% 105%, rgba(51,214,166,0.06), transparent 60%),
-    var(--bg);
-  background-attachment: fixed;
-}
-
-body {
-  margin:0;
-  min-height:100vh;
-  background:transparent;
-  color:var(--text-primary);
-  font-family:'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  -webkit-font-smoothing:antialiased;
-  display:flex;
-  flex-direction:column;
-}
+  html,body{height:100%;}
+  body{
+    margin:0;
+    background:
+      radial-gradient(1100px 600px at 85% -10%, rgba(76,124,240,0.10), transparent 60%),
+      radial-gradient(900px 500px at -10% 110%, rgba(51,214,166,0.05), transparent 60%),
+      var(--bg);
+    color:var(--text-primary);
+    font-family:'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+  }
   h1,h2,h3{font-family:'Sora', sans-serif;}
-  h4{font-family:'Arial Black', sans-serif;}
   .mono{font-family:'JetBrains Mono', monospace;}
-  a{color:inherit; text-decoration:none;}
+  a{color:inherit;}
+  button{font-family:inherit;}
   ::selection{background:var(--accent-soft);}
-  a:focus-visible, button:focus-visible{outline:2px solid var(--accent); outline-offset:2px;}
-
-  .wrap{
-    max-width:1380px; margin:0 auto; padding:64px 32px 40px; flex:1;
-    display:flex; flex-direction:column; align-items:center; width:100%;
+  button:focus-visible, input:focus-visible, select:focus-visible{
+    outline:2px solid var(--accent); outline-offset:2px;
   }
 
-  .hero{text-align:center; margin-bottom:52px;}
-  .-wrap{
-  position:relative; width:64px; margin:0 auto 22px;
-  display:flex; align-items:center; justify-content:center;
+  .app{display:grid; grid-template-columns:260px 1fr; min-height:100vh;}
+
+  .sidebar{
+    background:linear-gradient(180deg, var(--bg-elevated), var(--bg));
+    border-right:1px solid var(--border-soft);
+    padding:28px 20px; display:flex; flex-direction:column; gap:32px; position:relative;
   }
+  .sidebar::before{
+    content:""; position:absolute; top:0; left:0; bottom:0; width:2px;
+    background:linear-gradient(180deg, var(--accent), transparent 70%); opacity:0.6;
+  }
+  .brand{display:flex; align-items:center; gap:12px; padding:0 4px;}
   .brand-mark{
-    width:64px; height:64px; border-radius:18px; margin:0 auto 22px;
-    /*background:linear-gradient(155deg, var(--accent), #2a4fc4);*/
+    width:40px; height:40px; border-radius:11px;
     background:linear-gradient(155deg, var(--accent), #befffd);
     display:flex; align-items:center; justify-content:center;
-    box-shadow:0 12px 32px rgba(76,124,240,0.35);
+    box-shadow:0 6px 16px rgba(76,124,240,0.35); flex-shrink:0;
   }
-  .brand-mark svg{width:42px; height:42px;}
-  .hero h1{font-size:32px; font-weight:800; margin:0 0 10px; letter-spacing:-0.4px;}
-  .hero h4{font-size:34px; font-weight:700; margin:0 0 10px; letter-spacing:-0.2px;}
-  .hero p{margin:0; color:var(--text-secondary); font-size:15px; max-width:46ch; margin:0 auto;}
-
-
-  .ledger-stitch{
-    height:1px; width:100%; max-width:520px; margin:36px 0 40px;
-    background-image:linear-gradient(90deg, var(--border) 50%, transparent 50%);
-    background-size:10px 1px; background-repeat:repeat-x; opacity:0.7;
+  .brand-mark img{width:24px; height:24px;}
+  .brand-text{display:flex; flex-direction:column; line-height:1.25;}
+  .brand-text strong{font-family:'Sora'; font-size:15.5px; font-weight:700; letter-spacing:0.2px;}
+  .brand-text span{font-size:11.5px; color:var(--text-muted); font-weight:500;}
+  .nav{display:flex; flex-direction:column; gap:4px;}
+  .nav-label{
+    font-size:10.5px; text-transform:uppercase; letter-spacing:1.2px;
+    color:var(--text-muted); font-weight:600; padding:0 12px; margin-bottom:6px;
+  }
+  .nav-item{
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    padding:10px 12px; border-radius:8px; font-size:14px; font-weight:500;
+    color:var(--text-secondary); cursor:pointer; transition:background .15s ease, color .15s ease;
+    border:1px solid transparent; text-decoration:none;
+  }
+  .nav-item .left{display:flex; align-items:center; gap:10px;}
+  .nav-item svg{width:17px; height:17px; opacity:0.85;}
+  .nav-item.active{background:var(--accent-soft); color:var(--text-primary); border-color:rgba(76,124,240,0.35);}
+  .nav-item:not(.active):hover{background:rgba(255,255,255,0.03); color:var(--text-primary);}
+  .sidebar-footer{
+    margin-top:auto; padding-top:18px; border-top:1px dashed var(--border);
+    font-size:11.5px; color:var(--text-muted); display:flex; flex-direction:column; gap:4px;
   }
 
-  .grid{
-    display:grid; grid-template-columns:repeat(5, 1fr); gap:12px; width:100%;
+  .main{padding:32px 40px 60px; max-width:1400px; width:100%;}
+  .topbar{
+    display:flex; align-items:flex-start; justify-content:space-between; gap:24px;
+    margin-bottom:28px; flex-wrap:wrap;
   }
-  
-  .card{    
-    height:165px;
-    position:relative; background:linear-gradient(160deg, var(--panel), var(--panel-alt));
-    border:1px solid var(--border-soft); border-radius:var(--radius-lg); padding:22px;
-    display:flex; flex-direction:column; gap:11px; transition:transform .15s ease, border-color .15s ease, box-shadow .15s ease;
+  .topbar h1{font-size:26px; font-weight:700; margin:0 0 6px; letter-spacing:-0.3px;}
+  .topbar p{margin:0; color:var(--text-secondary); font-size:14px; max-width:50ch;}
+
+  .btn{
+    display:inline-flex; align-items:center; gap:6px; padding:8px 14px; border-radius:9px;
+    border:1px solid var(--border); font-size:12.5px; font-weight:600; cursor:pointer;
+    background:var(--panel); color:var(--text-secondary); text-decoration:none;
+    transition:color .15s ease, border-color .15s ease, background .15s ease;
   }
-  .card.live{cursor:pointer;}
-  .card.live:hover{transform:translateY(-3px); border-color:rgba(255,255,255,0.16); box-shadow:var(--shadow-lift);}
-  .card.disabled{opacity:0.55;}
-  .card-top{display:flex; align-items:flex-start; justify-content:space-between; gap:12px;}
-  .card-icon{
-    width:44px; height:44px; border-radius:12px; display:flex; align-items:center; justify-content:center;
-    flex-shrink:0; position:relative;
-  }  
-  .card-icon{ position:relative; } /* already present — just confirming this stays */
-  .expense-badge{
-    position:absolute; top:-8px; right:-8px; min-width:20px; height:20px; padding:0 5px;
-    border-radius:999px; background:#ff3b30; color:#fff;
-    font-family:'Inter', sans-serif; font-size:11.5px; font-weight:700; line-height:20px;
-    text-align:center; box-shadow:0 1px 4px rgba(0,0,0,0.45), 0 0 0 2px var(--panel);
-    display:none; z-index:5;
-  }  
-  .expense-badge.show{display:block;}
+  .btn:hover{color:var(--text-primary); border-color:rgba(255,255,255,0.18); background:var(--panel-alt);}
+  .btn svg{width:14px; height:14px;}
 
-  .payment-badge{
-    position:absolute; top:-8px; right:-8px; min-width:20px; height:20px; padding:0 5px;
-    border-radius:999px; background:#ff3b30; color:#fff;
-    font-family:'Inter', sans-serif; font-size:11.5px; font-weight:700; line-height:20px;
-    text-align:center; box-shadow:0 1px 4px rgba(0,0,0,0.45), 0 0 0 2px var(--panel);
-    display:none; z-index:5;
-  }  
-  .payment-badge.show{display:block;}
-
-  .note-badge{
-    position:absolute; top:-8px; right:-8px; min-width:20px; height:20px; padding:0 5px;
-    border-radius:999px; background:#ff3b30; color:#fff;
-    font-family:'Inter', sans-serif; font-size:11.5px; font-weight:700; line-height:20px;
-    text-align:center; box-shadow:0 1px 4px rgba(0,0,0,0.45), 0 0 0 2px var(--panel);
-    display:none; z-index:5;
-  }  
-  .note-badge.show{display:block;}
-
-  .shopping-badge{
-    position:absolute; top:-8px; right:-8px; min-width:20px; height:20px; padding:0 5px;
-    border-radius:999px; background:#ff3b30; color:#fff;
-    font-family:'Inter', sans-serif; font-size:11.5px; font-weight:700; line-height:20px;
-    text-align:center; box-shadow:0 1px 4px rgba(0,0,0,0.45), 0 0 0 2px var(--panel);
-    display:none; z-index:5;
-  }  
-  .shopping-badge.show{display:block;}
-  
-  .card-icon svg{width:21px; height:21px;}
-  .card.payments .card-icon{background:var(--accent-soft); color:var(--accent-hover);}
-  .card.documents .card-icon{background:var(--success-soft); color:var(--success);}
-  .card.expenses .card-icon{background:var(--warning-soft); color:var(--warning);}
-  .card.family .card-icon{background:rgba(255,255,255,0.06); color:var(--text-secondary);}
-  .card.bond .card-icon{background:rgba(255,255,255,0.06); color:var(--text-secondary);}
-  .card.medical .card-icon{background:rgba(255,255,255,0.06); color:var(--text-secondary);}
-  .card.pets .card-icon{background:rgba(255,255,255,0.06); color:var(--text-secondary);}
-  .card.notes .card-icon{background:rgba(255,255,255,0.06); color:var(--text-secondary);}
-
-  .soon-tag{
-    font-size:10px; font-weight:700; letter-spacing:0.5px; background:rgba(255,255,255,0.06);
-    color:var(--text-muted); padding:4px 9px; border-radius:20px; text-transform:uppercase;
-    align-self:flex-start; margin-top:2px;
-  }
-  .card h2{font-size:19px; font-weight:700; margin:0;}
-  .card p{margin:0; font-size:13.5px; color:var(--text-secondary); line-height:1.5;}
-  .card-stat{
-    font-size:12.5px; color:var(--text-muted); display:flex; align-items:center; gap:6px;
-    padding-top:10px; margin-top:auto; border-top:1px solid var(--border-soft);
-  }
-  .card-stat strong{color:var(--text-secondary); font-weight:600;}
-  .card-cta{
-    display:inline-flex; align-items:center; gap:6px; font-size:13px; font-weight:600;
-    color:var(--accent-hover); margin-top:4px;
-  }
-  .card-cta svg{width:14px; height:14px; transition:transform .15s ease;}
-  .card.live:hover .card-cta svg{transform:translateX(3px);}
-
-  footer.note{color:var(--text-muted); font-size:12px; text-align:center; padding:20px 0 32px;}
-
-  .profile-widget{position:fixed; top:22px; right:22px; z-index:55; width:65px;}
-  .profile-chip{
-    width:65px;
-    display:flex; align-items:center; gap:6px; padding:5px; border-radius:999px;
+  .stats{display:grid; grid-template-columns:repeat(4, 1fr); gap:16px; margin-bottom:26px;}
+  .stat-card{
     background:linear-gradient(160deg, var(--panel), var(--panel-alt));
-    border:1px solid var(--border-soft); box-shadow:var(--shadow-soft); cursor:pointer;
+    border:1px solid var(--border-soft); border-radius:var(--radius-md); padding:18px 20px;
   }
-  .profile-chip:hover{border-color:rgba(255,255,255,0.18);}
-  .profile-chip .chevron{width:14px; height:14px; color:var(--text-muted); margin-right:4px; transition:transform .15s ease;}
-  .profile-chip.open .chevron{transform:rotate(180deg);}
-  .profile-avatar{
-    width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center;
-    font-family:'Sora'; font-weight:700; font-size:13px; color:#fff; flex-shrink:0;
+  .stat-card .icon-wrap{
+    width:32px; height:32px; border-radius:9px; display:flex; align-items:center; justify-content:center;
+    margin-bottom:14px;
   }
-  .profile-avatar-lg{width:44px; height:44px; font-size:16px;}
-  .profile-menu{
-    position:absolute; top:calc(100% + 10px); right:0; width:290px;
-    background:linear-gradient(180deg, var(--bg-elevated), var(--bg));
-    border:1px solid var(--border); border-radius:14px; box-shadow:var(--shadow-lift);
-    padding:16px; opacity:0; pointer-events:none; transform:translateY(-6px);
-    transition:opacity .15s ease, transform .15s ease;
-  }
-  .profile-menu.show{opacity:1; pointer-events:auto; transform:translateY(0);}
-  .profile-menu-header{display:flex; align-items:center; gap:12px; padding-bottom:14px; margin-bottom:12px; border-bottom:1px solid var(--border-soft);}
-  .profile-name{font-family:'Sora'; font-weight:700; font-size:14px; color:var(--text-primary);}
-  .profile-email{font-size:11.5px; color:var(--text-muted); word-break:break-all;}
-  .profile-menu-item{
-    display:flex; align-items:center; gap:9px; width:100%; padding:9px 10px; border-radius:9px;
-    background:none; border:none; color:var(--text-secondary); font-size:13px; font-weight:600;
-    cursor:pointer; text-align:left; font-family:inherit;
-  }
-  .profile-menu-item:hover{background:var(--danger-soft); color:var(--danger);}
-  .profile-menu-item svg{width:15px; height:15px; flex-shrink:0;}
+  .stat-card .icon-wrap svg{width:16px; height:16px;}
+  .stat-card .label{font-size:12px; color:var(--text-muted); font-weight:600; text-transform:uppercase; letter-spacing:0.5px;}
+  .stat-card .value{font-family:'Sora'; font-size:22px; font-weight:700; margin-top:6px;}
+  .stat-card .sub{font-size:12px; color:var(--text-muted); margin-top:4px;}
+  .stat-card.spend .icon-wrap{background:var(--accent-soft); color:var(--accent-hover);}
+  .stat-card.pay .icon-wrap{background:var(--danger-soft); color:var(--danger);}
+  .stat-card.maint .icon-wrap{background:var(--warning-soft); color:var(--warning);}
+  .stat-card.shop .icon-wrap{background:var(--success-soft); color:var(--success);}
 
-  @media (max-width:640px){
-    .profile-widget{top:14px; right:14px;}
+  .dash-grid{display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px; align-items:start;}
+  .dash-grid.full{grid-template-columns:1fr;}
+
+  .card{
+    background:linear-gradient(160deg, var(--panel), var(--panel-alt));
+    border:1px solid var(--border-soft); border-radius:var(--radius-md);
+    box-shadow:var(--shadow-soft); overflow:hidden;
+  }
+  .card-head{
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    padding:16px 20px; border-bottom:1px solid var(--border-soft);
+  }
+  .card-head h2{font-size:14.5px; margin:0; font-weight:700;}
+  .card-head .view-all{
+    font-size:12px; color:var(--accent-hover); font-weight:600; text-decoration:none; white-space:nowrap;
+    display:flex; align-items:center; gap:4px;
+  }
+  .card-head .view-all:hover{color:var(--accent);}
+  .card-head .view-all svg{width:12px; height:12px;}
+  .card-body{padding:8px 10px;}
+
+  .row{
+    display:flex; align-items:center; gap:12px; padding:11px 10px; border-radius:9px;
+    transition:background .12s ease;
+  }
+  .row:hover{background:rgba(255,255,255,0.025);}
+  .row .rmain{flex:1; min-width:0;}
+  .row .rtitle{font-size:13.5px; font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .row .rsub{font-size:11.5px; color:var(--text-muted); margin-top:2px;}
+  .row .ramount{font-family:'JetBrains Mono'; font-size:13px; font-weight:600; flex-shrink:0;}
+
+  .pill{
+    display:inline-flex; align-items:center; gap:5px; padding:3px 9px;
+    border-radius:20px; font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:0.3px; flex-shrink:0;
+  }
+  .pill::before{content:""; width:5px; height:5px; border-radius:50%;}
+  .pill.pending{background:var(--warning-soft); color:var(--warning);}
+  .pill.pending::before{background:var(--warning);}
+  .pill.overdue{background:var(--danger-soft); color:var(--danger);}
+  .pill.overdue::before{background:var(--danger);}
+  .pill.planning{background:rgba(255,255,255,0.06); color:var(--text-secondary);}
+  .pill.planning::before{background:var(--text-secondary);}
+  .pill.in-progress{background:var(--accent-soft); color:var(--accent-hover);}
+  .pill.in-progress::before{background:var(--accent-hover);}
+  .pill.on-hold{background:var(--warning-soft); color:var(--warning);}
+  .pill.on-hold::before{background:var(--warning);}
+
+  .cat-pill{
+    display:inline-block; padding:3px 9px; border-radius:20px; font-size:10.5px; font-weight:600;
+    background:var(--accent-soft); color:var(--accent-hover); flex-shrink:0;
   }
 
-  /* Important notes strip — replaces the old planner tile */
-  .important-notes{width:100%; max-width:900px; margin:0 auto 40px;}
-  .important-notes-header{text-align:center; margin-bottom:20px;}
-  .important-notes-header h2{font-size:18px; margin:0 0 4px; font-weight:700;}
-  .important-notes-header p{margin:0; font-size:12.5px; color:var(--text-secondary);}
-  .important-notes-header a{font-size:12px; color:var(--accent-hover); font-weight:600;}
+  .check-row{display:flex; align-items:center; gap:11px; padding:9px 10px; border-radius:9px;}
+  .check-row:hover{background:rgba(255,255,255,0.025);}
+  .check-dot{
+    width:16px; height:16px; border-radius:5px; border:1.5px solid var(--border);
+    background:var(--panel-alt); flex-shrink:0;
+  }
+  .check-row .ctext{font-size:13px; color:var(--text-secondary); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
 
   .note-row{
-    display:flex; flex-wrap:wrap; justify-content:center; gap:22px 20px;
+    display:flex; align-items:flex-start; gap:10px; padding:11px 10px; border-radius:9px; border-left:3px solid transparent;
   }
-  .sticky-note{
-    position:relative; width:170px; min-height:88px; padding:20px 14px 12px;
-    border-radius:3px;
-    box-shadow:0 10px 22px -6px rgba(0,0,0,0.4), 0 2px 4px rgba(0,0,0,0.15);
-    display:flex; flex-direction:column; gap:6px;
-    transition:transform .18s ease, box-shadow .18s ease;
-    cursor:pointer;
-  }
-  .sticky-note:hover{transform:translateY(-4px) rotate(0deg) !important; box-shadow:0 16px 30px -8px rgba(0,0,0,0.45), 0 3px 6px rgba(0,0,0,0.16); z-index:5;}
-  .sticky-note.owner-brett{background:linear-gradient(155deg, #e08a45, #b85a24); border-bottom:3px solid var(--note-brett-edge);}
-  .sticky-note.owner-bernice{background:linear-gradient(155deg, #6ba3e0, #2f5c95); border-bottom:3px solid var(--note-bernice-edge);}
- 
-  .sticky-cat{
-    font-family:'Inter'; font-size:8px; font-weight:700; text-transform:uppercase; letter-spacing:0.4px;
-    padding:2px 6px; border-radius:20px; background:rgba(0,0,0,0.12); color:#fff; align-self:flex-start;
-  }
-  .sticky-title{font-family:'Sora'; font-weight:700; font-size:12.5px; line-height:1.3;}
-  .sticky-title-only{flex:1; display:flex; align-items:center;}
-  .owner-brett .sticky-title{color:var(--note-brett-text);}
-  .owner-bernice .sticky-title{color:var(--note-bernice-text);}
-  .sticky-footer{font-family:'Inter'; font-size:8px; margin-top:auto; padding-top:5px; opacity:0.7;}
-  .owner-brett .sticky-footer{color:var(--note-brett-text);}
-  .owner-bernice .sticky-footer{color:var(--note-bernice-text);}
+  .note-row:hover{background:rgba(255,255,255,0.025);}
+  .note-row.owner-brett{border-left-color:var(--note-brett);}
+  .note-row.owner-bernice{border-left-color:var(--note-bernice);}
+  .note-row .rmain{min-width:0;}
+  .note-row .rtitle{white-space:normal;}
+  .note-row .rsub{white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
 
-  .important-empty{
-    text-align:center; font-size:13px; color:var(--text-muted); padding:14px 0;
+  .empty-row{
+    padding:26px 14px; text-align:center; color:var(--text-muted); font-size:12.5px;
   }
+  .skeleton-row{padding:11px 10px; color:var(--text-muted); font-size:12.5px;}
 
-  /* Drawer / overlay / toast (shared pattern) */
-  .overlay{
-    position:fixed; inset:0; background:rgba(4,7,16,0.6); backdrop-filter:blur(2px);
-    opacity:0; pointer-events:none; transition:opacity .2s ease; z-index:40;
-  }
-  .overlay.show{opacity:1; pointer-events:auto;}
-  .drawer{
-    position:fixed; top:0; right:0; bottom:0; width:420px; max-width:92vw;
-    background:linear-gradient(180deg, var(--bg-elevated), var(--bg));
-    border-left:1px solid var(--border); box-shadow:var(--shadow-lift);
-    transform:translateX(100%); transition:transform .25s cubic-bezier(.4,0,.2,1);
-    z-index:50; display:flex; flex-direction:column; text-align:left;
-  }
-  .drawer.show{transform:translateX(0);}
-  .drawer-header{
-    padding:22px 24px; border-bottom:1px solid var(--border-soft);
-    display:flex; align-items:center; justify-content:space-between;
-  }
-  .drawer-header h2{font-size:17px; margin:0; font-weight:700;}
-  .drawer-close{
-    width:30px; height:30px; border-radius:8px; background:var(--panel); border:1px solid var(--border);
-    color:var(--text-secondary); cursor:pointer; display:flex; align-items:center; justify-content:center;
-  }
-  .drawer-close:hover{color:var(--text-primary);}
-  .drawer-body{padding:22px 24px; overflow-y:auto; flex:1; display:flex; flex-direction:column; gap:16px;}
-  .field label{display:block; font-size:12px; font-weight:600; color:var(--text-secondary); margin-bottom:7px; text-align:left;}
-  .field-row{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
-  input, select{
-    background:var(--panel); border:1px solid var(--border); color:var(--text-primary);
-    padding:9px 12px; border-radius:9px; font-size:13.5px; width:100%; font-family:inherit;
-  }
-  select{cursor:pointer;}
-  .drawer-footer{padding:18px 24px; border-top:1px solid var(--border-soft); display:flex; gap:10px;}
-  .drawer-footer .btn{flex:1; justify-content:center;}
-  .btn{
-    display:inline-flex; align-items:center; gap:8px; padding:10px 18px; border-radius:10px;
-    border:1px solid transparent; font-size:13.5px; font-weight:600; cursor:pointer;
-  }
-  .btn-primary{background:linear-gradient(155deg, var(--accent-hover), var(--accent)); color:#08101f;}
-  .btn-ghost{background:var(--panel); color:var(--text-secondary); border-color:var(--border);}
+  footer.note{margin-top:10px; color:var(--text-muted); font-size:12px; text-align:center;}
 
-  .toast{
-    position:fixed; bottom:26px; right:26px; background:var(--panel-alt); border:1px solid var(--border);
-    padding:13px 18px; border-radius:10px; font-size:13.5px; display:flex; align-items:center; gap:10px;
-    box-shadow:var(--shadow-lift); transform:translateY(20px); opacity:0; transition:all .25s ease; z-index:60;
-    text-align:left;
+  @media (max-width:1100px){
+    .dash-grid{grid-template-columns:1fr;}
   }
-  .toast.show{transform:translateY(0); opacity:1;}
-  .toast svg{width:16px; height:16px; color:var(--success); flex-shrink:0;} 
-
-@media (max-width:640px){
-    .wrap{padding:36px 16px 20px;}
-    .hero{margin-bottom:32px;}
-    .grid{grid-template-columns:repeat(2, 1fr); gap:10px;}
-    .card{height:auto; min-height:112px; padding:18px;}
-    .important-notes{margin:0 auto 28px;}
-    .sticky-note{width:135px; min-height:78px; padding:16px 11px 10px;}
-    .toast{left:16px; right:16px; bottom:18px;}   
+  @media (max-width:900px){
+    .app{grid-template-columns:1fr;}
+    .sidebar{flex-direction:row; align-items:center; padding:16px 20px; gap:16px; overflow-x:auto;}
+    .sidebar::before{display:none;}
+    .nav{flex-direction:row;}
+    .nav-label{display:none;}
+    .sidebar-footer{display:none;}
+    .main{padding:24px 18px 50px;}
+    .stats{grid-template-columns:1fr 1fr;}
+  }
+  @media (max-width:480px){
+    .stats{grid-template-columns:1fr;}
   }
 </style>
 </head>
 <body>
 
-<div class="profile-widget" id="profileWidget">
-  <button class="profile-chip" id="profileChip" aria-label="Account menu">
-    <span class="profile-avatar" id="profileAvatar">·</span>
-    <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
-  </button>
-  <div class="profile-menu" id="profileMenu">
-    <div class="profile-menu-header">
-      <span class="profile-avatar profile-avatar-lg" id="profileAvatarLg">·</span>
-      <div>
-        <div class="profile-name" id="profileName">Signed in</div>
-        <div class="profile-email" id="profileEmail">—</div>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark">
+        <img src="leaf_icon.png" width="24" height="24" alt="">
+      </div>
+      <div class="brand-text">
+        <strong>homeBase</strong>
+        <span>Dashboard</span>
       </div>
     </div>
-    <button class="profile-menu-item" id="logoutBtn">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
-      Sign out
-    </button>
-  </div>
-</div>
 
-<div class="wrap">
-
-  <div class="hero">
-    <div class="brand-mark">
-      <img src="leaf_icon.png" width="52" height="52" alt="">  
-    </div>
-   <!-- <h4>homeBase</h4> -->
-   <!-- <h4>home<span style="color:var(--accent); font-size:40px;">Base</span></h4> -->
-    <h4>home<span style="color:var(--accent); font-size:42px; -webkit-text-stroke:1.4px var(--accent);">Base</span></h4>
-    <p>Shared home for payments, documents & all things important.</p>
-  </div>
-
-  <div class="important-notes">
-    <div class="important-notes-header">
-      <h2>Important</h2>
-      <p>Pulled from notes — <a href="notes.html">manage all notes →</a></p>
-    </div>
-    <div class="note-row" id="importantNotesRow"></div>
-  </div>
-
-  <div class="grid">
-    <a href="shoppingList.html" class="card live payments">
-      <div class="card-top">
-        <div class="card-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <nav class="nav">
+      <div class="nav-label">Workspace</div>
+      <a href="index.html" class="nav-item active">
+        <div class="left">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v10a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V10"/></svg>
+          Home
+        </div>
+      </a>
+      <a href="shoppingList.html" class="nav-item">
+        <div class="left">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="9" cy="21" r="1"/><circle cx="19" cy="21" r="1"/>
             <path d="M2.5 3h2l2.6 12.4a2 2 0 0 0 2 1.6h8.4a2 2 0 0 0 2-1.6L21 8H6"/>
           </svg>
-          <span class="shopping-badge" id="shoppingBadge">0</span>
+          Shopping List
         </div>
-      </div>
-      <h2>Shopping List</h2>
-      <p>Fill your cupboard.</p>
-      <span style="text-align:right; font-size: 10px; color: #939EBA">
-  Open shopping list
-  <svg
-    viewBox="0 0 12 12"
-    width="10"
-    height="10"
-    fill="none"
-    stroke="currentColor"
-    stroke-width="1.8"
-    stroke-linecap="round"
-    stroke-linejoin="round"
-    style="vertical-align: middle; margin-left: 4px;"
-  >
-    <path d="M2 6h8" />
-    <path d="M7 2.5L10.5 6 7 9.5" />
-  </svg>
-      </span>
-      <div class="card-stat"></div>      
-    </a>
-
-    <a href="payments.html" class="card live payments">
-      <div class="card-top">
-        <div class="card-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 9h18M7 14h4"/></svg>
-          <span class="payment-badge" id="paymentBadge">0</span>
+      </a>
+      <a href="payments.html" class="nav-item">
+        <div class="left">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 9h18M7 14h4"/></svg>
+          Payments
         </div>
-      </div>
-      <h2>Payments</h2>
-      <p>Track payments.</p>
-      <span style="text-align:right; font-size: 10px; color: #939EBA">
-  Open payments
-  <svg
-    viewBox="0 0 12 12"
-    width="10"
-    height="10"
-    fill="none"
-    stroke="currentColor"
-    stroke-width="1.8"
-    stroke-linecap="round"
-    stroke-linejoin="round"
-    style="vertical-align: middle; margin-left: 4px;"
-  >
-    <path d="M2 6h8" />
-    <path d="M7 2.5L10.5 6 7 9.5" />
-  </svg>
-      </span>
-      <div class="card-stat"></div>      
-    </a>
-
-    <a href="documents.html" class="card live payments">
-      <div class="card-top">
-        <div class="card-icon">
-           <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/></svg> 
+      </a>
+      <a href="expenses.html" class="nav-item">
+        <div class="left">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          Expenses
         </div>
-      </div>
-      <h2>Documents</h2>
-      <p>Store documents.</p>
-      <span style="text-align:right; font-size: 10px; color: #939EBA">
-  Open docs
-  <svg
-    viewBox="0 0 12 12"
-    width="10"
-    height="10"
-    fill="none"
-    stroke="currentColor"
-    stroke-width="1.8"
-    stroke-linecap="round"
-    stroke-linejoin="round"
-    style="vertical-align: middle; margin-left: 4px;"
-  >
-    <path d="M2 6h8" />
-    <path d="M7 2.5L10.5 6 7 9.5" />
-  </svg>
-      </span>
-      <div class="card-stat"></div>      
-    </a>
-
-    <a href="expenses.html" class="card live payments">
-      <div class="card-top">
-        <div class="card-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.8"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-          <span class="expense-badge" id="expenseBadge">0</span>
+      </a>
+      <a href="documents.html" class="nav-item">
+        <div class="left">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/></svg>
+          Documents
         </div>
-      </div>
-      <h2>Expenses</h2>
-      <p>Daily spending.</p>
-      <span style="text-align:right; font-size: 10px; color: #939EBA">
-  Open expenses
-  <svg
-    viewBox="0 0 12 12"
-    width="10"
-    height="10"
-    fill="none"
-    stroke="currentColor"
-    stroke-width="1.8"
-    stroke-linecap="round"
-    stroke-linejoin="round"
-    style="vertical-align: middle; margin-left: 4px;"
-  >
-    <path d="M2 6h8" />
-    <path d="M7 2.5L10.5 6 7 9.5" />
-  </svg>
-      </span>
-      <div class="card-stat"></div>      
-    </a>
-
-    <a href="family-details.html" class="card live payments">
-      <div class="card-top">
-        <div class="card-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.8"><path d="M20 21a8 8 0 0 0-16 0"/><circle cx="12" cy="7" r="4"/></svg>
+      </a>
+      <a href="family-details.html" class="nav-item">
+        <div class="left">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 21a8 8 0 0 0-16 0"/><circle cx="12" cy="7" r="4"/></svg>
+          Family Details
         </div>
-      </div>
-      <h2>Family</h2>
-      <p>Family info.</p>
-      <span style="text-align:right; font-size: 10px; color: #939EBA">
-  Open family
-  <svg
-    viewBox="0 0 12 12"
-    width="10"
-    height="10"
-    fill="none"
-    stroke="currentColor"
-    stroke-width="1.8"
-    stroke-linecap="round"
-    stroke-linejoin="round"
-    style="vertical-align: middle; margin-left: 4px;"
-  >
-    <path d="M2 6h8" />
-    <path d="M7 2.5L10.5 6 7 9.5" />
-  </svg>
-      </span>
-      <div class="card-stat"></div>      
-    </a>
-
-    <a href="bond.html" class="card live payments">
-      <div class="card-top">
-        <div class="card-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M3 10.5L12 3l9 7.5"/>
-            <path d="M5 9.5V21h14V9.5"/>
-            <path d="M9 21v-6h6v6"/>
-          </svg>
+      </a>
+      <a href="bond.html" class="nav-item">
+        <div class="left">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-9"/><path d="M9 20v-6h6v6"/></svg>
+          Bond Payments
         </div>
-      </div>
-      <h2>Bond</h2>
-      <p>Track payments.</p>
-      <span style="text-align:right; font-size: 10px; color: #939EBA">
-  Open bond
-  <svg
-    viewBox="0 0 12 12"
-    width="10"
-    height="10"
-    fill="none"
-    stroke="currentColor"
-    stroke-width="1.8"
-    stroke-linecap="round"
-    stroke-linejoin="round"
-    style="vertical-align: middle; margin-left: 4px;"
-  >
-    <path d="M2 6h8" />
-    <path d="M7 2.5L10.5 6 7 9.5" />
-  </svg>
-      </span>
-      <div class="card-stat"></div>      
-    </a>
-
-    <a href="medical.html" class="card live payments">
-      <div class="card-top">
-        <div class="card-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.8"><path d="M19 14c1.5-1.5 3-3.5 3-5.5A4.5 4.5 0 0 0 17.5 4c-1.7 0-3 .7-4.5 2.5C11.5 4.7 10.2 4 8.5 4A4.5 4.5 0 0 0 4 8.5C4 13 12 21 12 21s2.5-2.4 4.5-4.5"/><path d="M9 11h3m0 0h3m-3 0V8m0 3v3"/></svg>
+      </a>
+      <a href="medical.html" class="nav-item">
+        <div class="left">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M19 14c1.5-1.5 3-3.5 3-5.5A4.5 4.5 0 0 0 17.5 4c-1.7 0-3 .7-4.5 2.5C11.5 4.7 10.2 4 8.5 4A4.5 4.5 0 0 0 4 8.5C4 13 12 21 12 21s2.5-2.4 4.5-4.5"/><path d="M9 11h3m0 0h3m-3 0V8m0 3v3"/></svg>
+          Medical
         </div>
-      </div>
-      <h2>Medical</h2>
-      <p>Medical docs.</p>
-      <span style="text-align:right; font-size: 10px; color: #939EBA">
-  Open medical
-  <svg
-    viewBox="0 0 12 12"
-    width="10"
-    height="10"
-    fill="none"
-    stroke="currentColor"
-    stroke-width="1.8"
-    stroke-linecap="round"
-    stroke-linejoin="round"
-    style="vertical-align: middle; margin-left: 4px;"
-  >
-    <path d="M2 6h8" />
-    <path d="M7 2.5L10.5 6 7 9.5" />
-  </svg>
-      </span>
-      <div class="card-stat"></div>     
-    </a>
-
-    <a href="pets.html" class="card live payments">
-      <div class="card-top">
-        <div class="card-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round">
+      </a>
+      <a href="pets.html" class="nav-item">
+        <div class="left">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
             <ellipse cx="12" cy="16.2" rx="7" ry="5.5"/>
             <ellipse cx="5.5" cy="7.5" rx="2.9" ry="4"/>
             <ellipse cx="12" cy="4.8" rx="2.9" ry="4"/>
             <ellipse cx="18.5" cy="7.5" rx="2.9" ry="4"/>
           </svg>
+          Pets
         </div>
-      </div>
-      <h2>Pets</h2>
-      <p>Pets info.</p>
-      <span style="text-align:right; font-size: 10px; color: #939EBA">
-      Open pets
-        <svg
-          viewBox="0 0 12 12"
-          width="10"
-          height="10"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.8"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          style="vertical-align: middle; margin-left: 4px;"
-        >
-          <path d="M2 6h8" />
-          <path d="M7 2.5L10.5 6 7 9.5" />
-        </svg>
-      </span>
-      <div class="card-stat"></div>      
-    </a>
-
-    <a href="property.html" class="card live payments">
-      <div class="card-top">
-        <div class="card-icon">       
-          <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      </a>
+      <a href="property.html" class="nav-item">
+        <div class="left">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
             <path d="M14.7 2.7a5.2 5.2 0 0 0-6.9 6.9l-5.1 5.1a2 2 0 0 0 0 2.8l1.8 1.8a2 2 0 0 0 2.8 0l5.1-5.1a5.2 5.2 0 0 0 6.9-6.9l-3.2 3.2-2.6-.6-.6-2.6 3.2-3.2a5.2 5.2 0 0 0-1.4-1.4Z"/>
             <circle cx="5.5" cy="18.5" r="1"/>
           </svg>
+          Home Maintenance
         </div>
-      </div>    
-      <h2>Home</h2>
-      <p>Maintenance.</p>
-      <span style="text-align:right; font-size: 10px; color: #939EBA">
-      Open maintenance
-        <svg
-          viewBox="0 0 12 12"
-          width="10"
-          height="10"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.8"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          style="vertical-align: middle; margin-left: 4px;"
-        >
-          <path d="M2 6h8" />
-          <path d="M7 2.5L10.5 6 7 9.5" />
-        </svg>
-      </span>
-      <div class="card-stat"></div>      
-    </a>
-
-    <a href="goals.html" class="card live payments">
-      <div class="card-top">
-        <div class="card-icon">       
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="#ffffff"
-            stroke-width="1.4"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
+      </a>
+      <a href="goals.html" class="nav-item">
+        <div class="left">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
             <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z" />
             <path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z" />
             <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0" />
             <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5" />
           </svg>
+          Goal Tracker
         </div>
-      </div>    
-      <h2>Goals</h2>
-      <p>Goal Tracker.</p>
-      <span style="text-align:right; font-size: 10px; color: #939EBA">
-      Open goals
-        <svg
-          viewBox="0 0 12 12"
-          width="10"
-          height="10"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.8"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          style="vertical-align: middle; margin-left: 4px;"
-        >
-          <path d="M2 6h8" />
-          <path d="M7 2.5L10.5 6 7 9.5" />
-        </svg>
-      </span>
-      <div class="card-stat"></div>      
-    </a>
-
-    <a href="notes.html" class="card live payments">
-      <div class="card-top">
-        <div class="card-icon">       
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="#ffffff"
-            stroke-width="1.4"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
+      </a>
+      <a href="notes.html" class="nav-item">
+        <div class="left">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
             <path d="M4 20l1.2-4.5L15.7 5a2.3 2.3 0 0 1 3.3 3.3L8.5 19.1 4 20z" />
             <path d="M13.2 7.5l3.3 3.3" />
             <path d="M5.2 15.5l3.3 3.3" />
           </svg>
-           <span class="note-badge" id="noteBadge">0</span>
+          Notes
         </div>
-      </div>    
-      <h2>Notes</h2>
-      <p>Note Keeper.</p>
-      <span style="text-align:right; font-size: 10px; color: #939EBA">
-      Open notes
-        <svg
-          viewBox="0 0 12 12"
-          width="10"
-          height="10"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.8"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          style="vertical-align: middle; margin-left: 4px;"
-        >
-          <path d="M2 6h8" />
-          <path d="M7 2.5L10.5 6 7 9.5" />
-        </svg>
-      </span>
-      <div class="card-stat"></div>      
-    </a>
-
-    <a href="movies.html" class="card live payments">
-      <div class="card-top">
-        <div class="card-icon">       
-          <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      </a>
+      <!--<a href="movies.html" class="nav-item">
+        <div class="left">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
             <rect x="2.5" y="5.5" width="19" height="13" rx="2"/>
             <path d="M7 5.5v13M17 5.5v13M2.5 9h4.5M2.5 15h4.5M17 9h4.5M17 15h4.5"/>
           </svg>
-           <span class="note-badge" id="noteBadge">0</span>
+          Movies
         </div>
-      </div>    
-      <h2>Movies</h2>
-      <p>Movie DB.</p>
-      <span style="text-align:right; font-size: 10px; color: #939EBA">
-      Open movies
-        <svg
-          viewBox="0 0 12 12"
-          width="10"
-          height="10"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.8"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          style="vertical-align: middle; margin-left: 4px;"
-        >
-          <path d="M2 6h8" />
-          <path d="M7 2.5L10.5 6 7 9.5" />
-        </svg>
-      </span>
-      <div class="card-stat"></div>      
-    </a>
-    <!--<a href="chores.html" class="card live payments">
-      <div class="card-top">
-        <div class="card-icon">        
-          <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      </a>
+      <a href="chores.html" class="nav-item">
+        <div class="left">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="6" cy="14" r="4.5" />
             <circle cx="16.3" cy="15" r="6.3" />
             <circle cx="7" cy="5" r="3.5" />
             <circle cx="14" cy="4" r="2.5" />
         </svg>
-           <span class="note-badge" id="noteBadge">0</span>
+          Chores
         </div>
-      </div>    
-      <h2>Chores</h2>
-      <p>Chore list.</p>
-      <span style="text-align:right; font-size: 10px; color: #939EBA">
-      Open chores
-        <svg
-          viewBox="0 0 12 12"
-          width="10"
-          height="10"
-          fill="none"
-          stroke="#ffffff"
-          stroke-width="1.8"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          style="vertical-align: middle; margin-left: 4px;"
-        >
-          <path d="M2 6h8" />
-          <path d="M7 2.5L10.5 6 7 9.5" />
-        </svg>
-      </span>
-      <div class="card-stat"></div>      
-    </a>-->   
-    <a href="meal-planner.html" class="card live payments">
-      <div class="card-top">
-        <div class="card-icon">        
-          <svg
-            viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle;"
-          >
+      </a>-->
+      <a href="meal-planner.html" class="nav-item">
+        <div class="left">
+          <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle;">
             <path d="M5 3v6" />
             <path d="M8 3v6" />
             <path d="M11 3v6" />
@@ -804,246 +377,290 @@ body {
             <path d="M8 12.5V21" />
             <path d="M16 3v18" />
             <path d="M16 3c4 2 5 5 5 9h-5" />
-          </svg>        
+          </svg>
+          Meal Planner
         </div>
-      </div>    
-      <h2>Meal Planner</h2>
-      <p>Plan meals.</p>
-      <span style="text-align:right; font-size: 10px; color: #939EBA">
-      Open planner
-        <svg
-          viewBox="0 0 12 12"
-          width="10"
-          height="10"
-          fill="none"
-          stroke="#ffffff"
-          stroke-width="1.8"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          style="vertical-align: middle; margin-left: 4px;"
-        >
-          <path d="M2 6h8" />
-          <path d="M7 2.5L10.5 6 7 9.5" />
-        </svg>
-      </span>
-      <div class="card-stat"></div>      
-    </a>
-  </div>
-</div>
+      </a>
+    </nav>
 
-<footer class="note">2026 homeBase · v1.1.6 ·</footer>
+    <script>
+      document.querySelector('.nav .nav-item.active')?.scrollIntoView({ inline: 'center', block: 'nearest' });
+    </script>
 
-<div class="toast" id="toast">
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>
-  <span id="toastText">Saved</span>
+    <div class="sidebar-footer">
+      <span>homeBase · v0.1</span>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div id="vaultWrap">
+      <div class="topbar">
+        <div>
+          <h1>Household Dashboard</h1>
+          <p>Everything that needs attention, in one place.</p>
+        </div>
+      </div>
+
+      <div class="stats">
+        <div class="stat-card spend">
+          <div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+          <div class="label">This Month</div>
+          <div class="value mono" id="statSpend">R0.00</div>
+          <div class="sub" id="statSpendSub">—</div>
+        </div>
+        <div class="stat-card pay">
+          <div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 9h18M7 14h4"/></svg></div>
+          <div class="label">Payments Due</div>
+          <div class="value mono" id="statPay">R0.00</div>
+          <div class="sub" id="statPaySub">—</div>
+        </div>
+        <div class="stat-card maint">
+          <div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-9"/><path d="M9 20v-6h6v6"/></svg></div>
+          <div class="label">Active Projects</div>
+          <div class="value mono" id="statMaint">0</div>
+          <div class="sub">home maintenance</div>
+        </div>
+        <div class="stat-card shop">
+          <div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.5 3h2l2.6 12.4a2 2 0 0 0 2 1.6h8.4a2 2 0 0 0 2-1.6L21 8H6"/></svg></div>
+          <div class="label">Shopping List</div>
+          <div class="value mono" id="statShop">0</div>
+          <div class="sub">items to buy</div>
+        </div>
+      </div>
+
+      <div class="dash-grid">
+        <div class="card">
+          <div class="card-head">
+            <h2>Upcoming Payments</h2>
+            <a href="payments.html" class="view-all">View all <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></a>
+          </div>
+          <div class="card-body" id="paymentsList"><div class="skeleton-row">Loading…</div></div>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <h2>Recent Expenses</h2>
+            <a href="expenses.html" class="view-all">View all <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></a>
+          </div>
+          <div class="card-body" id="expensesList"><div class="skeleton-row">Loading…</div></div>
+        </div>
+      </div>
+
+      <div class="dash-grid">
+        <div class="card">
+          <div class="card-head">
+            <h2>Shopping List</h2>
+            <a href="shoppingList.html" class="view-all">View all <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></a>
+          </div>
+          <div class="card-body" id="shoppingListBox"><div class="skeleton-row">Loading…</div></div>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <h2>Maintenance Due</h2>
+            <a href="property.html" class="view-all">View all <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></a>
+          </div>
+          <div class="card-body" id="maintenanceList"><div class="skeleton-row">Loading…</div></div>
+        </div>
+      </div>
+
+      <div class="dash-grid full">
+        <div class="card">
+          <div class="card-head">
+            <h2>Notes</h2>
+            <a href="notes.html" class="view-all">View all <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></a>
+          </div>
+          <div class="card-body" id="notesList"><div class="skeleton-row">Loading…</div></div>
+        </div>
+      </div>
+
+      <footer class="note">homeBase · Household Dashboard</footer>
+    </div>
+  </main>
 </div>
 
 <script>
 (function(){
   const el = (id) => document.getElementById(id);
-  const EXPENSE_HIGHLIGHT_HOURS = 6;
-  const PAYMENT_HIGHLIGHT_HOURS = 6;
-  const NOTE_HIGHLIGHT_HOURS = 6;
-  const IMPORTANT_NOTE_LIMIT = 6;
-  const SHOPPING_HIGHLIGHT_HOURS = 6;
 
-  function showToast(msg){
-    const toast = el('toast');
-    el('toastText').textContent = msg;
-    toast.classList.add('show');
-    clearTimeout(showToast._t);
-    showToast._t = setTimeout(() => toast.classList.remove('show'), 2200);
+  function currency(n){
+    return 'R' + Number(n||0).toLocaleString('en-ZA', {minimumFractionDigits:2, maximumFractionDigits:2});
+  }
+  function formatDate(d){
+    if(!d) return '—';
+    return new Date(d + 'T00:00:00').toLocaleDateString('en-ZA', {day:'2-digit', month:'short', year:'numeric'});
   }
   function escapeHtml(str){
     return String(str ?? '').replace(/[&<>"']/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]));
   }
-  function rotationFor(id){
-    let hash = 0;
-    for(let i = 0; i < id.length; i++){ hash = (hash * 31 + id.charCodeAt(i)) % 1000; }
-    return ((hash % 7) - 3) * 1.1;
+  function statusClass(status){
+    return (status||'').toLowerCase().replace(/\s+/g, '-');
+  }
+  function daysUntil(d){
+    if(!d) return null;
+    const today = new Date(); today.setHours(0,0,0,0);
+    const target = new Date(d + 'T00:00:00');
+    return Math.round((target - today) / 86400000);
+  }
+  function dueLabel(d){
+    const days = daysUntil(d);
+    if(days === null) return formatDate(d);
+    if(days < 0) return `${formatDate(d)} · ${Math.abs(days)}d overdue`;
+    if(days === 0) return `${formatDate(d)} · due today`;
+    return `${formatDate(d)} · in ${days}d`;
   }
 
-  // ---- Profile / logout widget ----
-  const AVATAR_COLORS = ['#4c7cf0', '#33d6a6', '#f0b84c', '#f0664c', '#8b6cf0'];
-  function colorForEmail(email){
-    let hash = 0;
-    for(let i = 0; i < email.length; i++){ hash = (hash * 31 + email.charCodeAt(i)) % 1000; }
-    return AVATAR_COLORS[hash % AVATAR_COLORS.length];
+  // ---- Upcoming Payments ----
+  async function loadPayments(){
+    const { data, error } = await supabaseClient
+      .from('payments')
+      .select('*')
+      .in('status', ['pending', 'overdue'])
+      .order('due_date', { ascending: true })
+      .limit(6);
+    const box = el('paymentsList');
+    if(error){ box.innerHTML = '<div class="empty-row">Could not load payments.</div>'; console.error(error); return; }
+
+    const totalDue = (data||[]).reduce((a,p) => a + Number(p.amount||0), 0);
+    const overdueCount = (data||[]).filter(p => p.status === 'overdue').length;
+    el('statPay').textContent = currency(totalDue);
+    el('statPaySub').textContent = overdueCount
+      ? `${data.length} due · ${overdueCount} overdue`
+      : `${data.length} due`;
+
+    if(!data || data.length === 0){
+      box.innerHTML = '<div class="empty-row">Nothing due — all payments up to date.</div>';
+      return;
+    }
+    box.innerHTML = data.map(p => `
+      <div class="row">
+        <span class="pill ${p.status}">${p.status}</span>
+        <div class="rmain">
+          <div class="rtitle">${escapeHtml(p.recipient)}</div>
+          <div class="rsub">${escapeHtml(p.category || '')} · ${dueLabel(p.due_date)}</div>
+        </div>
+        <div class="ramount">${currency(p.amount)}</div>
+      </div>
+    `).join('');
   }
-  function displayNameFromEmail(email){
-    const local = email.split('@')[0] || email;
-    return local.split(/[._\-]+/).filter(Boolean).map(w => w[0].toUpperCase() + w.slice(1)).join(' ');
+
+  // ---- This Month's Spending + Recent Expenses ----
+  async function loadExpenses(){
+    const { data, error } = await supabaseClient
+      .from('expenses')
+      .select('*')
+      .order('expense_date', { ascending: false })
+      .limit(60);
+    const box = el('expensesList');
+    if(error){ box.innerHTML = '<div class="empty-row">Could not load expenses.</div>'; console.error(error); return; }
+
+    const monthKey = new Date().toISOString().slice(0,7);
+    const monthList = (data||[]).filter(e => (e.expense_date||'').slice(0,7) === monthKey);
+    const monthTotal = monthList.reduce((a,e) => a + Number(e.amount||0), 0);
+    el('statSpend').textContent = currency(monthTotal);
+    el('statSpendSub').textContent = `${monthList.length} expense${monthList.length===1?'':'s'} logged`;
+
+    const recent = (data||[]).slice(0, 6);
+    if(recent.length === 0){
+      box.innerHTML = '<div class="empty-row">No expenses logged yet.</div>';
+      return;
+    }
+    box.innerHTML = recent.map(e => `
+      <div class="row">
+        <span class="cat-pill">${escapeHtml(e.category || '')}</span>
+        <div class="rmain">
+          <div class="rtitle">${escapeHtml(e.description)}</div>
+          <div class="rsub">${formatDate(e.expense_date)}${e.paid_by ? ' · ' + escapeHtml(e.paid_by) : ''}</div>
+        </div>
+        <div class="ramount">${currency(e.amount)}</div>
+      </div>
+    `).join('');
   }
-  function initialsFromName(name){
-    const parts = name.trim().split(/\s+/);
-    if(parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
-    return (parts[0][0] + parts[1][0]).toUpperCase();
+
+  // ---- Shopping List ----
+  async function loadShopping(){
+    const { data, error } = await supabaseClient
+      .from('shopping_items')
+      .select('*')
+      .eq('is_done', false)
+      .limit(8);
+    const box = el('shoppingListBox');
+    if(error){ box.innerHTML = '<div class="empty-row">Could not load shopping list.</div>'; console.error(error); return; }
+
+    el('statShop').textContent = (data||[]).length;
+
+    if(!data || data.length === 0){
+      box.innerHTML = '<div class="empty-row">Shopping list is empty.</div>';
+      return;
+    }
+    box.innerHTML = data.map(item => `
+      <div class="check-row">
+        <span class="check-dot"></span>
+        <span class="ctext">${escapeHtml(item.text)}</span>
+      </div>
+    `).join('');
   }
 
-  async function initProfileWidget(){
-    const { data: { session } } = await supabaseClient.auth.getSession();
-    const email = session && session.user ? session.user.email : null;
-    if(!email) return;
+  // ---- Maintenance Due ----
+  async function loadMaintenance(){
+    const { data, error } = await supabaseClient
+      .from('property_projects')
+      .select('*')
+      .in('status', ['Planning', 'In Progress', 'On Hold'])
+      .order('target_date', { ascending: true })
+      .limit(6);
+    const box = el('maintenanceList');
+    if(error){ box.innerHTML = '<div class="empty-row">Could not load projects.</div>'; console.error(error); return; }
 
-    const name = displayNameFromEmail(email);
-    const initials = initialsFromName(name);
-    const color = colorForEmail(email);
+    el('statMaint').textContent = (data||[]).length;
 
-    [el('profileAvatar'), el('profileAvatarLg')].forEach(node => {
-      if(!node) return;
-      node.textContent = initials;
-      node.style.background = `linear-gradient(155deg, ${color}, ${color}cc)`;
-    });
-    if(el('profileName')) el('profileName').textContent = name;
-    if(el('profileEmail')) el('profileEmail').textContent = email;
+    if(!data || data.length === 0){
+      box.innerHTML = '<div class="empty-row">No active maintenance projects.</div>';
+      return;
+    }
+    box.innerHTML = data.map(p => `
+      <div class="row">
+        <span class="pill ${statusClass(p.status)}">${escapeHtml(p.status)}</span>
+        <div class="rmain">
+          <div class="rtitle">${escapeHtml(p.name)}</div>
+          <div class="rsub">${p.target_date ? 'Target: ' + dueLabel(p.target_date) : 'No target date'}</div>
+        </div>
+      </div>
+    `).join('');
   }
 
-  const profileChip = el('profileChip');
-  const profileMenu = el('profileMenu');
-  function closeProfileMenu(){
-    profileMenu.classList.remove('show');
-    profileChip.classList.remove('open');
-  }
-  profileChip.addEventListener('click', (e) => {
-    e.stopPropagation();
-    const isOpen = profileMenu.classList.toggle('show');
-    profileChip.classList.toggle('open', isOpen);
-  });
-  document.addEventListener('click', (e) => {
-    if(!el('profileWidget').contains(e.target)) closeProfileMenu();
-  });
-  document.addEventListener('keydown', (e) => { if(e.key === 'Escape') closeProfileMenu(); });
-
-  el('logoutBtn').addEventListener('click', async () => {
-    closeProfileMenu();
-    const { error } = await supabaseClient.auth.signOut();
-    if(error){ showToast('Could not sign out'); console.error(error); }
-    // auth.js listens for SIGNED_OUT and reloads the page to show the sign-in screen
-  });
-
-  // The sign-in overlay (auth.js) reveals the page in place without reloading,
-  // so re-populate the widget whenever a fresh sign-in actually completes.
-  supabaseClient.auth.onAuthStateChange((event) => {
-    if(event === 'SIGNED_IN'){ initProfileWidget(); }
-  });
-
-  // ---- Important notes strip ----
-  async function loadImportantNotes(){
-    const row = el('importantNotesRow');
-    if(!row) return;
+  // ---- Notes (active only) ----
+  async function loadNotes(){
     const { data, error } = await supabaseClient
       .from('notes')
       .select('*')
-      .eq('category', 'Important')
       .eq('is_done', false)
       .order('created_at', { ascending: false })
-      .limit(IMPORTANT_NOTE_LIMIT);
-    if(error){ console.error(error); row.innerHTML = ''; return; }
+      .limit(6);
+    const box = el('notesList');
+    if(error){ box.innerHTML = '<div class="empty-row">Could not load notes.</div>'; console.error(error); return; }
+
     if(!data || data.length === 0){
-      row.innerHTML = '<div class="important-empty">No important notes right now — add one in Notes.</div>';
+      box.innerHTML = '<div class="empty-row">No active notes.</div>';
       return;
     }
-    row.innerHTML = data.map(n => {
-      const ownerClass = n.owner === 'Bernice' ? 'owner-bernice' : 'owner-brett';
-      const rot = rotationFor(n.id);
-      const subject = n.title && n.title.trim() ? n.title : (n.content || '').slice(0, 40);
-      return `
-      <a href="notes.html?note=${encodeURIComponent(n.id)}" class="sticky-note ${ownerClass}" style="transform:rotate(${rot}deg);">    
-        <span class="sticky-cat">${escapeHtml(n.category)}</span>
-        <div class="sticky-title sticky-title-only">${escapeHtml(subject)}</div>
-        <div class="sticky-footer">${escapeHtml(n.owner)}</div>
-      </a>
-    `;
-    }).join('');
+    box.innerHTML = data.map(n => `
+      <div class="note-row ${n.owner === 'Bernice' ? 'owner-bernice' : 'owner-brett'}">
+        <div class="rmain">
+          <div class="rtitle">${escapeHtml(n.title || n.content)}</div>
+          <div class="rsub">${escapeHtml(n.owner)} · ${escapeHtml(n.category || '')}</div>
+        </div>
+      </div>
+    `).join('');
   }
 
-  // ---- Expenses tile "recent activity" highlight ----
-  async function checkRecentExpenseActivity(){
-    const cutoff = new Date(Date.now() - EXPENSE_HIGHLIGHT_HOURS * 3600 * 1000).toISOString();
-    const { count, error } = await supabaseClient
-      .from('expenses')
-      .select('id', { count: 'exact', head: true })
-      .gte('created_at', cutoff);
-    if(error){ console.error(error); return; }
-    const n = count || 0;
-    const badge = el('expenseBadge');
-    if(badge){
-      badge.textContent = n > 99 ? '99+' : n;
-      badge.classList.toggle('show', n > 0);
-    }
-    const expensesCard = document.querySelector('a[href="expenses.html"].card');
-    if(expensesCard){
-      expensesCard.classList.toggle('recent-activity', n > 0);
-    }
-  }
-
-  async function checkRecentPaymentActivity(){
-    const cutoff = new Date(Date.now() - PAYMENT_HIGHLIGHT_HOURS * 3600 * 1000).toISOString();
-    const { count, error } = await supabaseClient
-      .from('payments')
-      .select('id', { count: 'exact', head: true })
-      .gte('created_at', cutoff);
-    if(error){ console.error(error); return; }
-    const n = count || 0;
-    const badge = el('paymentBadge');
-    if(badge){
-      badge.textContent = n > 99 ? '99+' : n;
-      badge.classList.toggle('show', n > 0);
-    }
-    const paymentsCard = document.querySelector('a[href="payments.html"].card');
-    if(paymentsCard){
-      paymentsCard.classList.toggle('recent-activity', n > 0);
-    }
-  }
-
-  async function checkRecentNoteActivity(){
-    const cutoff = new Date(Date.now() - NOTE_HIGHLIGHT_HOURS * 3600 * 1000).toISOString();
-    const { count, error } = await supabaseClient
-      .from('notes')
-      .select('id', { count: 'exact', head: true })
-      .gte('created_at', cutoff);
-    if(error){ console.error(error); return; }
-    const n = count || 0;
-    const badge = el('noteBadge');
-    if(badge){
-      badge.textContent = n > 99 ? '99+' : n;
-      badge.classList.toggle('show', n > 0);
-    }
-    const notesCard = document.querySelector('a[href="notes.html"].card');
-    if(notesCard){
-      notesCard.classList.toggle('recent-activity', n > 0);
-    }
-  }
-
-  async function checkRecentShoppingActivity(){
-    const cutoff = new Date(Date.now() - SHOPPING_HIGHLIGHT_HOURS * 3600 * 1000).toISOString();
-    const { count, error } = await supabaseClient
-      .from('shoppingList')
-      .select('id', { count: 'exact', head: true })
-      .gte('created_at', cutoff);
-    if(error){ console.error(error); return; }
-    const n = count || 0;
-    const badge = el('shoppingBadge');
-    if(badge){
-      badge.textContent = n > 99 ? '99+' : n;
-      badge.classList.toggle('show', n > 0);
-    }
-    const shoppingCard = document.querySelector('a[href="shoppingList.html"].card');
-    if(shoppingCard){
-      shoppingCard.classList.toggle('recent-activity', n > 0);
-    }
-  }
-
-
-  loadImportantNotes();
-  checkRecentExpenseActivity();
-  checkRecentPaymentActivity();
-  checkRecentNoteActivity();
-  checkRecentShoppingActivity();
-  initProfileWidget();
-  setInterval(checkRecentExpenseActivity, 5 * 60 * 1000);
-  setInterval(checkRecentPaymentActivity, 5 * 60 * 1000);
-  setInterval(checkRecentNoteActivity, 5 * 60 * 1000);
+  Promise.all([
+    loadPayments(),
+    loadExpenses(),
+    loadShopping(),
+    loadMaintenance(),
+    loadNotes()
+  ]).catch(err => console.error('Dashboard load error', err));
 })();
 </script>
 
