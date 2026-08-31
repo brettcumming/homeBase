@@ -243,6 +243,14 @@
   tbody tr:last-child td{border-bottom:none;}
   .cell-desc strong{display:block; font-size:14px; font-weight:600;}
   .cell-desc span{font-size:12px; color:var(--text-muted);}
+  .cell-desc .desc-row{display:flex; align-items:center; gap:8px;}
+  .row-new-badge{
+    display:inline-flex; align-items:center; justify-content:center; flex-shrink:0;
+    min-width:20px; height:20px; padding:0 5px;
+    border-radius:999px; background:#ff3b30; color:#fff;
+    font-family:'Inter', sans-serif; font-size:11.5px; font-weight:700; line-height:20px;
+    text-align:center; box-shadow:0 1px 4px rgba(0,0,0,0.45), 0 0 0 2px var(--panel);
+  }
   .amount{font-family:'JetBrains Mono'; font-weight:600; font-size:14px;}
   .cat-pill{
     display:inline-block; padding:4px 11px; border-radius:20px; font-size:11.5px; font-weight:600;
@@ -512,26 +520,6 @@
           Notes
         </div>
       </a>
-      <!--<a href="movies.html" class="nav-item">
-        <div class="left">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="2.5" y="5.5" width="19" height="13" rx="2"/>
-            <path d="M7 5.5v13M17 5.5v13M2.5 9h4.5M2.5 15h4.5M17 9h4.5M17 15h4.5"/>
-          </svg>
-          Movies
-        </div>
-      </a>
-      <a href="chores.html" class="nav-item">
-        <div class="left">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="6" cy="14" r="4.5" />
-            <circle cx="16.3" cy="15" r="6.3" />
-            <circle cx="7" cy="5" r="3.5" />
-            <circle cx="14" cy="4" r="2.5" />
-        </svg>
-          Chores
-        </div>
-      </a>-->
       <a href="meal-planner.html" class="nav-item">
         <div class="left">
           <svg
@@ -744,6 +732,7 @@
 (function(){
   const el = (id) => document.getElementById(id);
   const BUCKET = 'expense-receipts';
+  const ROW_NEW_HOURS = 6;
 
   let expenses = [];
   let editingId = null;
@@ -791,7 +780,8 @@
       id: e.id, description: e.description, amount: e.amount,
       date: e.expense_date, category: e.category, notes: e.notes,
       paidBy: e.paid_by || 'Brett',
-      receiptCount: (e.expense_receipts || []).length
+      receiptCount: (e.expense_receipts || []).length,
+      createdAt: e.created_at
     }));
     render();
   }
@@ -901,10 +891,15 @@
     }
     emptyState.style.display = 'none';
 
-    tableBody.innerHTML = list.map(e => `
+    tableBody.innerHTML = list.map(e => {
+      const isNew = e.createdAt && (Date.now() - new Date(e.createdAt).getTime()) < ROW_NEW_HOURS * 3600 * 1000;
+      return `
       <tr>
         <td class="cell-desc">
-          <strong>${escapeHtml(e.description)}</strong>
+          <div class="desc-row">
+            <strong>${escapeHtml(e.description)}</strong>
+            ${isNew ? `<span class="row-new-badge">1</span>` : ''}
+          </div>
           ${e.notes ? `<span>${escapeHtml(e.notes)}</span>` : ''}
         </td>
         <td data-label="Category"><span class="cat-pill">${escapeHtml(e.category)}</span></td>
@@ -925,7 +920,8 @@
           </div>
         </td>
       </tr>
-    `).join('');
+    `;
+    }).join('');
   }
 
   function updatePaidBySelection(){
