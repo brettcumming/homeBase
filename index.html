@@ -106,23 +106,23 @@ body {
   }
 
   .grid{
-    display:grid; grid-template-columns:repeat(5, 1fr); gap:12px; width:100%;
-  }
+    display:grid; grid-template-columns:repeat(5, 1fr); gap:10px; width:100%;
+}
   
   .card{    
-    height:165px;
+    height:132px;
     position:relative; background:linear-gradient(160deg, var(--panel), var(--panel-alt));
-    border:1px solid var(--border-soft); border-radius:var(--radius-lg); padding:22px;
-    display:flex; flex-direction:column; gap:11px; transition:transform .15s ease, border-color .15s ease, box-shadow .15s ease;
+    border:1px solid var(--border-soft); border-radius:var(--radius-lg); padding:16px;
+    display:flex; flex-direction:column; gap:8px; transition:transform .15s ease, border-color .15s ease, box-shadow .15s ease;
   }
   .card.live{cursor:pointer;}
   .card.live:hover{transform:translateY(-3px); border-color:rgba(255,255,255,0.16); box-shadow:var(--shadow-lift);}
   .card.disabled{opacity:0.55;}
   .card-top{display:flex; align-items:flex-start; justify-content:space-between; gap:12px;}
   .card-icon{
-    width:44px; height:44px; border-radius:12px; display:flex; align-items:center; justify-content:center;
+    width:36px; height:36px; border-radius:10px; display:flex; align-items:center; justify-content:center;
     flex-shrink:0; position:relative;
-  }  
+  }
   .card-icon{ position:relative; } /* already present — just confirming this stays */
   .expense-badge{
     position:absolute; top:-8px; right:-8px; min-width:20px; height:20px; padding:0 5px;
@@ -160,7 +160,7 @@ body {
   }  
   .shopping-badge.show{display:block;}
   
-  .card-icon svg{width:21px; height:21px;}
+  .card-icon svg{width:18px; height:18px;}
   .card.payments .card-icon{background:var(--accent-soft); color:var(--accent-hover);}
   .card.documents .card-icon{background:var(--success-soft); color:var(--success);}
   .card.expenses .card-icon{background:var(--warning-soft); color:var(--warning);}
@@ -175,8 +175,8 @@ body {
     color:var(--text-muted); padding:4px 9px; border-radius:20px; text-transform:uppercase;
     align-self:flex-start; margin-top:2px;
   }
-  .card h2{font-size:19px; font-weight:700; margin:0;}
-  .card p{margin:0; font-size:13.5px; color:var(--text-secondary); line-height:1.5;}
+  .card h2{font-size:16px; font-weight:700; margin:0;}
+  .card p{margin:0; font-size:12px; color:var(--text-secondary); line-height:1.4;}
   .card-stat{
     font-size:12.5px; color:var(--text-muted); display:flex; align-items:center; gap:6px;
     padding-top:10px; margin-top:auto; border-top:1px solid var(--border-soft);
@@ -321,7 +321,7 @@ body {
     .wrap{padding:36px 16px 20px;}
     .hero{margin-bottom:32px;}
     .grid{grid-template-columns:repeat(2, 1fr); gap:10px;}
-    .card{height:auto; min-height:112px; padding:18px;}
+    .card{height:auto; min-height:92px; padding:13px;}
     .important-notes{margin:0 auto 28px;}
     .sticky-note{width:135px; min-height:78px; padding:16px 11px 10px;}
     .toast{left:16px; right:16px; bottom:18px;}   
