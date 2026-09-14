@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
 <link rel="icon" type="image/svg+xml" href="leaf_icon.png">
@@ -44,363 +45,366 @@
     --shadow-lift: 0 16px 40px rgba(0,0,0,0.45);
   }
 
-  *{box-sizing:border-box;}
-  html,body{height:100%;}
-  body{
-    margin:0;
-    background:
-      radial-gradient(1100px 600px at 85% -10%, rgba(76,124,240,0.10), transparent 60%),
-      radial-gradient(900px 500px at -10% 110%, rgba(51,214,166,0.05), transparent 60%),
-      var(--bg);
-    color:var(--text-primary);
-    font-family:'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    -webkit-font-smoothing:antialiased;
-    min-height:100vh;
-  }
-  h1,h2,h3,.display{font-family:'Sora', sans-serif;}
-  .mono{font-family:'JetBrains Mono', monospace;}
+*{box-sizing:border-box;}
+html,body{height:100%;}
+body{
+margin:0;
+background:
+radial-gradient(1100px 600px at 85% -10%, rgba(76,124,240,0.10), transparent 60%),
+radial-gradient(900px 500px at -10% 110%, rgba(51,214,166,0.05), transparent 60%),
+var(--bg);
+color:var(--text-primary);
+font-family:'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+-webkit-font-smoothing:antialiased;
+min-height:100vh;
+}
+h1,h2,h3,.display{font-family:'Sora', sans-serif;}
+.mono{font-family:'JetBrains Mono', monospace;}
 
-  a{color:inherit; text-decoration: none;}
-  button{font-family:inherit;}
-  ::selection{background:var(--accent-soft);}
+a{color:inherit; text-decoration: none;}
+button{font-family:inherit;}
+::selection{background:var(--accent-soft);}
 
-  button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible{
-    outline:2px solid var(--accent);
-    outline-offset:2px;
-  }
+button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible{
+outline:2px solid var(--accent);
+outline-offset:2px;
+}
 
-  .app{
-    display:grid;
-    grid-template-columns:260px 1fr;
-    min-height:100vh;
-  }
+.app{
+display:grid;
+grid-template-columns:260px 1fr;
+min-height:100vh;
+}
 
-  .sidebar{
-    background:linear-gradient(180deg, var(--bg-elevated), var(--bg));
-    border-right:1px solid var(--border-soft);
-    padding:28px 20px;
-    display:flex;
-    flex-direction:column;
-    gap:32px;
-    position:relative;
-  }
-  .sidebar::before{
-    content:"";
-    position:absolute; top:0; left:0; bottom:0; width:2px;
-    background:linear-gradient(180deg, var(--accent), transparent 70%);
-    opacity:0.6;
-  }
-  .brand{display:flex; align-items:center; gap:12px; padding:0 4px;}
-  .brand-mark{
-    width:40px; height:40px; border-radius:11px;
-    background:linear-gradient(155deg, var(--accent), #befffd);
-    display:flex; align-items:center; justify-content:center;
-    box-shadow:0 6px 16px rgba(76,124,240,0.35);
-    flex-shrink:0;
-  }
-  .brand-mark svg{width:24px; height:24px;}
-  .brand-text{display:flex; flex-direction:column; line-height:1.25;}
-  .brand-text strong{font-family:'Sora'; font-size:15.5px; font-weight:700; letter-spacing:0.2px;}
-  .brand-text span{font-size:11.5px; color:var(--text-muted); font-weight:500;}
+.sidebar{
+background:linear-gradient(180deg, var(--bg-elevated), var(--bg));
+border-right:1px solid var(--border-soft);
+padding:28px 20px;
+display:flex;
+flex-direction:column;
+gap:32px;
+position:relative;
+}
+.sidebar::before{
+content:"";
+position:absolute; top:0; left:0; bottom:0; width:2px;
+background:linear-gradient(180deg, var(--accent), transparent 70%);
+opacity:0.6;
+}
+.brand{display:flex; align-items:center; gap:12px; padding:0 4px;}
+.brand-mark{
+width:40px; height:40px; border-radius:11px;
+background:linear-gradient(155deg, var(--accent), #befffd);
+display:flex; align-items:center; justify-content:center;
+box-shadow:0 6px 16px rgba(76,124,240,0.35);
+flex-shrink:0;
+}
+.brand-mark svg{width:24px; height:24px;}
+.brand-text{display:flex; flex-direction:column; line-height:1.25;}
+.brand-text strong{font-family:'Sora'; font-size:15.5px; font-weight:700; letter-spacing:0.2px;}
+.brand-text span{font-size:11.5px; color:var(--text-muted); font-weight:500;}
 
-  .nav{display:flex; flex-direction:column; gap:4px;}
-  .nav-label{
-    font-size:10.5px; text-transform:uppercase; letter-spacing:1.2px;
-    color:var(--text-muted); font-weight:600; padding:0 12px; margin-bottom:6px;
-  }
-  .nav-item{
-    display:flex; align-items:center; justify-content:space-between;
-    gap:10px; padding:10px 12px; border-radius:var(--radius-sm);
-    font-size:14px; font-weight:500; color:var(--text-secondary);
-    cursor:pointer; transition:background .15s ease, color .15s ease;
-    border:1px solid transparent;
-  }
-  .nav-item .left{display:flex; align-items:center; gap:10px;}
-  .nav-item svg{width:17px; height:17px; opacity:0.85;}
-  .nav-item.active{
-    background:var(--accent-soft); color:var(--text-primary);
-    border-color:rgba(76,124,240,0.35);
-  }
-  .nav-item.disabled{cursor:not-allowed; color:var(--text-muted); opacity:0.6;}
-  .nav-item.disabled:hover{background:none;}
-  .nav-item:not(.disabled):not(.active):hover{background:rgba(255,255,255,0.03); color:var(--text-primary);}
-  .soon-tag{
-    font-size:9.5px; font-weight:700; letter-spacing:0.4px;
-    background:rgba(255,255,255,0.05); color:var(--text-muted);
-    padding:2px 6px; border-radius:5px; text-transform:uppercase;
-  }
+.nav{display:flex; flex-direction:column; gap:4px;}
+.nav-label{
+font-size:10.5px; text-transform:uppercase; letter-spacing:1.2px;
+color:var(--text-muted); font-weight:600; padding:0 12px; margin-bottom:6px;
+}
+.nav-item{
+display:flex; align-items:center; justify-content:space-between;
+gap:10px; padding:10px 12px; border-radius:var(--radius-sm);
+font-size:14px; font-weight:500; color:var(--text-secondary);
+cursor:pointer; transition:background .15s ease, color .15s ease;
+border:1px solid transparent;
+}
+.nav-item .left{display:flex; align-items:center; gap:10px;}
+.nav-item svg{width:17px; height:17px; opacity:0.85;}
+.nav-item.active{
+background:var(--accent-soft); color:var(--text-primary);
+border-color:rgba(76,124,240,0.35);
+}
+.nav-item.disabled{cursor:not-allowed; color:var(--text-muted); opacity:0.6;}
+.nav-item.disabled:hover{background:none;}
+.nav-item:not(.disabled):not(.active):hover{background:rgba(255,255,255,0.03); color:var(--text-primary);}
+.soon-tag{
+font-size:9.5px; font-weight:700; letter-spacing:0.4px;
+background:rgba(255,255,255,0.05); color:var(--text-muted);
+padding:2px 6px; border-radius:5px; text-transform:uppercase;
+}
 
-  .sidebar-footer{
-    margin-top:auto; padding-top:18px; border-top:1px dashed var(--border);
-    font-size:11.5px; color:var(--text-muted); display:flex; flex-direction:column; gap:4px;
-  }
+.sidebar-footer{
+margin-top:auto; padding-top:18px; border-top:1px dashed var(--border);
+font-size:11.5px; color:var(--text-muted); display:flex; flex-direction:column; gap:4px;
+}
 
-  .main{padding:32px 40px 60px; max-width:1280px; width:100%;}
-  .topbar{
-    display:flex; align-items:flex-start; justify-content:space-between; gap:24px;
-    margin-bottom:28px; flex-wrap:wrap;
-  }
-  .topbar h1{font-size:26px; font-weight:700; margin:0 0 6px; letter-spacing:-0.3px;}
-  .topbar p{margin:0; color:var(--text-secondary); font-size:14px; max-width:46ch;}
+.main{padding:32px 40px 60px; max-width:1280px; width:100%;}
+.topbar{
+display:flex; align-items:flex-start; justify-content:space-between; gap:24px;
+margin-bottom:28px; flex-wrap:wrap;
+}
+.topbar h1{font-size:26px; font-weight:700; margin:0 0 6px; letter-spacing:-0.3px;}
+.topbar p{margin:0; color:var(--text-secondary); font-size:14px; max-width:46ch;}
 
-  .btn{
-    display:inline-flex; align-items:center; gap:8px;
-    padding:10px 18px; border-radius:10px; border:1px solid transparent;
-    font-size:13.5px; font-weight:600; cursor:pointer;
-    transition:transform .12s ease, box-shadow .12s ease, background .15s ease, border-color .15s ease;
-    white-space:nowrap;
-  }
-  .btn svg{width:16px; height:16px;}
-  .btn-primary{
-    background:linear-gradient(155deg, var(--accent-hover), var(--accent));
-    color:#08101f; box-shadow:0 8px 20px rgba(76,124,240,0.28);
-  }
-  .btn-primary:hover{transform:translateY(-1px); box-shadow:0 10px 24px rgba(76,124,240,0.38);}
-  .btn-primary:active{transform:translateY(0px);}
-  .btn-ghost{
-    background:var(--panel); color:var(--text-secondary); border-color:var(--border);
-  }
-  .btn-ghost:hover{color:var(--text-primary); border-color:rgba(255,255,255,0.18); background:var(--panel-alt);}
-  .btn-danger-text{background:none; border:none; color:var(--text-muted); font-size:13px; cursor:pointer;}
-  .btn-danger-text:hover{color:var(--danger);}
+.btn{
+display:inline-flex; align-items:center; gap:8px;
+padding:10px 18px; border-radius:10px; border:1px solid transparent;
+font-size:13.5px; font-weight:600; cursor:pointer;
+transition:transform .12s ease, box-shadow .12s ease, background .15s ease, border-color .15s ease;
+white-space:nowrap;
+}
+.btn svg{width:16px; height:16px;}
+.btn-primary{
+background:linear-gradient(155deg, var(--accent-hover), var(--accent));
+color:#08101f; box-shadow:0 8px 20px rgba(76,124,240,0.28);
+}
+.btn-primary:hover{transform:translateY(-1px); box-shadow:0 10px 24px rgba(76,124,240,0.38);}
+.btn-primary:active{transform:translateY(0px);}
+.btn-ghost{
+background:var(--panel); color:var(--text-secondary); border-color:var(--border);
+}
+.btn-ghost:hover{color:var(--text-primary); border-color:rgba(255,255,255,0.18); background:var(--panel-alt);}
+.btn-danger-text{background:none; border:none; color:var(--text-muted); font-size:13px; cursor:pointer;}
+.btn-danger-text:hover{color:var(--danger);}
 
-  .actions-row{display:flex; gap:10px; flex-shrink:0;}
+.actions-row{display:flex; gap:10px; flex-shrink:0;}
 
-  .stats{
-    display:grid; grid-template-columns:repeat(4, 1fr); gap:16px; margin-bottom:14px;
-  }
-  .stat-card{
-    background:linear-gradient(160deg, var(--panel), var(--panel-alt));
-    border:1px solid var(--border-soft); border-radius:var(--radius-md);
-    padding:18px 20px; position:relative; overflow:hidden;
-  }
-  .stat-card .icon-wrap{
-    width:32px; height:32px; border-radius:9px; display:flex; align-items:center; justify-content:center;
-    margin-bottom:14px;
-  }
-  .stat-card .icon-wrap svg{width:16px; height:16px;}
-  .stat-card .label{font-size:12px; color:var(--text-muted); font-weight:600; text-transform:uppercase; letter-spacing:0.5px;}
-  .stat-card .value{font-family:'Sora'; font-size:22px; font-weight:700; margin-top:6px;}
-  .stat-card .sub{font-size:12px; color:var(--text-muted); margin-top:4px;}
-  .stat-card.total .icon-wrap{background:var(--accent-soft); color:var(--accent-hover);}
-  .stat-card.paid .icon-wrap{background:var(--success-soft); color:var(--success);}
-  .stat-card.pending .icon-wrap{background:var(--warning-soft); color:var(--warning);}
-  .stat-card.overdue .icon-wrap{background:var(--danger-soft); color:var(--danger);}
+.stats{
+display:grid; grid-template-columns:repeat(4, 1fr); gap:16px; margin-bottom:14px;
+}
+.stat-card{
+background:linear-gradient(160deg, var(--panel), var(--panel-alt));
+border:1px solid var(--border-soft); border-radius:var(--radius-md);
+padding:18px 20px; position:relative; overflow:hidden;
+}
+.stat-card .icon-wrap{
+width:32px; height:32px; border-radius:9px; display:flex; align-items:center; justify-content:center;
+margin-bottom:14px;
+}
+.stat-card .icon-wrap svg{width:16px; height:16px;}
+.stat-card .label{font-size:12px; color:var(--text-muted); font-weight:600; text-transform:uppercase; letter-spacing:0.5px;}
+.stat-card .value{font-family:'Sora'; font-size:22px; font-weight:700; margin-top:6px;}
+.stat-card .sub{font-size:12px; color:var(--text-muted); margin-top:4px;}
+.stat-card.total .icon-wrap{background:var(--accent-soft); color:var(--accent-hover);}
+.stat-card.paid .icon-wrap{background:var(--success-soft); color:var(--success);}
+.stat-card.pending .icon-wrap{background:var(--warning-soft); color:var(--warning);}
+.stat-card.overdue .icon-wrap{background:var(--danger-soft); color:var(--danger);}
 
-  .ledger-stitch{
-    height:1px; margin:26px 0 24px;
-    background-image:linear-gradient(90deg, var(--border) 50%, transparent 50%);
-    background-size:10px 1px; background-repeat:repeat-x;
-    opacity:0.7;
-  }
+.ledger-stitch{
+height:1px; margin:26px 0 24px;
+background-image:linear-gradient(90deg, var(--border) 50%, transparent 50%);
+background-size:10px 1px; background-repeat:repeat-x;
+opacity:0.7;
+}
 
-  .filters{
-    display:flex; gap:10px; align-items:center; margin-bottom:16px; flex-wrap:wrap;
-  }
-  .search-wrap{
-    position:relative; flex:1; min-width:220px;
-  }
-  .search-wrap svg{
-    position:absolute; left:13px; top:50%; transform:translateY(-50%);
-    width:15px; height:15px; color:var(--text-muted);
-  }
-  .search-wrap input{padding-left:36px;}
-  input, select{
-    background:var(--panel); border:1px solid var(--border); color:var(--text-primary);
-    padding:9px 12px; border-radius:9px; font-size:13.5px; width:100%;
-  }
-  input::placeholder{color:var(--text-muted);}
-  select{cursor:pointer; min-width:150px; width:auto;}
+.filters{
+display:flex; gap:10px; align-items:center; margin-bottom:16px; flex-wrap:wrap;
+}
+.search-wrap{
+position:relative; flex:1; min-width:220px;
+}
+.search-wrap svg{
+position:absolute; left:13px; top:50%; transform:translateY(-50%);
+width:15px; height:15px; color:var(--text-muted);
+}
+.search-wrap input{padding-left:36px;}
+input, select{
+background:var(--panel); border:1px solid var(--border); color:var(--text-primary);
+padding:9px 12px; border-radius:9px; font-size:13.5px; width:100%;
+}
+input::placeholder{color:var(--text-muted);}
+select{cursor:pointer; min-width:150px; width:auto;}
 
-  .table-wrap{
-    background:var(--panel); border:1px solid var(--border-soft); border-radius:var(--radius-md);
-    overflow:hidden; box-shadow:var(--shadow-soft);
-  }
-  table{width:100%; border-collapse:collapse;}
-  thead th{
-    text-align:left; font-size:11px; text-transform:uppercase; letter-spacing:0.6px;
-    color:var(--text-muted); font-weight:600; padding:14px 18px;
-    border-bottom:1px solid var(--border-soft); background:rgba(255,255,255,0.015);
-  }
-  tbody td{
-    padding:14px 18px; font-size:13.5px; border-bottom:1px solid var(--border-soft); vertical-align:middle;
-  }
-  tbody tr{transition:background .12s ease;}
-  tbody tr:hover{background:rgba(255,255,255,0.02);}
-  tbody tr:last-child td{border-bottom:none;}
-  .cell-recipient strong{display:block; font-size:14px; font-weight:600;}
-  .cell-recipient span{font-size:12px; color:var(--text-muted);} 
-  .cell-recipient .row-new-badge{color:#fff; font-size:11.5px}
-  .cell-recipient .desc-row{display:flex; align-items:center; gap:8px;}
-  .row-new-badge{
-    display:inline-flex; align-items:center; justify-content:center; flex-shrink:0;    
-    min-width:20px; height:20px; padding:0 5px;
-    border-radius:999px; background:#ff3b30; color:#ffffff;
-    font-family:'Inter', sans-serif; font-size:11.5px; font-weight:700; line-height:20px;
-    text-align:center; box-shadow:0 1px 4px rgba(0,0,0,0.45), 0 0 0 2px var(--panel);
-  }
-  .amount{font-family:'JetBrains Mono'; font-weight:600; font-size:14px;}
-  .ref{font-family:'JetBrains Mono'; font-size:12.5px; color:var(--text-secondary);}
+.table-wrap{
+background:var(--panel); border:1px solid var(--border-soft); border-radius:var(--radius-md);
+overflow:hidden; box-shadow:var(--shadow-soft);
+}
+table{width:100%; border-collapse:collapse;}
+thead th{
+text-align:left; font-size:11px; text-transform:uppercase; letter-spacing:0.6px;
+color:var(--text-muted); font-weight:600; padding:14px 18px;
+border-bottom:1px solid var(--border-soft); background:rgba(255,255,255,0.015);
+}
+tbody td{
+padding:14px 18px; font-size:13.5px; border-bottom:1px solid var(--border-soft); vertical-align:middle;
+}
+tbody tr{transition:background .12s ease;}
+tbody tr:hover{background:rgba(255,255,255,0.02);}
+tbody tr:last-child td{border-bottom:none;}
+.cell-recipient strong{display:block; font-size:14px; font-weight:600;}
+.cell-recipient span{font-size:12px; color:var(--text-muted);}
+.cell-recipient .row-new-badge{color:#fff; font-size:11.5px}
+.cell-recipient .desc-row{display:flex; align-items:center; gap:8px;}
+.row-new-badge{
+display:inline-flex; align-items:center; justify-content:center; flex-shrink:0;
+min-width:20px; height:20px; padding:0 5px;
+border-radius:999px; background:#ff3b30; color:#ffffff;
+font-family:'Inter', sans-serif; font-size:11.5px; font-weight:700; line-height:20px;
+text-align:center; box-shadow:0 1px 4px rgba(0,0,0,0.45), 0 0 0 2px var(--panel);
+}
+.amount{font-family:'JetBrains Mono'; font-weight:600; font-size:14px;}
+.ref{font-family:'JetBrains Mono'; font-size:12.5px; color:var(--text-secondary);}
 
-  .pill{
-    display:inline-flex; align-items:center; gap:6px; padding:5px 11px;
-    border-radius:20px; font-size:11.5px; font-weight:600;
-  }
-  .pill::before{content:""; width:6px; height:6px; border-radius:50%;}
-  .pill.paid{background:var(--success-soft); color:var(--success);}
-  .pill.paid::before{background:var(--success);}
-  .pill.pending{background:var(--warning-soft); color:var(--warning);}
-  .pill.pending::before{background:var(--warning);}
-  .pill.overdue{background:var(--danger-soft); color:var(--danger);}
-  .pill.overdue::before{background:var(--danger);}
+.pill{
+display:inline-flex; align-items:center; gap:6px; padding:5px 11px;
+border-radius:20px; font-size:11.5px; font-weight:600;
+}
+.pill::before{content:""; width:6px; height:6px; border-radius:50%;}
+.pill.paid{background:var(--success-soft); color:var(--success);}
+.pill.paid::before{background:var(--success);}
+.pill.pending{background:var(--warning-soft); color:var(--warning);}
+.pill.pending::before{background:var(--warning);}
+.pill.overdue{background:var(--danger-soft); color:var(--danger);}
+.pill.overdue::before{background:var(--danger);}
 
-  .row-actions{display:flex; gap:6px; justify-content:flex-end; align-items:center;}
-  .receipt-count-btn{
-    display:inline-flex; align-items:center; gap:4px; padding:5px 9px; border-radius:20px;
-    background:var(--panel-alt); border:1px solid var(--border); color:var(--text-muted);
-    font-size:11px; font-weight:600; cursor:pointer; flex-shrink:0;
-  }
-  .receipt-count-btn.has{color:var(--success); border-color:rgba(51,214,166,0.35); background:var(--success-soft);}
-  .receipt-count-btn svg{width:12px; height:12px;}
-  .icon-btn{
-    width:30px; height:30px; border-radius:8px; display:flex; align-items:center; justify-content:center;
-    background:transparent; border:1px solid transparent; color:var(--text-muted); cursor:pointer;
-    transition:background .12s ease, color .12s ease, border-color .12s ease;
-  }
-  .icon-btn svg{width:14.5px; height:14.5px;}
-  .icon-btn:hover{background:var(--panel-alt); color:var(--text-primary); border-color:var(--border);}
-  .icon-btn.danger:hover{color:var(--danger); border-color:rgba(240,102,76,0.35); background:var(--danger-soft);}
+.row-actions{display:flex; gap:6px; justify-content:flex-end; align-items:center;}
+.receipt-count-btn{
+display:inline-flex; align-items:center; gap:4px; padding:5px 9px; border-radius:20px;
+background:var(--panel-alt); border:1px solid var(--border); color:var(--text-muted);
+font-size:11px; font-weight:600; cursor:pointer; flex-shrink:0;
+}
+.receipt-count-btn.has{color:var(--success); border-color:rgba(51,214,166,0.35); background:var(--success-soft);}
+.receipt-count-btn svg{width:12px; height:12px;}
+.icon-btn{
+width:30px; height:30px; border-radius:8px; display:flex; align-items:center; justify-content:center;
+background:transparent; border:1px solid transparent; color:var(--text-muted); cursor:pointer;
+transition:background .12s ease, color .12s ease, border-color .12s ease;
+}
+.icon-btn svg{width:14.5px; height:14.5px;}
+.icon-btn:hover{background:var(--panel-alt); color:var(--text-primary); border-color:var(--border);}
+.icon-btn.danger:hover{color:var(--danger); border-color:rgba(240,102,76,0.35); background:var(--danger-soft);}
 
-  .empty-state{
-    display:flex; flex-direction:column; align-items:center; justify-content:center;
-    padding:70px 20px; text-align:center; color:var(--text-muted);
-  }
-  .empty-state svg{width:40px; height:40px; margin-bottom:14px; opacity:0.5;}
-  .empty-state h3{margin:0 0 6px; color:var(--text-secondary); font-size:15px;}
-  .empty-state p{margin:0 0 18px; font-size:13px; max-width:32ch;}
+.empty-state{
+display:flex; flex-direction:column; align-items:center; justify-content:center;
+padding:70px 20px; text-align:center; color:var(--text-muted);
+}
+.empty-state svg{width:40px; height:40px; margin-bottom:14px; opacity:0.5;}
+.empty-state h3{margin:0 0 6px; color:var(--text-secondary); font-size:15px;}
+.empty-state p{margin:0 0 18px; font-size:13px; max-width:32ch;}
 
-  .overlay{
-    position:fixed; inset:0; background:rgba(4,7,16,0.6); backdrop-filter:blur(2px);
-    opacity:0; pointer-events:none; transition:opacity .2s ease; z-index:40;
-  }
-  .overlay.show{opacity:1; pointer-events:auto;}
+.overlay{
+position:fixed; inset:0; background:rgba(4,7,16,0.6); backdrop-filter:blur(2px);
+opacity:0; pointer-events:none; transition:opacity .2s ease; z-index:40;
+}
+.overlay.show{opacity:1; pointer-events:auto;}
 
-  .drawer{
-    position:fixed; top:0; right:0; bottom:0; width:420px; max-width:92vw;
-    background:linear-gradient(180deg, var(--bg-elevated), var(--bg));
-    border-left:1px solid var(--border); box-shadow:var(--shadow-lift);
-    transform:translateX(100%); transition:transform .25s cubic-bezier(.4,0,.2,1);
-    z-index:50; display:flex; flex-direction:column;
-  }
-  .drawer.show{transform:translateX(0);}
-  .drawer-header{
-    padding:22px 24px; border-bottom:1px solid var(--border-soft);
-    display:flex; align-items:center; justify-content:space-between;
-  }
-  .drawer-header h2{font-size:17px; margin:0; font-weight:700;}
-  .drawer-close{
-    width:30px; height:30px; border-radius:8px; background:var(--panel); border:1px solid var(--border);
-    color:var(--text-secondary); cursor:pointer; display:flex; align-items:center; justify-content:center;
-  }
-  .drawer-close:hover{color:var(--text-primary);}
-  .drawer-body{padding:22px 24px; overflow-y:auto; flex:1; display:flex; flex-direction:column; gap:16px;}
-  .field label{display:block; font-size:12px; font-weight:600; color:var(--text-secondary); margin-bottom:7px;}
-  .field-row{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
-  .drawer-footer{
-    padding:18px 24px; border-top:1px solid var(--border-soft); display:flex; gap:10px;
-  }
-  .drawer-footer .btn{flex:1; justify-content:center;}
+.drawer{
+position:fixed; top:0; right:0; bottom:0; width:420px; max-width:92vw;
+background:linear-gradient(180deg, var(--bg-elevated), var(--bg));
+border-left:1px solid var(--border); box-shadow:var(--shadow-lift);
+transform:translateX(100%); transition:transform .25s cubic-bezier(.4,0,.2,1);
+z-index:50; display:flex; flex-direction:column;
+}
+.drawer.show{transform:translateX(0);}
+.drawer-header{
+padding:22px 24px; border-bottom:1px solid var(--border-soft);
+display:flex; align-items:center; justify-content:space-between;
+}
+.drawer-header h2{font-size:17px; margin:0; font-weight:700;}
+.drawer-close{
+width:30px; height:30px; border-radius:8px; background:var(--panel); border:1px solid var(--border);
+color:var(--text-secondary); cursor:pointer; display:flex; align-items:center; justify-content:center;
+}
+.drawer-close:hover{color:var(--text-primary);}
+.drawer-body{padding:22px 24px; overflow-y:auto; flex:1; display:flex; flex-direction:column; gap:16px;}
+.field label{display:block; font-size:12px; font-weight:600; color:var(--text-secondary); margin-bottom:7px;}
+.field-row{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+.drawer-footer{
+padding:18px 24px; border-top:1px solid var(--border-soft); display:flex; gap:10px;
+}
+.drawer-footer .btn{flex:1; justify-content:center;}
 
-  .section-block{border-top:1px dashed var(--border); padding-top:16px; margin-top:4px;}
-  .section-block-header{display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;}
-  .section-label{
-    font-size:11px; text-transform:uppercase; letter-spacing:0.8px; color:var(--text-muted); font-weight:700;
-  }
-  .save-hint{
-    font-size:11.5px; color:var(--text-muted); background:var(--panel); border:1px solid var(--border-soft);
-    border-radius:8px; padding:10px 12px; line-height:1.5;
-  }
-  .mini-list{display:flex; flex-direction:column; gap:8px;}
-  .no-items{font-size:12.5px; color:var(--text-muted); text-align:center; padding:10px 0;}
+.section-block{border-top:1px dashed var(--border); padding-top:16px; margin-top:4px;}
+.section-block-header{display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;}
+.section-label{
+font-size:11px; text-transform:uppercase; letter-spacing:0.8px; color:var(--text-muted); font-weight:700;
+}
+.save-hint{
+font-size:11.5px; color:var(--text-muted); background:var(--panel); border:1px solid var(--border-soft);
+border-radius:8px; padding:10px 12px; line-height:1.5;
+}
+.mini-list{display:flex; flex-direction:column; gap:8px;}
+.no-items{font-size:12.5px; color:var(--text-muted); text-align:center; padding:10px 0;}
 
-  .mini-dropzone{
-    border:2px dashed var(--border); border-radius:10px; padding:18px; text-align:center;
-    transition:border-color .15s ease, background .15s ease; background:var(--panel);
-  }
-  .mini-dropzone.drag{border-color:var(--accent); background:var(--accent-soft);}
-  .mini-dropzone svg{width:22px; height:22px; color:var(--text-muted); margin-bottom:6px;}
-  .mini-dropzone p{margin:0 0 2px; font-size:13px; color:var(--text-secondary); font-weight:500;}
-  .mini-dropzone span{font-size:11.5px; color:var(--text-muted);}
-  .mini-dropzone .browse{color:var(--accent-hover); font-weight:600; cursor:pointer;}
-  .mini-dropzone input[type=file]{display:none;}
+.mini-dropzone{
+border:2px dashed var(--border); border-radius:10px; padding:18px; text-align:center;
+transition:border-color .15s ease, background .15s ease; background:var(--panel);
+}
+.mini-dropzone.drag{border-color:var(--accent); background:var(--accent-soft);}
+.mini-dropzone svg{width:22px; height:22px; color:var(--text-muted); margin-bottom:6px;}
+.mini-dropzone p{margin:0 0 2px; font-size:13px; color:var(--text-secondary); font-weight:500;}
+.mini-dropzone span{font-size:11.5px; color:var(--text-muted);}
+.mini-dropzone .browse{color:var(--accent-hover); font-weight:600; cursor:pointer;}
+.mini-dropzone input[type=file]{display:none;}
 
-  .doc-row{
-    display:flex; align-items:center; gap:10px; padding:10px 12px; background:var(--panel);
-    border:1px solid var(--border-soft); border-radius:9px; font-size:12.5px;
-  }
-  .doc-row .dicon{
-    width:30px; height:30px; border-radius:7px; background:var(--panel-alt); display:flex;
-    align-items:center; justify-content:center; flex-shrink:0; overflow:hidden;
-  }
-  .doc-row .dicon img{width:100%; height:100%; object-fit:cover;}
-  .doc-row .dicon svg{width:14px; height:14px; color:var(--text-muted);}
-  .doc-row .dname{flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-weight:500;}
-  .doc-row .dmeta{color:var(--text-muted); font-size:11px; flex-shrink:0;}
-  .doc-row .drow-actions{display:flex; gap:4px; flex-shrink:0;}
+.doc-row{
+display:flex; align-items:center; gap:10px; padding:10px 12px; background:var(--panel);
+border:1px solid var(--border-soft); border-radius:9px; font-size:12.5px;
+}
+.doc-row .dicon{
+width:30px; height:30px; border-radius:7px; background:var(--panel-alt); display:flex;
+align-items:center; justify-content:center; flex-shrink:0; overflow:hidden;
+}
+.doc-row .dicon img{width:100%; height:100%; object-fit:cover;}
+.doc-row .dicon svg{width:14px; height:14px; color:var(--text-muted);}
+.doc-row .dname{flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-weight:500;}
+.doc-row .dmeta{color:var(--text-muted); font-size:11px; flex-shrink:0;}
+.doc-row .drow-actions{display:flex; gap:4px; flex-shrink:0;}
 
-  .toast{
-    position:fixed; bottom:26px; right:26px; background:var(--panel-alt);
-    border:1px solid var(--border); padding:13px 18px; border-radius:10px;
-    font-size:13.5px; display:flex; align-items:center; gap:10px; box-shadow:var(--shadow-lift);
-    transform:translateY(20px); opacity:0; transition:all .25s ease; z-index:60;
-  }
-  .toast.show{transform:translateY(0); opacity:1;}
-  .toast svg{width:16px; height:16px; color:var(--success); flex-shrink:0;}
+.toast{
+position:fixed; bottom:26px; right:26px; background:var(--panel-alt);
+border:1px solid var(--border); padding:13px 18px; border-radius:10px;
+font-size:13.5px; display:flex; align-items:center; gap:10px; box-shadow:var(--shadow-lift);
+transform:translateY(20px); opacity:0; transition:all .25s ease; z-index:60;
+}
+.toast.show{transform:translateY(0); opacity:1;}
+.toast svg{width:16px; height:16px; color:var(--success); flex-shrink:0;}
 
-  footer.note{margin-top:30px; color:var(--text-muted); font-size:12px; text-align:center;}
+footer.note{margin-top:30px; color:var(--text-muted); font-size:12px; text-align:center;}
 
-  @media (max-width:900px){
-    .app{grid-template-columns:1fr;}
-    .sidebar{
-      flex-direction:row; align-items:center; padding:16px 20px; gap:16px; overflow-x:auto;
-    }
-    .sidebar::before{display:none;}
-    .nav{flex-direction:row;}
-    .nav-label{display:none;}
-    .sidebar-footer{display:none;}
-    .main{padding:24px 18px 50px;}
-    .stats{grid-template-columns:1fr 1fr;}
-    .field-row{grid-template-columns:1fr;}
+@media (max-width:900px){
+.app{grid-template-columns:1fr;}
+.sidebar{
+flex-direction:row; align-items:center; padding:16px 20px; gap:16px; overflow-x:auto;
+}
+.sidebar::before{display:none;}
+.nav{flex-direction:row;}
+.nav-label{display:none;}
+.sidebar-footer{display:none;}
+.main{padding:24px 18px 50px;}
+.stats{grid-template-columns:1fr 1fr;}
+.field-row{grid-template-columns:1fr;}
 
-    .table-wrap{background:transparent; border:none; box-shadow:none; overflow:visible;}
-    table, tbody{display:block; width:100%;}
-    thead{display:none;}
-    tbody tr{
-      display:block;
-      background:linear-gradient(160deg, var(--panel), var(--panel-alt));
-      border:1px solid var(--border-soft); border-radius:var(--radius-md);
-      padding:16px 18px; margin-bottom:12px; box-shadow:var(--shadow-soft);
-    }
-    tbody tr:last-child{margin-bottom:0;}
-    tbody td{
-      display:flex; align-items:center; justify-content:space-between; gap:12px;
-      padding:6px 0; border-bottom:none; font-size:13.5px;
-    }
-    tbody td::before{
-      content:attr(data-label); font-size:11px; font-weight:600; text-transform:uppercase;
-      letter-spacing:0.4px; color:var(--text-muted);
-    }
-    tbody td.cell-recipient{
-      flex-direction:column; align-items:flex-start; gap:2px; padding-bottom:10px;
-      border-bottom:1px solid var(--border-soft); margin-bottom:6px;
-    }
-    tbody td.cell-recipient::before{display:none;}
-    tbody td.cell-recipient strong{font-size:15px;}
-    tbody td:last-child{padding-top:10px; margin-top:4px; border-top:1px solid var(--border-soft);}
-    tbody td:last-child::before{display:none;}
-    tbody .row-actions{justify-content:flex-end; width:100%;}
-  }
-</style>
+```
+.table-wrap{background:transparent; border:none; box-shadow:none; overflow:visible;}
+table, tbody{display:block; width:100%;}
+thead{display:none;}
+tbody tr{
+  display:block;
+  background:linear-gradient(160deg, var(--panel), var(--panel-alt));
+  border:1px solid var(--border-soft); border-radius:var(--radius-md);
+  padding:16px 18px; margin-bottom:12px; box-shadow:var(--shadow-soft);
+}
+tbody tr:last-child{margin-bottom:0;}
+tbody td{
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+  padding:6px 0; border-bottom:none; font-size:13.5px;
+}
+tbody td::before{
+  content:attr(data-label); font-size:11px; font-weight:600; text-transform:uppercase;
+  letter-spacing:0.4px; color:var(--text-muted);
+}
+tbody td.cell-recipient{
+  flex-direction:column; align-items:flex-start; gap:2px; padding-bottom:10px;
+  border-bottom:1px solid var(--border-soft); margin-bottom:6px;
+}
+tbody td.cell-recipient::before{display:none;}
+tbody td.cell-recipient strong{font-size:15px;}
+tbody td:last-child{padding-top:10px; margin-top:4px; border-top:1px solid var(--border-soft);}
+tbody td:last-child::before{display:none;}
+tbody .row-actions{justify-content:flex-end; width:100%;}
+```
+
+} </style>
+
 </head>
 <body>
 
@@ -417,249 +421,254 @@
       </div>
     </div>
 
-    <nav class="nav">
-      <div class="nav-label">Workspace</div>
-      <a href="index.html" class="nav-item">
-        <div class="left">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v10a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V10"/></svg>
-          Home
-        </div>
-      </a>
-      <a href="shoppingList.html" class="nav-item">
-        <div class="left">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="9" cy="21" r="1"/><circle cx="19" cy="21" r="1"/>
-            <path d="M2.5 3h2l2.6 12.4a2 2 0 0 0 2 1.6h8.4a2 2 0 0 0 2-1.6L21 8H6"/>
-          </svg>
-          Shopping List
-        </div>
-      </a>
-      <a href="payments.html" class="nav-item active">
-        <div class="left">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 9h18M7 14h4"/></svg>
-          Payments
-        </div>
-      </a>
-      <a href="expenses.html" class="nav-item">
-        <div class="left">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-          Expenses
-        </div>
-      </a>
-      <a href="documents.html" class="nav-item">
-        <div class="left">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/></svg>
-          Documents
-        </div>
-      </a>
-      <a href="family-details.html" class="nav-item">
-        <div class="left">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 21a8 8 0 0 0-16 0"/><circle cx="12" cy="7" r="4"/></svg>
-          Family Details
-        </div>
-      </a>
-      <a href="bond.html" class="nav-item">
-        <div class="left">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-9"/><path d="M9 20v-6h6v6"/></svg>
-          Bond Payments
-        </div>
-      </a>
-      <a href="medical.html" class="nav-item">
-        <div class="left">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M19 14c1.5-1.5 3-3.5 3-5.5A4.5 4.5 0 0 0 17.5 4c-1.7 0-3 .7-4.5 2.5C11.5 4.7 10.2 4 8.5 4A4.5 4.5 0 0 0 4 8.5C4 13 12 21 12 21s2.5-2.4 4.5-4.5"/><path d="M9 11h3m0 0h3m-3 0V8m0 3v3"/></svg>
-          Medical
-        </div>
-      </a>  
-      <a href="pets.html" class="nav-item">
-        <div class="left">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
-            <ellipse cx="12" cy="16.2" rx="7" ry="5.5"/>
-            <ellipse cx="5.5" cy="7.5" rx="2.9" ry="4"/>
-            <ellipse cx="12" cy="4.8" rx="2.9" ry="4"/>
-            <ellipse cx="18.5" cy="7.5" rx="2.9" ry="4"/>
-          </svg>
-          Pets
-        </div>
-      </a>
-      <a href="property.html" class="nav-item">
-        <div class="left">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M14.7 2.7a5.2 5.2 0 0 0-6.9 6.9l-5.1 5.1a2 2 0 0 0 0 2.8l1.8 1.8a2 2 0 0 0 2.8 0l5.1-5.1a5.2 5.2 0 0 0 6.9-6.9l-3.2 3.2-2.6-.6-.6-2.6 3.2-3.2a5.2 5.2 0 0 0-1.4-1.4Z"/>
-            <circle cx="5.5" cy="18.5" r="1"/>
-          </svg>
-          Home Maintenance
-        </div>
-      </a> 
-      <a href="goals.html" class="nav-item">
-        <div class="left">
-          <svg
-            xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"
-          >
-            <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z" />
-            <path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z" />
-            <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0" />
-            <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5" />
-          </svg>
-          Goal Tracker
-        </div>
-      </a>
-      <a href="notes.html" class="nav-item">
-        <div class="left">
-          <svg
-            xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"
-          >
-            <path d="M4 20l1.2-4.5L15.7 5a2.3 2.3 0 0 1 3.3 3.3L8.5 19.1 4 20z" />
-            <path d="M13.2 7.5l3.3 3.3" />
-            <path d="M5.2 15.5l3.3 3.3" />
-          </svg>
-          Notes
-        </div>
-      </a>
-      <!--<a href="movies.html" class="nav-item">
-        <div class="left">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="2.5" y="5.5" width="19" height="13" rx="2"/>
-            <path d="M7 5.5v13M17 5.5v13M2.5 9h4.5M2.5 15h4.5M17 9h4.5M17 15h4.5"/>
-          </svg>
-          Movies
-        </div>
-      </a>
-      <a href="chores.html" class="nav-item">
-        <div class="left">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="6" cy="14" r="4.5" />
-            <circle cx="16.3" cy="15" r="6.3" />
-            <circle cx="7" cy="5" r="3.5" />
-            <circle cx="14" cy="4" r="2.5" />
-        </svg>
-          Chores
-        </div>
-      </a>-->
-      <a href="meal-planner.html" class="nav-item">
-        <div class="left">
-          <svg
-            viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle;"
-          >
-            <path d="M5 3v6" />
-            <path d="M8 3v6" />
-            <path d="M11 3v6" />
-            <path d="M5 9c0 2 1.3 3.5 3 3.5S11 11 11 9" />
-            <path d="M8 12.5V21" />
-            <path d="M16 3v18" />
-            <path d="M16 3c4 2 5 5 5 9h-5" />
-          </svg>  
-          Meal Planner
-        </div>
-      </a>
-    </nav>
-
-    <script>
-      document.querySelector('.nav .nav-item.active')?.scrollIntoView({ inline: 'center', block: 'nearest' });
-    </script>
-
-    <div class="sidebar-footer">
-      <span>homeBase · v0.1</span>
-  
+```
+<nav class="nav">
+  <div class="nav-label">Workspace</div>
+  <a href="index.html" class="nav-item">
+    <div class="left">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v10a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V10"/></svg>
+      Home
     </div>
+  </a>
+  <a href="shoppingList.html" class="nav-item">
+    <div class="left">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="9" cy="21" r="1"/><circle cx="19" cy="21" r="1"/>
+        <path d="M2.5 3h2l2.6 12.4a2 2 0 0 0 2 1.6h8.4a2 2 0 0 0 2-1.6L21 8H6"/>
+      </svg>
+      Shopping List
+    </div>
+  </a>
+  <a href="payments.html" class="nav-item active">
+    <div class="left">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 9h18M7 14h4"/></svg>
+      Payments
+    </div>
+  </a>
+  <a href="expenses.html" class="nav-item">
+    <div class="left">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      Expenses
+    </div>
+  </a>
+  <a href="documents.html" class="nav-item">
+    <div class="left">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/></svg>
+      Documents
+    </div>
+  </a>
+  <a href="family-details.html" class="nav-item">
+    <div class="left">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 21a8 8 0 0 0-16 0"/><circle cx="12" cy="7" r="4"/></svg>
+      Family Details
+    </div>
+  </a>
+  <a href="bond.html" class="nav-item">
+    <div class="left">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-9"/><path d="M9 20v-6h6v6"/></svg>
+      Bond Payments
+    </div>
+  </a>
+  <a href="medical.html" class="nav-item">
+    <div class="left">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M19 14c1.5-1.5 3-3.5 3-5.5A4.5 4.5 0 0 0 17.5 4c-1.7 0-3 .7-4.5 2.5C11.5 4.7 10.2 4 8.5 4A4.5 4.5 0 0 0 4 8.5C4 13 12 21 12 21s2.5-2.4 4.5-4.5"/><path d="M9 11h3m0 0h3m-3 0V8m0 3v3"/></svg>
+      Medical
+    </div>
+  </a>  
+  <a href="pets.html" class="nav-item">
+    <div class="left">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+        <ellipse cx="12" cy="16.2" rx="7" ry="5.5"/>
+        <ellipse cx="5.5" cy="7.5" rx="2.9" ry="4"/>
+        <ellipse cx="12" cy="4.8" rx="2.9" ry="4"/>
+        <ellipse cx="18.5" cy="7.5" rx="2.9" ry="4"/>
+      </svg>
+      Pets
+    </div>
+  </a>
+  <a href="property.html" class="nav-item">
+    <div class="left">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M14.7 2.7a5.2 5.2 0 0 0-6.9 6.9l-5.1 5.1a2 2 0 0 0 0 2.8l1.8 1.8a2 2 0 0 0 2.8 0l5.1-5.1a5.2 5.2 0 0 0 6.9-6.9l-3.2 3.2-2.6-.6-.6-2.6 3.2-3.2a5.2 5.2 0 0 0-1.4-1.4Z"/>
+        <circle cx="5.5" cy="18.5" r="1"/>
+      </svg>
+      Home Maintenance
+    </div>
+  </a> 
+  <a href="goals.html" class="nav-item">
+    <div class="left">
+      <svg
+        xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"
+      >
+        <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z" />
+        <path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z" />
+        <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0" />
+        <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5" />
+      </svg>
+      Goal Tracker
+    </div>
+  </a>
+  <a href="notes.html" class="nav-item">
+    <div class="left">
+      <svg
+        xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"
+      >
+        <path d="M4 20l1.2-4.5L15.7 5a2.3 2.3 0 0 1 3.3 3.3L8.5 19.1 4 20z" />
+        <path d="M13.2 7.5l3.3 3.3" />
+        <path d="M5.2 15.5l3.3 3.3" />
+      </svg>
+      Notes
+    </div>
+  </a>
+  <!--<a href="movies.html" class="nav-item">
+    <div class="left">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="2.5" y="5.5" width="19" height="13" rx="2"/>
+        <path d="M7 5.5v13M17 5.5v13M2.5 9h4.5M2.5 15h4.5M17 9h4.5M17 15h4.5"/>
+      </svg>
+      Movies
+    </div>
+  </a>
+  <a href="chores.html" class="nav-item">
+    <div class="left">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="6" cy="14" r="4.5" />
+        <circle cx="16.3" cy="15" r="6.3" />
+        <circle cx="7" cy="5" r="3.5" />
+        <circle cx="14" cy="4" r="2.5" />
+    </svg>
+      Chores
+    </div>
+  </a>-->
+  <a href="meal-planner.html" class="nav-item">
+    <div class="left">
+      <svg
+        viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle;"
+      >
+        <path d="M5 3v6" />
+        <path d="M8 3v6" />
+        <path d="M11 3v6" />
+        <path d="M5 9c0 2 1.3 3.5 3 3.5S11 11 11 9" />
+        <path d="M8 12.5V21" />
+        <path d="M16 3v18" />
+        <path d="M16 3c4 2 5 5 5 9h-5" />
+      </svg>  
+      Meal Planner
+    </div>
+  </a>
+</nav>
+
+<script>
+  document.querySelector('.nav .nav-item.active')?.scrollIntoView({ inline: 'center', block: 'nearest' });
+</script>
+
+<div class="sidebar-footer">
+  <span>homeBase · v0.1</span>
+</div>
+```
+
   </aside>
 
   <main class="main">
 
-    <div id="vaultWrap">
-    <div class="topbar">
-      <div>
-        <h1>Payments</h1>
-        <p>Track payments.</p>
-      </div>
-      <div class="actions-row">
-        <button class="btn btn-ghost" id="exportBtn">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
-          Export CSV
-        </button>
-        <button class="btn btn-primary" id="addBtn">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
-          Add Payment
-        </button>
-      </div>
-    </div>
+```
+<div id="vaultWrap">
+<div class="topbar">
+  <div>
+    <h1>Payments</h1>
+    <p>Track payments.</p>
+  </div>
+  <div class="actions-row">
+    <button class="btn btn-ghost" id="exportBtn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+      Export CSV
+    </button>
+    <button class="btn btn-primary" id="addBtn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+      Add Payment
+    </button>
+  </div>
+</div>
 
-    <div class="stats">
-      <div class="stat-card total">
-        <div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 12a9 9 0 1 0 18 0 9 9 0 0 0-18 0Z"/><path d="M12 7v5l3 3"/></svg></div>
-        <div class="label">Total Tracked</div>
-        <div class="value mono" id="statTotal">R0.00</div>
-        <div class="sub" id="statTotalCount">0 payments</div>
-      </div>
-      <div class="stat-card paid">
-        <div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 6 9 17l-5-5"/></svg></div>
-        <div class="label">Paid</div>
-        <div class="value mono" id="statPaid">R0.00</div>
-        <div class="sub" id="statPaidCount">0 payments</div>
-      </div>
-      <div class="stat-card pending">
-        <div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l4 2"/></svg></div>
-        <div class="label">Pending</div>
-        <div class="value mono" id="statPending">R0.00</div>
-        <div class="sub" id="statPendingCount">0 payments</div>
-      </div>
-      <div class="stat-card overdue">
-        <div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 9v4m0 4h.01M10.3 3.86 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.86a2 2 0 0 0-3.4 0Z"/></svg></div>
-        <div class="label">Overdue</div>
-        <div class="value mono" id="statOverdue">R0.00</div>
-        <div class="sub" id="statOverdueCount">0 payments</div>
-      </div>
-    </div>
+<div class="stats">
+  <div class="stat-card total">
+    <div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 12a9 9 0 1 0 18 0 9 9 0 0 0-18 0Z"/><path d="M12 7v5l3 3"/></svg></div>
+    <div class="label">Total Tracked</div>
+    <div class="value mono" id="statTotal">R0.00</div>
+    <div class="sub" id="statTotalCount">0 payments</div>
+  </div>
+  <div class="stat-card paid">
+    <div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 6 9 17l-5-5"/></svg></div>
+    <div class="label">Paid</div>
+    <div class="value mono" id="statPaid">R0.00</div>
+    <div class="sub" id="statPaidCount">0 payments</div>
+  </div>
+  <div class="stat-card pending">
+    <div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l4 2"/></svg></div>
+    <div class="label">Pending</div>
+    <div class="value mono" id="statPending">R0.00</div>
+    <div class="sub" id="statPendingCount">0 payments</div>
+  </div>
+  <div class="stat-card overdue">
+    <div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 9v4m0 4h.01M10.3 3.86 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.86a2 2 0 0 0-3.4 0Z"/></svg></div>
+    <div class="label">Overdue</div>
+    <div class="value mono" id="statOverdue">R0.00</div>
+    <div class="sub" id="statOverdueCount">0 payments</div>
+  </div>
+</div>
 
-    <div class="ledger-stitch"></div>
+<div class="ledger-stitch"></div>
 
-    <div class="filters">
-      <div class="search-wrap">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
-        <input type="text" id="searchInput" placeholder="Search recipient or reference…">
-      </div>
-      <select id="statusFilter">
-        <option value="all">All statuses</option>
-        <option value="paid">Paid</option>
-        <option value="pending">Pending</option>
-        <option value="overdue">Overdue</option>
-      </select>
-      <select id="categoryFilter">
-        <option value="all">All categories</option>
-      </select>
-      <select id="sortFilter">
-        <option value="date-desc">Newest first</option>
-        <option value="date-asc">Oldest first</option>
-        <option value="amount-desc">Amount: high to low</option>
-        <option value="amount-asc">Amount: low to high</option>
-      </select>
-    </div>
+<div class="filters">
+  <div class="search-wrap">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+    <input type="text" id="searchInput" placeholder="Search recipient or reference…">
+  </div>
+  <select id="statusFilter">
+    <option value="all">All statuses</option>
+    <option value="paid">Paid</option>
+    <option value="pending">Pending</option>
+    <option value="overdue">Overdue</option>
+  </select>
+  <select id="categoryFilter">
+    <option value="all">All categories</option>
+  </select>
+  <select id="sortFilter">
+    <option value="date-desc">Newest first</option>
+    <option value="date-asc">Oldest first</option>
+    <option value="amount-desc">Amount: high to low</option>
+    <option value="amount-asc">Amount: low to high</option>
+  </select>
+</div>
 
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>Recipient</th>
-            <th>Category</th>
-            <th>Amount</th>
-            <th>Due Date</th>
-            <th>Method</th>
-            <th>Status</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody id="tableBody"></tbody>
-      </table>
-      <div class="empty-state" id="emptyState" style="display:none;">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 9h18"/></svg>
-        <h3>No payments yet</h3>
-        <p>Add your first beneficiary payment to start building the ledger.</p>
-        <button class="btn btn-primary" id="emptyAddBtn">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
-          Add Payment
-        </button>
-      </div>
-    </div>   
-    </div>
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>Recipient</th>
+        <th>Category</th>
+        <th>Amount</th>
+        <th>Due Date</th>
+        <th>Method</th>
+        <th>Status</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody id="tableBody"></tbody>
+  </table>
+  <div class="empty-state" id="emptyState" style="display:none;">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 9h18"/></svg>
+    <h3>No payments yet</h3>
+    <p>Add your first beneficiary payment to start building the ledger.</p>
+    <button class="btn btn-primary" id="emptyAddBtn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+      Add Payment
+    </button>
+  </div>
+</div>   
+</div>
+```
+
   </main>
 </div>
 
@@ -729,19 +738,22 @@
       <input type="text" id="fNotes" placeholder="Any extra detail…">
     </div>
 
-    <div class="section-block" id="receiptsBlock" style="display:none;">
-      <div class="section-block-header">
-        <div class="section-label">Receipts / Documents</div>
-      </div>
-      <div class="mini-dropzone" id="receiptDropzone">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 16V4m0 0 4 4m-4-4L8 8"/><path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></svg>
-        <p>Drag files here, or <span class="browse" id="receiptBrowseLink">browse</span></p>
-        <span>Photos, PDFs — saved against this payment</span>
-        <input type="file" id="receiptFileInput" multiple>
-      </div>
-      <div class="mini-list" id="receiptList" style="margin-top:10px;"></div>
-    </div>
-    <div class="save-hint" id="newPaymentHint">Save this payment first to attach receipts.</div>
+```
+<div class="section-block" id="receiptsBlock" style="display:none;">
+  <div class="section-block-header">
+    <div class="section-label">Receipts / Documents</div>
+  </div>
+  <div class="mini-dropzone" id="receiptDropzone">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 16V4m0 0 4 4m-4-4L8 8"/><path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></svg>
+    <p>Drag files here, or <span class="browse" id="receiptBrowseLink">browse</span></p>
+    <span>Photos, PDFs — saved against this payment</span>
+    <input type="file" id="receiptFileInput" multiple>
+  </div>
+  <div class="mini-list" id="receiptList" style="margin-top:10px;"></div>
+</div>
+<div class="save-hint" id="newPaymentHint">Save this payment first to attach receipts.</div>
+```
+
   </div>
   <div class="drawer-footer">
     <button class="btn btn-ghost" id="cancelBtn">Cancel</button>
@@ -759,6 +771,9 @@
   const el = (id) => document.getElementById(id);
   const BUCKET = 'payment-receipts';
 
+  // Payments are considered "new" for 24 hours after creation.
+  const ROW_NEW_HOURS = 24;
+
   let payments = [];
   let editingId = null;
   let currentReceipts = [];
@@ -772,20 +787,24 @@
   function currency(n){
     return 'R' + Number(n).toLocaleString('en-ZA', {minimumFractionDigits:2, maximumFractionDigits:2});
   }
+
   function formatDate(d){
     if(!d) return '—';
     const dt = new Date(d + 'T00:00:00');
     return dt.toLocaleDateString('en-ZA', {day:'2-digit', month:'short', year:'numeric'});
   }
+
   function formatBytes(bytes){
     if(!bytes) return '0 KB';
     const kb = bytes / 1024;
     if(kb < 1024) return kb.toFixed(0) + ' KB';
     return (kb/1024).toFixed(1) + ' MB';
   }
+
   function escapeHtml(str){
     return String(str ?? '').replace(/[&<>"']/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]));
   }
+
   function showToast(msg){
     const toast = el('toast');
     el('toastText').textContent = msg;
@@ -799,13 +818,30 @@
       .from('payments')
       .select('*, payment_receipts(id)')
       .order('due_date', { ascending: false });
-    if(error){ showToast('Error loading payments'); console.error(error); return; }
+
+    if(error){
+      showToast('Error loading payments');
+      console.error(error);
+      return;
+    }
+
     payments = data.map(p => ({
-      id: p.id, recipient: p.recipient, reference: p.reference,
-      amount: p.amount, date: p.due_date, category: p.category,
-      method: p.method, status: p.status, notes: p.notes,
+      id: p.id,
+      recipient: p.recipient,
+      reference: p.reference,
+      amount: p.amount,
+      date: p.due_date,
+      category: p.category,
+      method: p.method,
+      status: p.status,
+      notes: p.notes,
+
+      // Supabase's created_at timestamp is used for the row-level "new" badge.
+      createdAt: p.created_at,
+
       receiptCount: (p.payment_receipts || []).length
     }));
+
     render();
   }
 
@@ -813,8 +849,10 @@
     const catFilter = el('categoryFilter');
     const cats = Array.from(new Set(payments.map(p => p.category))).sort();
     const current = catFilter.value;
+
     catFilter.innerHTML = '<option value="all">All categories</option>' +
       cats.map(c => `<option value="${c}">${c}</option>`).join('');
+
     if(cats.includes(current)) catFilter.value = current;
   }
 
@@ -826,10 +864,13 @@
 
     el('statTotal').textContent = currency(sum(payments));
     el('statTotalCount').textContent = `${payments.length} payment${payments.length===1?'':'s'}`;
+
     el('statPaid').textContent = currency(sum(paid));
     el('statPaidCount').textContent = `${paid.length} payment${paid.length===1?'':'s'}`;
+
     el('statPending').textContent = currency(sum(pending));
     el('statPendingCount').textContent = `${pending.length} payment${pending.length===1?'':'s'}`;
+
     el('statOverdue').textContent = currency(sum(overdue));
     el('statOverdueCount').textContent = `${overdue.length} payment${overdue.length===1?'':'s'}`;
   }
@@ -841,9 +882,14 @@
     const sort = el('sortFilter').value;
 
     let list = payments.filter(p => {
-      const matchesQ = !q || p.recipient.toLowerCase().includes(q) || (p.reference||'').toLowerCase().includes(q);
+      const matchesQ =
+        !q ||
+        p.recipient.toLowerCase().includes(q) ||
+        (p.reference||'').toLowerCase().includes(q);
+
       const matchesStatus = status === 'all' || p.status === status;
       const matchesCat = cat === 'all' || p.category === cat;
+
       return matchesQ && matchesStatus && matchesCat;
     });
 
@@ -854,12 +900,14 @@
       if(sort === 'amount-asc') return a.amount - b.amount;
       return 0;
     });
+
     return list;
   }
 
   function render(){
     refreshCategoryOptions();
     computeStats();
+
     const list = getFiltered();
 
     if(list.length === 0){
@@ -867,10 +915,17 @@
       emptyState.style.display = 'flex';
       return;
     }
+
     emptyState.style.display = 'none';
 
     tableBody.innerHTML = list.map(p => {
-      const isNew = p.createdAt && (Date.now() - new Date(p.createdAt).getTime()) < ROW_NEW_HOURS * 3600 * 1000;
+
+      // Show the red "1" badge for payments created within the last 24 hours.
+      const isNew =
+        p.createdAt &&
+        (Date.now() - new Date(p.createdAt).getTime()) <
+        ROW_NEW_HOURS * 3600 * 1000;
+
       return `
       <tr>
         <td class="cell-recipient">
@@ -880,22 +935,45 @@
           </div>  
           <span class="ref">${escapeHtml(p.reference || '—')}</span>
         </td>
+
         <td data-label="Category">${escapeHtml(p.category)}</td>
-        <td class="amount" data-label="Amount">${currency(p.amount)}</td>
+
+        <td class="amount" data-label="Amount">
+          ${currency(p.amount)}
+        </td>
+
         <td data-label="Due Date">${formatDate(p.date)}</td>
+
         <td data-label="Method">${escapeHtml(p.method)}</td>
-        <td data-label="Status"><span class="pill ${p.status}">${p.status.charAt(0).toUpperCase()+p.status.slice(1)}</span></td>
+
+        <td data-label="Status">
+          <span class="pill ${p.status}">
+            ${p.status.charAt(0).toUpperCase()+p.status.slice(1)}
+          </span>
+        </td>
+
         <td>
           <div class="row-actions">
             <button class="receipt-count-btn ${p.receiptCount ? 'has' : ''}" data-receipts="${p.id}" aria-label="Receipts">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/>
+                <path d="M14 2v6h6"/>
+              </svg>
               ${p.receiptCount || 0}
             </button>
+
             <button class="icon-btn" data-edit="${p.id}" aria-label="Edit payment">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5Z"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M12 20h9"/>
+                <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5Z"/>
+              </svg>
             </button>
+
             <button class="icon-btn danger" data-del="${p.id}" aria-label="Delete payment">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0-1 14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L4 6"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M3 6h18"/>
+                <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0-1 14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L4 6"/>
+              </svg>
             </button>
           </div>
         </td>
@@ -906,6 +984,7 @@
 
   async function openDrawer(payment){
     editingId = payment ? payment.id : null;
+
     el('drawerTitle').textContent = payment ? 'Edit Payment' : 'Add Payment';
     el('editId').value = payment ? payment.id : '';
     el('fRecipient').value = payment ? payment.recipient : '';
@@ -929,8 +1008,10 @@
 
     drawer.classList.add('show');
     overlay.classList.add('show');
+
     setTimeout(() => el('fRecipient').focus(), 200);
   }
+
   function closeDrawer(){
     drawer.classList.remove('show');
     overlay.classList.remove('show');
@@ -938,65 +1019,133 @@
   }
 
   // ---- Receipts ----
+
   async function loadReceipts(paymentId){
     const { data, error } = await supabaseClient
-      .from('payment_receipts').select('*').eq('payment_id', paymentId).order('added_at', { ascending: false });
-    if(error){ showToast('Error loading receipts'); console.error(error); return; }
+      .from('payment_receipts')
+      .select('*')
+      .eq('payment_id', paymentId)
+      .order('added_at', { ascending: false });
+
+    if(error){
+      showToast('Error loading receipts');
+      console.error(error);
+      return;
+    }
+
     currentReceipts = data;
     await renderReceiptList();
   }
+
   async function renderReceiptList(){
     const list = el('receiptList');
     receiptThumbs = {};
+
     if(currentReceipts.length === 0){
       list.innerHTML = '<div class="no-items">No receipts yet</div>';
       return;
     }
-    await Promise.all(currentReceipts.filter(r => r.is_image).map(async (r) => {
-      const { data, error } = await supabaseClient.storage.from(BUCKET).createSignedUrl(r.storage_path, 3600);
-      if(!error) receiptThumbs[r.id] = data.signedUrl;
-    }));
+
+    await Promise.all(
+      currentReceipts
+        .filter(r => r.is_image)
+        .map(async (r) => {
+          const { data, error } = await supabaseClient
+            .storage
+            .from(BUCKET)
+            .createSignedUrl(r.storage_path, 3600);
+
+          if(!error) receiptThumbs[r.id] = data.signedUrl;
+        })
+    );
+
     list.innerHTML = currentReceipts.map(r => `
       <div class="doc-row">
         <div class="dicon">
           ${r.is_image && receiptThumbs[r.id]
             ? `<img src="${receiptThumbs[r.id]}" alt="">`
-            : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/></svg>`}
+            : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/>
+                <path d="M14 2v6h6"/>
+              </svg>`
+          }
         </div>
-        <div class="dname" title="${escapeHtml(r.name)}">${escapeHtml(r.name)}</div>
+
+        <div class="dname" title="${escapeHtml(r.name)}">
+          ${escapeHtml(r.name)}
+        </div>
+
         <div class="dmeta">${formatBytes(r.size)}</div>
+
         <div class="drow-actions">
           <button class="icon-btn" data-rdownload="${r.id}" aria-label="Download">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M12 3v12m0 0 4-4m-4 4-4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/>
+            </svg>
           </button>
+
           <button class="icon-btn danger" data-rdel="${r.id}" aria-label="Delete">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0-1 14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L4 6"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M3 6h18"/>
+              <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0-1 14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L4 6"/>
+            </svg>
           </button>
         </div>
       </div>
     `).join('');
   }
+
   el('receiptList').addEventListener('click', async (e) => {
     const dl = e.target.closest('[data-rdownload]');
     const delBtn = e.target.closest('[data-rdel]');
+
     if(dl){
       const r = currentReceipts.find(x => x.id === dl.dataset.rdownload);
       if(!r) return;
-      const { data, error } = await supabaseClient.storage.from(BUCKET).createSignedUrl(r.storage_path, 60);
-      if(error){ showToast('Could not download that file'); return; }
+
+      const { data, error } = await supabaseClient
+        .storage
+        .from(BUCKET)
+        .createSignedUrl(r.storage_path, 60);
+
+      if(error){
+        showToast('Could not download that file');
+        return;
+      }
+
       const a = document.createElement('a');
-      a.href = data.signedUrl; a.download = r.name; a.click();
+      a.href = data.signedUrl;
+      a.download = r.name;
+      a.click();
     }
+
     if(delBtn){
       const id = delBtn.dataset.rdel;
       const r = currentReceipts.find(x => x.id === id);
       if(!r) return;
+
       if(!confirm(`Delete "${r.name}"? This can't be undone.`)) return;
 
-      const { error: storageErr } = await supabaseClient.storage.from(BUCKET).remove([r.storage_path]);
-      if(storageErr){ showToast('Could not delete file from storage'); console.error(storageErr); return; }
-      const { error: dbErr } = await supabaseClient.from('payment_receipts').delete().eq('id', id);
-      if(dbErr){ showToast('Could not delete receipt record'); return; }
+      const { error: storageErr } = await supabaseClient
+        .storage
+        .from(BUCKET)
+        .remove([r.storage_path]);
+
+      if(storageErr){
+        showToast('Could not delete file from storage');
+        console.error(storageErr);
+        return;
+      }
+
+      const { error: dbErr } = await supabaseClient
+        .from('payment_receipts')
+        .delete()
+        .eq('id', id);
+
+      if(dbErr){
+        showToast('Could not delete receipt record');
+        return;
+      }
 
       await loadReceipts(editingId);
       await loadPayments();
@@ -1006,31 +1155,68 @@
 
   const receiptDropzone = el('receiptDropzone');
   const receiptFileInput = el('receiptFileInput');
+
   el('receiptBrowseLink').addEventListener('click', () => receiptFileInput.click());
-  receiptDropzone.addEventListener('dragover', (e) => { e.preventDefault(); receiptDropzone.classList.add('drag'); });
-  receiptDropzone.addEventListener('dragleave', () => receiptDropzone.classList.remove('drag'));
+
+  receiptDropzone.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    receiptDropzone.classList.add('drag');
+  });
+
+  receiptDropzone.addEventListener('dragleave', () => {
+    receiptDropzone.classList.remove('drag');
+  });
+
   receiptDropzone.addEventListener('drop', (e) => {
     e.preventDefault();
     receiptDropzone.classList.remove('drag');
     handleReceiptFiles(e.dataTransfer.files);
   });
-  receiptFileInput.addEventListener('change', () => handleReceiptFiles(receiptFileInput.files));
+
+  receiptFileInput.addEventListener('change', () => {
+    handleReceiptFiles(receiptFileInput.files);
+  });
 
   async function handleReceiptFiles(fileList){
     if(!editingId) return;
-    for(const file of Array.from(fileList)){
-      if(file.size > 50 * 1024 * 1024){ showToast(`${file.name} is over 50MB — skipped`); continue; }
-      const storagePath = `receipts/${editingId}/${crypto.randomUUID()}_${file.name}`;
-      const { error: uploadErr } = await supabaseClient.storage.from(BUCKET).upload(storagePath, file);
-      if(uploadErr){ showToast(`Could not upload ${file.name}`); console.error(uploadErr); continue; }
 
-      const { error: dbErr } = await supabaseClient.from('payment_receipts').insert({
-        payment_id: editingId, name: file.name, storage_path: storagePath,
-        size: file.size, is_image: file.type.startsWith('image/')
-      });
-      if(dbErr){ showToast(`Uploaded but failed to save record for ${file.name}`); continue; }
+    for(const file of Array.from(fileList)){
+      if(file.size > 50 * 1024 * 1024){
+        showToast(`${file.name} is over 50MB — skipped`);
+        continue;
+      }
+
+      const storagePath = `receipts/${editingId}/${crypto.randomUUID()}_${file.name}`;
+
+      const { error: uploadErr } = await supabaseClient
+        .storage
+        .from(BUCKET)
+        .upload(storagePath, file);
+
+      if(uploadErr){
+        showToast(`Could not upload ${file.name}`);
+        console.error(uploadErr);
+        continue;
+      }
+
+      const { error: dbErr } = await supabaseClient
+        .from('payment_receipts')
+        .insert({
+          payment_id: editingId,
+          name: file.name,
+          storage_path: storagePath,
+          size: file.size,
+          is_image: file.type.startsWith('image/')
+        });
+
+      if(dbErr){
+        showToast(`Uploaded but failed to save record for ${file.name}`);
+        continue;
+      }
+
       showToast(`${file.name} saved`);
     }
+
     receiptFileInput.value = '';
     await loadReceipts(editingId);
     await loadPayments();
@@ -1039,8 +1225,16 @@
   async function handleSave(){
     const recipient = el('fRecipient').value.trim();
     const amount = parseFloat(el('fAmount').value);
-    if(!recipient){ el('fRecipient').focus(); return; }
-    if(isNaN(amount) || amount <= 0){ el('fAmount').focus(); return; }
+
+    if(!recipient){
+      el('fRecipient').focus();
+      return;
+    }
+
+    if(isNaN(amount) || amount <= 0){
+      el('fAmount').focus();
+      return;
+    }
 
     const data = {
       recipient,
@@ -1054,18 +1248,40 @@
     };
 
     if(editingId){
-      const { error } = await supabaseClient.from('payments').update(data).eq('id', editingId);
-      if(error){ showToast('Error saving payment'); console.error(error); return; }
+      const { error } = await supabaseClient
+        .from('payments')
+        .update(data)
+        .eq('id', editingId);
+
+      if(error){
+        showToast('Error saving payment');
+        console.error(error);
+        return;
+      }
+
       showToast('Payment updated');
       await loadPayments();
       closeDrawer();
+
     } else {
-      const { data: inserted, error } = await supabaseClient.from('payments').insert(data).select().single();
-      if(error){ showToast('Error saving payment'); console.error(error); return; }
+      const { data: inserted, error } = await supabaseClient
+        .from('payments')
+        .insert(data)
+        .select()
+        .single();
+
+      if(error){
+        showToast('Error saving payment');
+        console.error(error);
+        return;
+      }
+
       showToast('Payment added');
       await loadPayments();
+
       // Re-open in edit mode so receipts can be attached right away
       const newPayment = payments.find(x => x.id === inserted.id);
+
       if(newPayment) await openDrawer(newPayment);
     }
   }
@@ -1073,35 +1289,89 @@
   async function handleDelete(id){
     const target = payments.find(p => p.id === id);
     if(!target) return;
+
     if(!confirm(`Remove the payment to "${target.recipient}"? This can't be undone.`)) return;
 
     if(target.receiptCount > 0){
       const { data: receiptRows, error: recErr } = await supabaseClient
-        .from('payment_receipts').select('storage_path').eq('payment_id', id);
-      if(recErr){ showToast('Could not check receipts'); console.error(recErr); return; }
+        .from('payment_receipts')
+        .select('storage_path')
+        .eq('payment_id', id);
+
+      if(recErr){
+        showToast('Could not check receipts');
+        console.error(recErr);
+        return;
+      }
+
       const paths = (receiptRows || []).map(r => r.storage_path);
+
       if(paths.length){
-        const { error: storageErr } = await supabaseClient.storage.from(BUCKET).remove(paths);
-        if(storageErr){ showToast('Could not delete receipt files'); console.error(storageErr); return; }
+        const { error: storageErr } = await supabaseClient
+          .storage
+          .from(BUCKET)
+          .remove(paths);
+
+        if(storageErr){
+          showToast('Could not delete receipt files');
+          console.error(storageErr);
+          return;
+        }
       }
     }
 
-    const { error } = await supabaseClient.from('payments').delete().eq('id', id);
-    if(error){ showToast('Error deleting payment'); console.error(error); return; }
+    const { error } = await supabaseClient
+      .from('payments')
+      .delete()
+      .eq('id', id);
+
+    if(error){
+      showToast('Error deleting payment');
+      console.error(error);
+      return;
+    }
+
     await loadPayments();
     showToast('Payment removed');
   }
 
   function exportCsv(){
-    const rows = [['Recipient','Reference','Amount','Due Date','Category','Method','Status','Notes']];
-    payments.forEach(p => rows.push([p.recipient, p.reference, p.amount, p.date, p.category, p.method, p.status, p.notes||'']));
-    const csv = rows.map(r => r.map(v => `"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
+    const rows = [[
+      'Recipient',
+      'Reference',
+      'Amount',
+      'Due Date',
+      'Category',
+      'Method',
+      'Status',
+      'Notes'
+    ]];
+
+    payments.forEach(p =>
+      rows.push([
+        p.recipient,
+        p.reference,
+        p.amount,
+        p.date,
+        p.category,
+        p.method,
+        p.status,
+        p.notes||''
+      ])
+    );
+
+    const csv = rows
+      .map(r => r.map(v => `"${String(v).replace(/"/g,'""')}"`).join(','))
+      .join('\n');
+
     const blob = new Blob([csv], {type:'text/csv'});
     const url = URL.createObjectURL(blob);
+
     const a = document.createElement('a');
     a.href = url;
     a.download = 'family-ledger-payments.csv';
     a.click();
+
     URL.revokeObjectURL(url);
   }
 
@@ -1117,14 +1387,17 @@
     const editId = e.target.closest('[data-edit]');
     const delId = e.target.closest('[data-del]');
     const receiptsId = e.target.closest('[data-receipts]');
+
     if(editId){
       const p = payments.find(x => x.id === editId.dataset.edit);
       if(p) openDrawer(p);
     }
+
     if(receiptsId){
       const p = payments.find(x => x.id === receiptsId.dataset.receipts);
       if(p) openDrawer(p);
     }
+
     if(delId){
       handleDelete(delId.dataset.del);
     }
@@ -1136,11 +1409,14 @@
   });
 
   document.addEventListener('keydown', (e) => {
-    if(e.key === 'Escape' && drawer.classList.contains('show')) closeDrawer();
+    if(e.key === 'Escape' && drawer.classList.contains('show')) {
+      closeDrawer();
+    }
   });
 
   loadPayments();
 })();
 </script>
+
 </body>
 </html>
