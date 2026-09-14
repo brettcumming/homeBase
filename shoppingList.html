@@ -511,12 +511,12 @@
   const el = (id) => document.getElementById(id);
 
   const EMOJI_MAP = [
-    [/milk/, '🥛'], [/egg/, '🥚'], [/bread/, '🍞'], [/butter/, '🧈'], [/seed/, '🌱'],
-    [/cheese/, '🧀'], [/apple/, '🍎'], [/banana|fruit/, '🍌'], [/tomato/, '🍅'],
+    [/milk|cream/, '🥛'], [/egg/, '🥚'], [/bread/, '🍞'], [/butter/, '🧈'], [/seed/, '🌱'],
+    [/cheese|melrose/, '🧀'], [/apple/, '🍎'], [/banana|fruit/, '🍌'], [/tomato/, '🍅'],
     [/potato/, '🥔'], [/onion/, '🧅'], [/carrot/, '🥕'], [/chicken/, '🍗'],
-    [/beef|mince|steak|patties/, '🥩'], [/fish|tuna/, '🐟'], [/rice/, '🍚'], [/pasta|spaghetti/, '🍝'],
+    [/beef|mince|steak|patties|biltong/, '🥩'], [/fish|tuna/, '🐟'], [/rice/, '🍚'], [/pasta|spaghetti/, '🍝'],
     [/coffee/, '☕'], [/tea/, '🍵'], [/juice/, '🧃'], [/water/, '💧'], [/cranberries/, '🔴'],
-    [/wine/, '🍷'], [/beer/, '🍺'], [/chocolate|choc/, '🍫'], [/biscuit|cookie/, '🍪'],
+    [/wine/, '🍷'], [/beer/, '🍺'], [/chocolate|choc|bar/, '🍫'], [/biscuit|cookie/, '🍪'],
     [/toilet paper|tissue|TPaper/, '🧻'], [/soap/, '🧼'], [/washing|detergent/, '🧴'],
     [/garlic/, '🧄'], [/lemon/, '🍋'], [/orange/, '🍊'], [/salt|pepper/, '🧂'],
     [/avocado/, '🥑'], [/cereal|muesli|granola/, '🥣'], [/yoghurt|yogurt/, '🥄'], [/sugar/, '🧂'],
@@ -525,7 +525,7 @@
     [/citrus/, '🍋'], [/pizza/, '🍕❄️'], [/veg/, '🫛❄️'], [/ice/, '🧊'],
     [/sausage|wors|hotdog/, '🌭'], [/gherkins|cucumber/, '🥒'], [/wheels|car/, '🔥'],
     [/naartjie|tangerine/, '🍊'], [/honey/, '🍯'], [/bacon/, '🥓'], [/peas/, '🫛'],  [/lettuce/, '🥬'], 
-    [/buns/, '🍔'],  [/pork/, '🐷'],
+    [/buns/, '🍔'],  [/pork/, '🐷'], [/butternut|pumpkin/, '🎃'], 
   ];
 
   let items = [];
