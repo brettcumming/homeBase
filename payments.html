@@ -874,6 +874,7 @@
       <tr>
         <td class="cell-recipient">
           <strong>${escapeHtml(p.recipient)}</strong>
+          ${isNew ? `<span class="row-new-badge">1</span>` : ''}
           <span class="ref">${escapeHtml(p.reference || '—')}</span>
         </td>
         <td data-label="Category">${escapeHtml(p.category)}</td>
