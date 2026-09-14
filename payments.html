@@ -870,7 +870,8 @@
     }
     emptyState.style.display = 'none';
 
-    tableBody.innerHTML = list.map(p => `
+    tableBody.innerHTML = list.map(p => const isNew = e.createdAt && (Date.now() - new Date(e.createdAt).getTime()) < ROW_NEW_HOURS * 3600 * 1000;
+      return `
       <tr>
         <td class="cell-recipient">
           <strong>${escapeHtml(p.recipient)}</strong>
