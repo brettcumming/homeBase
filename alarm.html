@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alarm Zones · homeBase</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="auth.js" defer></script>
+<style>
+  :root{
+    --bg:#0a0f1e; --panel:#121b31; --panel-2:#172340; --border:#22304f;
+    --text:#e6ecf8; --muted:#8a98b8; --accent:#4c7cf0; --accent-2:#6f97ff;
+    --danger:#e5484d; --ok:#2fbf71;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:Inter,system-ui,sans-serif;min-height:100vh}
+  h1,h2,h3{font-family:Sora,sans-serif}
+
+  /* ---------- App shell ---------- */
+  .app{display:flex;min-height:100vh}
+  .sidebar{width:240px;background:var(--panel);border-right:1px solid var(--border);padding:24px 16px;flex-shrink:0}
+  .brand{font-family:Sora;font-weight:700;font-size:20px;margin-bottom:28px;padding-left:8px}
+  .brand span{color:var(--accent)}
+  .nav a{display:block;color:var(--muted);text-decoration:none;padding:10px 12px;border-radius:8px;font-size:14px;margin-bottom:2px}
+  .nav a:hover{background:var(--panel-2);color:var(--text)}
+  .nav a.active{background:var(--accent);color:#fff}
+  .main{flex:1;padding:28px 32px;min-width:0}
+  .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;gap:12px;flex-wrap:wrap}
+  .topbar h1{font-size:24px}
+  .topbar p{color:var(--muted);font-size:14px;margin-top:4px}
+  .actions-row{display:flex;gap:8px}
+  .btn{background:var(--accent);color:#fff;border:none;padding:10px 16px;border-radius:8px;font:600 14px Inter;cursor:pointer}
+  .btn:hover{background:var(--accent-2)}
+  .btn.ghost{background:transparent;border:1px solid var(--border);color:var(--text)}
+  .btn.danger{background:transparent;border:1px solid var(--danger);color:var(--danger)}
+
+  /* ---------- Lookup ---------- */
+  .lookup{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:28px;text-align:center;margin-bottom:24px}
+  .lookup label{display:block;color:var(--muted);font-size:13px;text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px}
+  #zoneInput{width:100%;max-width:320px;background:var(--bg);border:2px solid var(--border);border-radius:14px;color:var(--text);
+    font:700 56px 'JetBrains Mono',monospace;text-align:center;padding:12px;outline:none}
+  #zoneInput:focus{border-color:var(--accent)}
+  .result{margin-top:24px;min-height:120px;display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:14px;padding:20px}
+  .result .area{font-family:Sora;font-weight:700;font-size:40px;line-height:1.15}
+  .result .notes{color:var(--muted);font-size:15px;margin-top:8px}
+  .result .hint{color:var(--muted);font-size:15px}
+  .result.found{background:rgba(229,72,77,.12);border:1px solid rgba(229,72,77,.5)}
+  .result.found .area{color:#ff8a8d}
+  .result.missing{background:var(--panel-2);border:1px dashed var(--border)}
+  .status-line{color:var(--muted);font-size:12px;margin-top:14px}
+
+  /* ---------- Zone list ---------- */
+  .card{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:20px}
+  .card h2{font-size:17px;margin-bottom:14px}
+  table{width:100%;border-collapse:collapse}
+  th{text-align:left;color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.06em;padding:10px;border-bottom:1px solid var(--border)}
+  td{padding:12px 10px;border-bottom:1px solid var(--border);font-size:14px;vertical-align:middle}
+  td.zone{font:700 18px 'JetBrains Mono',monospace;color:var(--accent-2);width:90px}
+  td.row-actions{text-align:right;white-space:nowrap}
+  td.row-actions button{background:none;border:1px solid var(--border);color:var(--muted);border-radius:6px;padding:5px 10px;cursor:pointer;font-size:12px;margin-left:4px}
+  td.row-actions button:hover{color:var(--text);border-color:var(--accent)}
+  tr.hl td{background:rgba(76,124,240,.12)}
+  .empty{color:var(--muted);text-align:center;padding:24px;font-size:14px}
+
+  /* ---------- Modal ---------- */
+  .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;z-index:50;padding:16px}
+  .modal-bg.open{display:flex}
+  .modal{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:24px;width:100%;max-width:420px}
+  .modal h3{margin-bottom:16px}
+  .field{margin-bottom:14px}
+  .field label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
+  .field input,.field textarea{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:10px;font:14px Inter}
+  .field textarea{min-height:70px;resize:vertical}
+  .modal .btns{display:flex;justify-content:space-between;gap:8px;margin-top:8px}
+  .modal .btns div{display:flex;gap:8px}
+  .err{color:var(--danger);font-size:13px;min-height:18px}
+
+  /* ---------- Mobile ---------- */
+  @media (max-width:900px){
+    .app{flex-direction:column}
+    .sidebar{width:100%;border-right:none;border-bottom:1px solid var(--border);padding:14px 16px}
+    .brand{margin-bottom:10px}
+    .nav{display:flex;overflow-x:auto;gap:4px}
+    .nav a{white-space:nowrap}
+    .main{padding:20px 16px}
+    .actions-row{width:100%}
+    #zoneInput{font-size:48px}
+    .result .area{font-size:32px}
+    table,thead,tbody,tr,td{display:block}
+    thead{display:none}
+    tr{background:var(--panel-2);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:10px}
+    td{border:none;padding:3px 0}
+    td.zone{width:auto}
+    td.row-actions{text-align:left;padding-top:8px}
+    td.row-actions button{margin:0 6px 0 0}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">home<span>Base</span></div>
+    <nav class="nav">
+      <a href="index.html">Dashboard</a>
+      <a href="payments.html">Payments</a>
+      <a href="expenses.html">Expenses</a>
+      <a href="documents.html">Documents</a>
+      <a href="bond.html">Bond</a>
+      <a href="medical.html">Medical</a>
+      <a href="pets.html">Pets</a>
+      <a href="property.html">Home Maintenance</a>
+      <a href="goals.html">Goals</a>
+      <a href="notes.html">Notes</a>
+      <a href="shopping-list.html">Shopping List</a>
+      <a href="alarm.html" class="active">Alarm Zones</a>
+    </nav>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <div>
+        <h1>Alarm Zones</h1>
+        <p>Type the number shown on the alarm panel</p>
+      </div>
+      <div class="actions-row">
+        <button class="btn" id="addBtn">+ Add Zone</button>
+      </div>
+    </div>
+
+    <section class="lookup">
+      <label for="zoneInput">Zone number</label>
+      <input id="zoneInput" type="text" inputmode="numeric" autocomplete="off" placeholder="—" autofocus>
+      <div class="result missing" id="result"><div class="hint">Waiting for a number…</div></div>
+      <div class="status-line" id="statusLine">Loading zones…</div>
+    </section>
+
+    <section class="card">
+      <h2>All Zones</h2>
+      <table>
+        <thead><tr><th>Zone</th><th>Room / Area</th><th>Notes</th><th></th></tr></thead>
+        <tbody id="zoneBody"><tr><td colspan="4" class="empty">Loading…</td></tr></tbody>
+      </table>
+    </section>
+  </main>
+</div>
+
+<div class="modal-bg" id="modalBg">
+  <div class="modal">
+    <h3 id="modalTitle">Add Zone</h3>
+    <div class="field"><label>Zone number</label><input id="fZone" inputmode="numeric"></div>
+    <div class="field"><label>Room / Area</label><input id="fArea" placeholder="e.g. Main bedroom PIR"></div>
+    <div class="field"><label>Notes (optional)</label><textarea id="fNotes" placeholder="e.g. Sliding door beam, sensor above cupboard"></textarea></div>
+    <div class="err" id="fErr"></div>
+    <div class="btns">
+      <button class="btn danger" id="delBtn" style="visibility:hidden">Delete</button>
+      <div>
+        <button class="btn ghost" id="cancelBtn">Cancel</button>
+        <button class="btn" id="saveBtn">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ----- Supabase client: reuse the one from auth.js if it exists -----
+  const SUPABASE_URL = 'YOUR_SUPABASE_URL';        // same values as auth.js
+  const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+  const sb = window.sb || window.supabaseClient ||
+             window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  const TABLE = 'alarm_zones';
+  const CACHE_KEY = 'homebase_alarm_zones';
+  let zones = [];
+  let editingId = null;
+
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const norm = s => String(s ?? '').trim().replace(/^0+(?=\d)/, '').toLowerCase(); // "07" == "7"
+
+  // ----- Offline cache so lookup still works if the network is down at night -----
+  function saveCache(){ try{ localStorage.setItem(CACHE_KEY, JSON.stringify(zones)); }catch(e){} }
+  function loadCache(){ try{ return JSON.parse(localStorage.getItem(CACHE_KEY) || '[]'); }catch(e){ return []; } }
+
+  async function loadZones(){
+    const cached = loadCache();
+    if (cached.length){ zones = cached; render(); $('statusLine').textContent = 'Showing saved copy… syncing'; }
+    const { data, error } = await sb.from(TABLE).select('*');
+    if (error){
+      $('statusLine').textContent = cached.length ? 'Offline — using saved copy' : 'Could not load zones: ' + error.message;
+      return;
+    }
+    zones = data.sort((a,b) => (parseInt(a.zone_no)||0) - (parseInt(b.zone_no)||0) || String(a.zone_no).localeCompare(b.zone_no));
+    saveCache();
+    render();
+    $('statusLine').textContent = `${zones.length} zone${zones.length === 1 ? '' : 's'} loaded`;
+  }
+
+  function lookup(){
+    const q = norm($('zoneInput').value);
+    const box = $('result');
+    if (!q){ box.className = 'result missing'; box.innerHTML = '<div class="hint">Waiting for a number…</div>'; highlight(null); return; }
+    const z = zones.find(z => norm(z.zone_no) === q);
+    if (z){
+      box.className = 'result found';
+      box.innerHTML = `<div class="area">${esc(z.area)}</div>${z.notes ? `<div class="notes">${esc(z.notes)}</div>` : ''}`;
+      highlight(z.id);
+    } else {
+      box.className = 'result missing';
+      box.innerHTML = `<div class="hint">No zone <b>${esc($('zoneInput').value.trim())}</b> on record</div>`;
+      highlight(null);
+    }
+  }
+
+  function highlight(id){
+    document.querySelectorAll('#zoneBody tr').forEach(tr => tr.classList.toggle('hl', tr.dataset.id == id));
+  }
+
+  function render(){
+    const body = $('zoneBody');
+    if (!zones.length){ body.innerHTML = '<tr><td colspan="4" class="empty">No zones yet — add the ones from your sheet.</td></tr>'; return; }
+    body.innerHTML = zones.map(z => `
+      <tr data-id="${z.id}">
+        <td class="zone">${esc(z.zone_no)}</td>
+        <td>${esc(z.area)}</td>
+        <td style="color:var(--muted)">${esc(z.notes)}</td>
+        <td class="row-actions"><button data-edit="${z.id}">Edit</button></td>
+      </tr>`).join('');
+    lookup();
+  }
+
+  // ----- Modal -----
+  function openModal(z){
+    editingId = z ? z.id : null;
+    $('modalTitle').textContent = z ? 'Edit Zone' : 'Add Zone';
+    $('fZone').value = z ? z.zone_no : '';
+    $('fArea').value = z ? z.area : '';
+    $('fNotes').value = z ? (z.notes || '') : '';
+    $('fErr').textContent = '';
+    $('delBtn').style.visibility = z ? 'visible' : 'hidden';
+    $('modalBg').classList.add('open');
+    $('fZone').focus();
+  }
+  function closeModal(){ $('modalBg').classList.remove('open'); }
+
+  async function save(){
+    const zone_no = $('fZone').value.trim();
+    const area = $('fArea').value.trim();
+    const notes = $('fNotes').value.trim() || null;
+    if (!zone_no || !area){ $('fErr').textContent = 'Zone number and room/area are required.'; return; }
+    const dupe = zones.find(z => norm(z.zone_no) === norm(zone_no) && z.id !== editingId);
+    if (dupe){ $('fErr').textContent = `Zone ${zone_no} already exists (${dupe.area}).`; return; }
+
+    const q = editingId
+      ? sb.from(TABLE).update({ zone_no, area, notes }).eq('id', editingId)
+      : sb.from(TABLE).insert({ zone_no, area, notes });
+    const { error } = await q;
+    if (error){ $('fErr').textContent = error.message; return; }
+    closeModal();
+    loadZones();
+  }
+
+  async function remove(){
+    if (!editingId || !confirm('Delete this zone?')) return;
+    const { error } = await sb.from(TABLE).delete().eq('id', editingId);
+    if (error){ $('fErr').textContent = error.message; return; }
+    closeModal();
+    loadZones();
+  }
+
+  // ----- Events -----
+  $('zoneInput').addEventListener('input', lookup);
+  $('zoneInput').addEventListener('focus', e => e.target.select());
+  $('addBtn').addEventListener('click', () => openModal(null));
+  $('cancelBtn').addEventListener('click', closeModal);
+  $('saveBtn').addEventListener('click', save);
+  $('delBtn').addEventListener('click', remove);
+  $('modalBg').addEventListener('click', e => { if (e.target.id === 'modalBg') closeModal(); });
+  $('zoneBody').addEventListener('click', e => {
+    const id = e.target.dataset.edit;
+    if (id) openModal(zones.find(z => String(z.id) === id));
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeModal();
+    if (e.key === 'Enter' && $('modalBg').classList.contains('open')) save();
+  });
+
+  loadZones();
+</script>
+</body>
+</html>
