@@ -1,13 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<link rel="icon" type="image/svg+xml" href="leaf_icon.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0a0f1e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="homeBase">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Alarm Zones · homeBase</title>
+<title>homeBase — Alarm Zones</title>
+<style>body{visibility:hidden;}</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="supabase-client.js"></script>
+<script src="auth.js" defer></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="auth.js" defer></script>
 <style>
   :root{
     --bg:#0a0f1e; --panel:#121b31; --panel-2:#172340; --border:#22304f;
@@ -164,11 +172,10 @@
 </div>
 
 <script>
-  // ----- Supabase client: reuse the one from auth.js if it exists -----
-  const SUPABASE_URL = 'YOUR_SUPABASE_URL';        // same values as auth.js
-  const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
-  const sb = window.sb || window.supabaseClient ||
-             window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+document.addEventListener('DOMContentLoaded', () => {   // runs after auth.js (defer) has loaded
+  // ----- Supabase: shared client from supabase-client.js (same as other homeBase pages) -----
+  const sb = (typeof supabaseClient !== 'undefined') ? supabaseClient : null;
+  if (!sb) document.getElementById('statusLine').textContent = 'supabase-client.js not loaded';
 
   const TABLE = 'alarm_zones';
   const CACHE_KEY = 'homebase_alarm_zones';
@@ -186,6 +193,7 @@
   async function loadZones(){
     const cached = loadCache();
     if (cached.length){ zones = cached; render(); $('statusLine').textContent = 'Showing saved copy… syncing'; }
+    if (!sb){ if (!cached.length) $('zoneBody').innerHTML = '<tr><td colspan="4" class="empty">Supabase not configured.</td></tr>'; return; }
     const { data, error } = await sb.from(TABLE).select('*');
     if (error){
       $('statusLine').textContent = cached.length ? 'Offline — using saved copy' : 'Could not load zones: ' + error.message;
@@ -248,6 +256,7 @@
     const zone_no = $('fZone').value.trim();
     const area = $('fArea').value.trim();
     const notes = $('fNotes').value.trim() || null;
+    if (!sb){ $('fErr').textContent = 'supabase-client.js not loaded.'; return; }
     if (!zone_no || !area){ $('fErr').textContent = 'Zone number and room/area are required.'; return; }
     const dupe = zones.find(z => norm(z.zone_no) === norm(zone_no) && z.id !== editingId);
     if (dupe){ $('fErr').textContent = `Zone ${zone_no} already exists (${dupe.area}).`; return; }
@@ -262,7 +271,7 @@
   }
 
   async function remove(){
-    if (!editingId || !confirm('Delete this zone?')) return;
+    if (!sb || !editingId || !confirm('Delete this zone?')) return;
     const { error } = await sb.from(TABLE).delete().eq('id', editingId);
     if (error){ $('fErr').textContent = error.message; return; }
     closeModal();
@@ -287,6 +296,7 @@
   });
 
   loadZones();
+});
 </script>
 </body>
 </html>
